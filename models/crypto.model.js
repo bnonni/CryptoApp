@@ -4,11 +4,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let CryptoSchema = new Schema({
-	Account: {type: Number, required: true},
-	ID: {type: Number, required: true},
+	cAcct: {type: Number, required: true},
+	cAmt: {type: Number, required: true},
+	dAcct: {type: Number, required: true},
+	dAmt: {type: Number, required: true},
+	currency: {type: String, required: true},
+	transactionID: {type: Number, required: true},
 	hash: {type: String, required: true, max: 128},
-	Credit: {type: Number, required: true},
-	Debit: {type: Number, required: true}
 });
 
 // Export
