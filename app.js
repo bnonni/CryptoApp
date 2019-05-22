@@ -3,7 +3,9 @@
 // app.js
 const express = require('express');
 const bodyParser = require('body-parser');
-
+// initialize our express app
+const transaction = require('./routes/crypto.route'); // Imports routes for the products
+const app = express();
 
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://hu5ky5n0w:MongoDB4243!!@simpleapp-glvp8.mongodb.net/test?retryWrites=true";
@@ -14,12 +16,10 @@ client.connect(err => {
   client.close();
 });
 
-
 const crypto_route = require('./routes/crypto.route');
 
-// initialize our express app
-const app = express();
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use('/crypto', crypto_route);
 
 let port = 8000;
