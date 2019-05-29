@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 // app.js
 const express = require('express');
-const bodyParser= require('body-parser')
+const bodyParser= require('body-parser');
 const app = express();
 
 const MongoClient = require('mongodb').MongoClient;
@@ -10,25 +10,32 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
 var db;
 
 client.connect(err => {
-  let port = 3000;
-  const collection = client.db("CryptoWallet").collection("transactions");
+  let port = 3000;  
   if (err) return console.log(err);
-  db = client.db("CryptoWallet");
+  db = client.db("crypto_wallet");
   
   app.listen(port, () => {
-    console.log("Server is up and running on port number " + port);
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.get("/", (req, res) => {
-      res.sendFile(__dirname + "/index.html");
-    });
-    app.post("/transaction", (req, res) => {
-      db.collection("transactions").save(req.body, (err, result) => {
-        if (err) return console.log(err);
-    
-        console.log("saved "+ req +" to database");
-        res.redirect("/");
-      });
-    });
+    console.log("Server running. Listening on port " + port);
   });
-  client.close();
+});
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  var cursor = db.collection("transactions").find().toArray(function(err, results){
+    if (err) return console.log(err);
+    res.sendFile(__dirname + '/index.html', {transactions: results});
+  });
+});
+
+app.post("/transactions", (req, res) => {
+  db.collection("transactions").insertOne(req.body, (err, result) => {
+    if (err) return console.log(err);
+    console.log("saved to database");
+
+    res.redirect("/");
+  });
 });
