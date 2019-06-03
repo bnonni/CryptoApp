@@ -22,19 +22,21 @@ client.connect(err => {
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(__dirname + '../public'));
+
 
 app.get('/', (req, res) => {
-  var cursor = db.collection("transactions").find().toArray(function(err, results){
+  db.collection("transactions").find().toArray(function(err, results){
     if (err) return console.log(err);
-    res.sendFile(__dirname + '/index.html', {transactions: results});
+    res.render('index.ejs', {transactions: results})
+
   });
 });
 
 app.post("/transactions", (req, res) => {
   db.collection("transactions").insertOne(req.body, (err, result) => {
     if (err) return console.log(err);
-    console.log("saved to database");
+    console.log("Saved to database");
 
     res.redirect("/");
   });
