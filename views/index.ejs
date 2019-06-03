@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Transaction Ledger</title>
+  <link rel="stylesheet" href="style.css" type="text/html">
+  <style>
+    .transactions{
+      display: flex;
+      justify-content: space-between;
+      width: 20%;
+    }
+  </style>
+</head>
+<body>
+ <form action="/transactions" method="POST">
+   <input type="text" placeholder="currency" name="currency">
+   <input type="text" placeholder="action" name="action">
+   <input type="value" placeholder="amount" name="amount">
+   <input type="value" placeholder="price" name="price">
+   <button type="submit">Submit</button>
+  </form>
+  <ul class="transactions">
+      <% for(var i=0; i<transactions.length; i++){%>
+        <li class="transaction">
+          <span><%= transactions[i].action %> => </span>
+          <span><%= transactions[i].currency %></span>
+          <span><%= transactions[i].amount %> @ </span>
+          <span>$<%= transactions[i].price %> per coin</span>
+        </li>
+      <%}%>
+    </ul>
+</body>
+</html>
