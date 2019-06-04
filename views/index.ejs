@@ -13,13 +13,6 @@
   </style>
 </head>
 <body>
- <form action="/transactions" method="POST">
-   <input type="text" placeholder="currency" name="currency">
-   <input type="text" placeholder="action" name="action">
-   <input type="value" placeholder="amount" name="amount">
-   <input type="value" placeholder="price" name="price">
-   <button type="submit">Submit</button>
-  </form>
   <ul class="transactions">
       <% for(var i=0; i<transactions.length; i++){%>
         <li class="transaction">
@@ -30,5 +23,12 @@
         </li>
       <%}%>
     </ul>
+    <form action="/transactions" method="POST">
+      <input type="text" placeholder="currency" name="currency">
+      <input type="text" placeholder="action" name="action">
+      <input type="value" placeholder="amount" name="amount">
+      <input type="value" placeholder="price" name="price">
+      <button type="submit">Submit</button>
+     </form>
 </body>
 </html>
