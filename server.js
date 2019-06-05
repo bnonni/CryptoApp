@@ -1,11 +1,38 @@
 /*jshint esversion: 6 */
-// app.js
+
+/**
+ * Node/Express Setup
+ */
 const express = require('express');
-const bodyParser= require('body-parser');
 const app = express();
 
+/**
+ * BodyParser
+ */
+const bodyParser= require('body-parser');
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '../public'));
+
+/**
+ * Coinbase Connection Setup
+ */
+const CoinbasePro = require('coinbase-pro');
+
+const key = '6719bd8885dca93f6c6e2f919e3434ae';
+const secret = 'hL5HqYs38gLdWMSi/CNIY7nqMi1TdnfhJlx4A1mO7XOiUs6L49PiHPQEjcVJLWK4egDWleAu8b7txlvG7KmIpg==';
+const passphrase = 'mm39ja8p9m';
+const apiURI = 'https://api.pro.coinbase.com';
+
+const authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
+
+/**
+ * MongoDB Setup
+ */
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://hu5ky5n0w:MongoDB4243!!@cryptowallet-glvp8.mongodb.net/test?retryWrites=true";
+const uri = "mongodb+srv://hu5ky5n0w:MongoDB4243!!@cryptowallet-glvp8.mongodb.net/crypto_wallet?retryWrites=true";
 const mongo = new MongoClient(uri, { useNewUrlParser: true });
 var db;
 
@@ -19,6 +46,10 @@ mongo.connect(err => {
   });
 });
 
+/**
+ * Ledger POST via UI
+ */
+
 app.post("/transactions", (req, res) => {
   db.collection("transactions").insertOne(req.body, (err, result) => {
     if (err) return console.log(err);
@@ -27,12 +58,6 @@ app.post("/transactions", (req, res) => {
     res.redirect("/");
   });
 });
-
-app.use(bodyParser.urlencoded({extended: true}));
-app.set('view engine', 'ejs');
-app.use(bodyParser.json());
-app.use(express.static(__dirname + '../public'));
-
 
 app.get('/', (req, res) => {
   db.collection("transactions").find().toArray(function(err, results){
@@ -43,11 +68,3 @@ app.get('/', (req, res) => {
 });
 
 
-var Client = require('coinbase').Client;
-var client = new Client({'apiKey': 'RusruCA3DYsReba5',
-                         'apiSecret': 'API SECRET'});
-
-client.getAccounts({}, function(err, accounts) {
-  // account.getTransactions(function(err, txs) {console.log(txs);});\
-  console.log(accounts);
-});
