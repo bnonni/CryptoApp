@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
 /**
  * Coinigy
- * Key: *
- * Secret: *
+ * Key: 2606c94b47054895b8eb53737942628f
+ * Secret: bffd0f97f126441eac85d6b008bdd5fd
  */
 const RSI = require('technicalindicators').RSI;
 
@@ -11,9 +11,9 @@ const RSI = require('technicalindicators').RSI;
  * Coinbase Connection Setup
  */
 const CoinbasePro = require('coinbase-pro');
-const key = '*';
-const secret = '*';
-const passphrase = '*';
+const key = '6719bd8885dca93f6c6e2f919e3434ae';
+const secret = 'hL5HqYs38gLdWMSi/CNIY7nqMi1TdnfhJlx4A1mO7XOiUs6L49PiHPQEjcVJLWK4egDWleAu8b7txlvG7KmIpg==';
+const passphrase = 'mm39ja8p9m';
 const apiURI = 'https://api.pro.coinbase.com';
 const authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
 
@@ -34,7 +34,10 @@ app.get('/', (req, res) => {
     // data=JSON.stringify(data);
     // console.log(data);
     res.render('index.ejs', {ETH: data});
-    console.log(data[0].price);
+    for(var i = 0; i < data.length; i++){
+      var price = data[i].price;
+      console.log(i + " " + price);
+    }
   });
 });
 
@@ -57,7 +60,7 @@ app.get('/', (req, res) => {
 /**
  * MongoDB Setup
  */
-const uri = "mongodb+srv://hu5ky5n0w:*@cryptowallet-glvp8.mongodb.net/crypto_wallet?retryWrites=true";
+const uri = "mongodb+srv://hu5ky5n0w:MongoDB4243!!@cryptowallet-glvp8.mongodb.net/crypto_wallet?retryWrites=true";
 const mongo = new MongoClient(uri, { useNewUrlParser: true });
 var db;
 
