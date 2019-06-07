@@ -1,0 +1,8 @@
+server.js filter=lfs diff=lfs merge=lfs -text
+views filter=lfs diff=lfs merge=lfs -text
+README.md filter=lfs diff=lfs merge=lfs -text
+custom_modules filter=lfs diff=lfs merge=lfs -text
+node_modules filter=lfs diff=lfs merge=lfs -text
+package-lock.json filter=lfs diff=lfs merge=lfs -text
+package.json filter=lfs diff=lfs merge=lfs -text
+public filter=lfs diff=lfs merge=lfs -text
