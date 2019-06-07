@@ -1,5 +1,5 @@
 {
-  "name": "cryptoapp",
+  "name": "crypto-algo",
   "version": "1.0.0",
   "description": "nodejs, expressjs, mongodb crypto app",
   "main": "index.js",
@@ -16,12 +16,23 @@
     "coinbase-pro": "^0.9.0",
     "cryptiles": "^4.1.3",
     "ejs": "^2.6.1",
-    "express": "^4.17.0",
-    "mongodb": "^3.2.6",
-    "mongoose": "^5.5.9",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "jsdom": "^15.1.1",
+    "mjs": "^1.0.0",
+    "mongodb": "^3.2.7",
+    "mongoose": "^5.5.13",
     "update": "^0.7.4"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bnonni/Crypto-Log.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bnonni/Crypto-Log/issues"
+  },
+  "homepage": "https://github.com/bnonni/Crypto-Log#readme"
 }

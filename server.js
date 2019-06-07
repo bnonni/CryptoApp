@@ -1,11 +1,16 @@
 /*jshint esversion: 6 */
 /**
+ * Coinigy
+ * Key: 2606c94b47054895b8eb53737942628f
+ * Secret: bffd0f97f126441eac85d6b008bdd5fd
+ */
+/**
  * Coinbase Connection Setup
  */
 const CoinbasePro = require('coinbase-pro');
-const key = '****************************';
-const secret = '********************************************************';
-const passphrase = '';
+const key = '*';
+const secret = '*';
+const passphrase = '*';
 const apiURI = 'https://api.pro.coinbase.com';
 const authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
 
@@ -14,15 +19,35 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 
+var jsdom = require('jsdom');
+app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+var $ = require('jquery')(window);
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+
+app.get('/', (req, res) => {
+  db.collection("ETH").find().toArray(function(err, results){
+    if (err) return console.log(err);
+    res.render('index.ejs', {ETH: results});
+    
+  });
+});
+
+$(document).ready(() => {
+  console.log('Test!');
+  $('.ETH').text('Hello World!');
+});
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '../public'));
 
 /**
  * MongoDB Setup
  */
-const uri = "mongodb+srv://hu5ky5n0w:*******@cryptowallet-glvp8.mongodb.net/crypto_wallet?retryWrites=true";
+const uri = "mongodb+srv://hu5ky5n0w:*@cryptowallet-glvp8.mongodb.net/crypto_wallet?retryWrites=true";
 const mongo = new MongoClient(uri, { useNewUrlParser: true });
 var db;
 
@@ -31,7 +56,7 @@ mongo.connect(err => {
   if (err) return console.log(err);
   db = mongo.db("crypto_wallet");
   const ETHcb = (err, response, data) => {
-    db.collection("transactions").insertOne(data, (err, result) => {
+    db.collection("ETH").insertOne(data, (err, result) => {
       if (err) return console.log(err);
       console.log("Saved to database");
     });
@@ -45,24 +70,16 @@ mongo.connect(err => {
 });
 
 /**
- * Ledger POST via UI
+ * Render DB results on page
  */
 
-app.post("/transactions", (req, res) => {
-  db.collection("transactions").insertOne(req.body, (err, result) => {
-    if (err) return console.log(err);
-    console.log("Saved to database");
 
-    res.redirect("/");
-  });
-});
-
-app.get('/', (req, res) => {
-  db.collection("transactions").find().toArray(function(err, results){
-    if (err) return console.log(err);
-    res.render('index.ejs', {transactions: results});
-
-  });
-});
-
-
+// app.get('/', (req, res) => {
+//   db.collection("ETH").find().toArray(function(err, results){
+//     if (err) return console.log(err);
+//     res.get('.html', {ETH: results});
+//   });
+//   res.sendFile('index.ejs', {
+//     root: path.join(__dirname, './views')
+//   });
+// });
