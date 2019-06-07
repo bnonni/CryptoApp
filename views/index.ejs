@@ -2,33 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Crypto Transaction Ledger</title>
+  <title>Crypto Trading Algo</title>
   <link rel="stylesheet" href="style.css" type="text/html">
   <style>
-    .transactions{
-      display: flex;
-      justify-content: space-between;
-      width: 20%;
+    h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
     }
+    .ETH{
+         display: flex;
+         width: 85%;
+         flex-wrap: wrap;
+        justify-content: space-between;
+        }
   </style>
 </head>
 <body>
-  <ul class="transactions">
-      <% for(var i=0; i<transactions.length; i++){%>
-        <li class="transaction">
-          <span><%= transactions[i].action %> => </span>
-          <span><%= transactions[i].currency %></span>
-          <span><%= transactions[i].amount %> @ </span>
-          <span>$<%= transactions[i].price %> per coin</span>
+ <h1>ETH</h1>
+  <ul class="ETH">
+      <% for(var i=ETH.length - 1; i>=0; i--){%>
+        <li class="ETH">
+          <price>Price: <%= ETH[i].price %></price>
+          <datetime>Datetime: <%= ETH[i].time %> </datetime>
+          <bid>Bid: $<%= ETH[i].bid %></bid>
+          <ask>Ask: $<%= ETH[i].ask %></ask>
+          <volume>Volume: <%= ETH[i].volume %></volume>
         </li>
       <%}%>
     </ul>
-    <form action="/transactions" method="POST">
-      <input type="text" placeholder="currency" name="currency">
-      <input type="text" placeholder="action" name="action">
-      <input type="value" placeholder="amount" name="amount">
-      <input type="value" placeholder="price" name="price">
-      <button type="submit">Submit</button>
-     </form>
 </body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
 </html>
