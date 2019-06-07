@@ -1,9 +1,12 @@
 /*jshint esversion: 6 */
 /**
  * Coinigy
- * Key: 2606c94b47054895b8eb53737942628f
- * Secret: bffd0f97f126441eac85d6b008bdd5fd
+ * Key: *
+ * Secret: *
  */
+
+
+ 
 /**
  * Coinbase Connection Setup
  */
@@ -19,15 +22,6 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 
-var jsdom = require('jsdom');
-app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
-const { JSDOM } = jsdom;
-const { window } = new JSDOM();
-var $ = require('jquery')(window);
-const { document } = (new JSDOM('')).window;
-global.document = document;
-
-
 app.get('/', (req, res) => {
   db.collection("ETH").find().toArray(function(err, results){
     if (err) return console.log(err);
@@ -36,10 +30,20 @@ app.get('/', (req, res) => {
   });
 });
 
-$(document).ready(() => {
-  console.log('Test!');
-  $('.ETH').text('Hello World!');
-});
+function usejQuery(html){
+  var jsdom = require('jsdom');
+  app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
+  const { JSDOM } = jsdom;
+  const { window } = new JSDOM();
+  var $ = require('jquery')(window);
+  const { document } = (new JSDOM('')).window;
+  global.document = document;
+  $(document).ready(() => {
+    console.log('Test!');
+    $('.ETH').text('Hello World!');
+  });
+  }
+  usejQuery();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
