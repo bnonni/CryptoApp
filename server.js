@@ -4,7 +4,7 @@
  * Key: *
  * Secret: *
  */
-
+const RSI = require('technicalindicators').RSI;
 
  
 /**
@@ -22,31 +22,37 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 
+// app.get('/', (req, res) => {
+//   db.collection("ETH").find().toArray((err, results) => {
+//     if (err) return console.log(err);
+//     res.render('index.ejs', {ETH: results});
+//   });
+// });
+
 app.get('/', (req, res) => {
-  db.collection("ETH").find().toArray(function(err, results){
-    if (err) return console.log(err);
-    res.render('index.ejs', {ETH: results});
-    
+  db.collection("ETH").find().toArray((err, data) => {
+    // data=JSON.stringify(data);
+    // console.log(data);
+    res.render('index.ejs', {ETH: data});
+    console.log(data[0].price);
   });
 });
 
-function usejQuery(html){
-  var jsdom = require('jsdom');
-  app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
-  const { JSDOM } = jsdom;
-  const { window } = new JSDOM();
-  var $ = require('jquery')(window);
-  const { document } = (new JSDOM('')).window;
-  global.document = document;
-  $(document).ready(() => {
-    console.log('Test!');
-    $('.ETH').text('Hello World!');
-  });
-  }
-  usejQuery();
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+//   var jsdom = require('jsdom');
+//   app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
+//   const { JSDOM } = jsdom;
+//   const { window } = new JSDOM();
+//   var $ = require('jquery')(window);
+//   const { document } = (new JSDOM('')).window;
+//   global.document = document;
+//   $(document).ready(() => {
+//     console.log('Test!');
+//     $('.ETH').text('Hello World!');
+//   });
+
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json());
 
 /**
  * MongoDB Setup
@@ -65,9 +71,13 @@ mongo.connect(err => {
       console.log("Saved to database");
     });
   };
-  
-  authedClient.getProductTicker('ETH-USD', ETHcb);
-  
+  const prices = authedClient.getProductTicker('ETH-USD', ETHcb);
+  // const trades = authedClient.getProductTradeStream('ETH-USD',  0, 8408000);
+  // db.collection("ETH").insertOne(trades, (err, result) => {
+  //   if (err) return console.log(err);
+  //   console.log("Saved to database");
+  // });
+
   app.listen(port, () => {
     console.log("Server listening on port " + port + ".");
   });
