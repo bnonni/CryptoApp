@@ -20,6 +20,7 @@ const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const app = express();
 const path = require('path');
+app.set('view engine', 'ejs');
 
 /**
  * MongoDB Setup
@@ -33,7 +34,7 @@ var db;
  * Mongo Connection + Collection Access & Price Parsing + RSI Calculation
  */
 mongo.connect(err => {
-  let port = 443;
+  let port = 8080;
   if (err) return console.log(err);
   db = mongo.db("crypto_wallet");
 
@@ -50,19 +51,18 @@ mongo.connect(err => {
   app.get('/eth-tickers', (req, res) => {
     // console.log(res);
     db.collection("ETH-tickers").find().toArray((err, eth_ticker_data) => {
-      res.render('ETH-tickers.ejs', {
+      res.render('eth-tickers', {
         ETH_tickers: eth_ticker_data,
-        root: path.join(__dirname, './views')
+	root: path.join(__dirname, "./views")
       });
     });
   });
-
 
   //Render BTC Tickers
   app.get('/btc-tickers', (req, res) => {
     // console.log(res);
     db.collection("BTC-tickers").find().toArray((err, btc_ticker_data) => {
-      res.render('BTC-tickers.ejs', {
+      res.render('btc-tickers', {
         BTC_tickers: btc_ticker_data,
         root: path.join(__dirname, './views')
       });

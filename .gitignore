@@ -1,2 +1,17 @@
 node_modules
 app-env
+.DS_Store
+.bash_history
+.bashrc
+.cache
+.cloud-locale-test.skip
+.config
+.local
+.gnupg
+.npm
+.pm2
+.profile
+.ssh
+.viminfo
+npm-debug.log
+nodesource_setup.sh
