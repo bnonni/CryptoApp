@@ -1,0 +1,12 @@
+
+.transactions{
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  width: 20%;
+  margin-left: 1%;
+  float: right;
+  position: absolute;
+  left: 30%;
+  bottom: 95.6%;
+}
