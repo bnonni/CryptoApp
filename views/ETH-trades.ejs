@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Trading Algo</title>
+  <link rel="stylesheet" href="style.css" type="text/html">
+  <style>
+    h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+    }
+    .ETH_trades{
+         display: flex;
+         width: 85%;
+         flex-wrap: wrap;
+        justify-content: space-between;
+        }
+  </style>
+</head>
+<body>
+ <h1>ETH Trades</h1>
+  <ul class="ETH_trades">
+      <% for(var i=ETH_trades.length - 1; i>=0; i--){%>
+        <li class="ETH_trades">
+            <% if(ETH_trades[i].price != undefined){%>
+          <div class="ETH_trades-data">Datetime: <%= ETH_trades[i].time %> </div>
+          <div class="ETH_trades-data">Price: <%= ETH_trades[i].price %></div>
+          <div class="ETH_trades-data">Size: $<%= ETH_trades[i].size %></div>
+          <div class="ETH_trades-data">Side: <%= ETH_trades[i].side %></div>
+          <%}%>
+        </li>
+      <%}%>
+    </ul>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+</html>
