@@ -1,25 +1,26 @@
 #!/usr/bin/env nodejs
 /*jshint esversion: 6 */
-require('@tensorflow/tfjs');
-require('@tensorflow/tfjs-node');
-require('@tensorflow/tfjs-node-gpu');
-const RSI = require('technicalindicators').RSI;
+require("@tensorflow/tfjs");
+require("@tensorflow/tfjs-node");
+require("@tensorflow/tfjs-node-gpu");
+const RSI = require("technicalindicators").RSI;
 
 /**
  * Coinbase Connection Setup
  */
-const CoinbasePro = require('coinbase-pro');
+const CoinbasePro = require("coinbase-pro");
 const key = process.env.key;
 const secret = process.env.secret;
 const passphrase = process.env.passphrase;
-const apiURI = 'https://api.pro.coinbase.com';
+const apiURI = "https://api.pro.coinbase.com";
 const authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
 
 
-const MongoClient = require('mongodb').MongoClient;
-const express = require('express');
+const express = require("express");
 const app = express();
-const path = require('path');
+const MongoClient = require("mongodb").MongoClient;
+const path = require("path");
+app.set('view engine', 'ejs');
 
 /**
  * MongoDB Setup
@@ -40,31 +41,30 @@ mongo.connect(err => {
   /**
    * Render HP
    */
-  app.get('/', (req, res) => {
-    res.sendFile('index.html', {
-      root: path.join(__dirname, './views')
+  app.get("/", (req, res) => {
+    res.sendFile("index.html", {
+      root: path.join(__dirname, "./views")
     });
   });
 
   //Render ETH Tickers
-  app.get('/eth-tickers', (req, res) => {
+  app.get("/eth-tickers", (req, res) => {
     // console.log(res);
     db.collection("ETH-tickers").find().toArray((err, eth_ticker_data) => {
-      res.render('ETH-tickers.ejs', {
+      res.render("eth-tickers.ejs", {
         ETH_tickers: eth_ticker_data,
-        root: path.join(__dirname, './views')
+        root: path.join(__dirname, "./views")
       });
     });
   });
 
-
   //Render BTC Tickers
-  app.get('/btc-tickers', (req, res) => {
+  app.get("/btc-tickers", (req, res) => {
     // console.log(res);
     db.collection("BTC-tickers").find().toArray((err, btc_ticker_data) => {
-      res.render('BTC-tickers.ejs', {
+      res.render("btc-tickers.ejs", {
         BTC_tickers: btc_ticker_data,
-        root: path.join(__dirname, './views')
+        root: path.join(__dirname, "./views")
       });
     });
   });
@@ -99,7 +99,7 @@ mongo.connect(err => {
         console.log("Saved tickers to BTC-tickers.");
       });
     };
-    authedClient.getProductTicker('BTC-USD', btc_ticker_cb);
+    authedClient.getProductTicker("BTC-USD", btc_ticker_cb);
     calcBtcRSI14();
     calcBtcRSI28();
     setTimeout(getBtcTickers, 60000);
@@ -158,7 +158,7 @@ mongo.connect(err => {
         console.log("Saved tickers to ETH-tickers.");
       });
     };
-    authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
+    authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
     setTimeout(calcEthRSI14, 500);
     setTimeout(calcEthRSI28, 500);
     setTimeout(getEthTickers, 60000);
@@ -222,16 +222,16 @@ mongo.connect(err => {
 /**
  * jQuery Setup
  */
-//   var jsdom = require('jsdom');
-//   app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
+//   var jsdom = require("jsdom");
+//   app.use("/jquery", express.static(__dirname + "/node_modules/jquery/dist/"));
 //   const { JSDOM } = jsdom;
 //   const { window } = new JSDOM();
-//   var $ = require('jquery')(window);
-//   const { document } = (new JSDOM('')).window;
+//   var $ = require("jquery")(window);
+//   const { document } = (new JSDOM("")).window;
 //   global.document = document;
 //   $(document).ready(() => {
-//     console.log('Test!');
-//     $('.ETH').text('Hello World!');
+//     console.log("Test!");
+//     $(".ETH").text("Hello World!");
 //   });
 
 // app.use(bodyParser.urlencoded({extended: true}));

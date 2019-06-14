@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Crypto Trading Algo - BTC Tickers</title>
+  <title>Crypto Trading Algo - BTC Prices</title>
   <link rel="stylesheet" href="style.css" type="text/html">
   <style>
     h1 {
@@ -27,26 +27,25 @@
   </style>
 </head>
 <body>
- <h1>BTC Tickers</h1>
+ <h1>BTC Prices</h1>
  <div class="button">
     <a href="/">
       <button>Home</button>
     </a>
   </div>
   <ul class="BTC_tickers">
-      <% for(var i=BTC_tickers.length - 1; i>=0; i--){%>
+      <%for(var i=BTC_tickers.length - 1; i>=0; i--){%>
         <li class="BTC_tickers">
           <% if(BTC_tickers[i].price != undefined){%>
-          <div class="BTC_tickers-data">Price: <%= BTC_tickers[i].price %></div>
-          <div class="BTC_tickers-data">Datetime: <%= BTC_tickers[i].time %> </div>
-          <div class="BTC_tickers-data">Bid: $<%= BTC_tickers[i].bid %></div>
-          <div class="BTC_tickers-data">Ask: $<%= BTC_tickers[i].ask %></div>
-           <div class="BTC_tickers-data">Volume: <%= BTC_tickers[i].volume %></div>
+          <div class="price"><%= BTC_tickers[i].price %></div>
+          <div class="datetime">Datetime: <%= BTC_tickers[i].time %> </div>
+          <div class="bid">Bid: $<%= BTC_tickers[i].bid %></div>
+          <div class="ask">Ask: $<%= BTC_tickers[i].ask %></div>
+           <div class="volume">Volume: <%= BTC_tickers[i].volume %></div>
            <%}%>
         </li>
       <%}%>
     </ul>
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
 </html>
