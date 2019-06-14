@@ -15,11 +15,24 @@
          width: 85%;
          flex-wrap: wrap;
         justify-content: space-between;
-        }
+    }
+    .button{
+      text-align : center;
+    }
+    button{
+      padding: 0.5%;
+      border-radius: 5px;
+      width: 10%; 
+    }
   </style>
 </head>
 <body>
  <h1>BTC Tickers</h1>
+ <div class="button">
+    <a href="/">
+      <button>Home</button>
+    </a>
+  </div>
   <ul class="BTC_tickers">
       <% for(var i=BTC_tickers.length - 1; i>=0; i--){%>
         <li class="BTC_tickers">
