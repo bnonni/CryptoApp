@@ -1,2 +1,4 @@
 node_modules
 app-env
+package-lock.json
+package.json
