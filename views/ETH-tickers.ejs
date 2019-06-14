@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Crypto Trading Algo - ETH Tickers</title>
+  <title>Crypto Trading Algo - ETH Prices</title>
   <link rel="stylesheet" href="style.css" type="text/html">
   <style>
     h1 {
@@ -16,10 +16,23 @@
          flex-wrap: wrap;
         justify-content: space-between;
         }
+        .button{
+      text-align : center;
+    }
+    button{
+      padding: 0.5%;
+      border-radius: 5px;
+      width: 10%; 
+    }
   </style>
 </head>
 <body>
- <h1>ETH Tickers</h1>
+ <h1>ETH Prices</h1>
+  <div class="button">
+    <a href="/">
+      <button>Home</button>
+    </a>
+  </div>
   <ul class="ETH_tickers">
       <% for(var i=ETH_tickers.length - 1; i>=0; i--){%>
         <li class="ETH_tickers">
