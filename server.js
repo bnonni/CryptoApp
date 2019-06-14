@@ -113,7 +113,7 @@ mongo.connect(err => {
    */
 
 
-   /** Five Minute RSI Calculation - need to edit to pull every fifth minute ticker */
+   /** Five Minute RSI Calculation - need to edit to pull every fifth minute ticker  bew shit*/
   function calculateTickerRSIMin5 () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH-tickers").find().toArray((err, ticker_data) => {
@@ -129,7 +129,7 @@ mongo.connect(err => {
         period : 14
       };
       var RSIs = RSI.calculate(inputRSI);  
-      console.log("\nTick RSI: " + RSIs);
+      console.log("\nTick RSI 5 min: " + RSIs);
       // tradeETH(RSIs);
     });
   }
