@@ -1,1 +1,0 @@
-console.log(process.env.CoinBase_Key);
