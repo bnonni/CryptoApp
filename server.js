@@ -72,12 +72,12 @@ mongo.connect(err => {
   /**
    * trade signal logic
    */
-  function tickerBuySignal(tickers, currency, period){
+  function tickerBuySignal(RSIs, currency, period){
     var buy_comp_one = false;
-    if(tickers[0] >= tickers[1]){
-      if(tickers[1] <= 28){
-        if(tickers[2] <= 29){
-          if(tickers[4] <= 32){
+    if(RSIs[0] >= RSIs[1]){
+      if(RSIs[1] <= 28){
+        if(RSIs[2] <= 29){
+          if(RSIs[4] <= 32){
             buy_comp_one = true;
           }
         }
@@ -110,19 +110,25 @@ mongo.connect(err => {
     //Find ETH tickers & calculate RSI
     db.collection("BTC-tickers").find().toArray((err, btc_tickers) => {
       var btc_prices = [];
-      for(var i = 0; i < btc_tickers.length; i++){
-        if(btc_prices != undefined  && i%3==0){
+      for(var i = btc_tickers.length - 1; i >= 0 ; i--){
+        if(btc_prices != undefined  && i%5==0){
           btc_prices.push(btc_tickers[i].price);
           // console.log(i + " " + btc_prices);
         }
       }
-      var btc14_RSI_input = {
+      var btc_Rsi14_input = {
         values : btc_prices,
         period : 14
       };
-      var btc14_RSIs = RSI.calculate(btc14_RSI_input);  
-      // console.log("\nBTC Ticker RSI: " + btc_RSI);
-      tickerBuySignal(btc14_RSIs, "BTC", btc14_RSI_input.period);
+      var btc_Rsi_14 = RSI.calculate(btc_Rsi14_input);
+      // console.log(btc_Rsi_14);
+      
+        // db.collection("btcRsi14").insert(btc_Rsi_14, (err, result) => {
+        //   if (err) return console.log(err);
+        //   console.log("Saved BTC 14 min RSIs to btcRsi14.");
+        // });
+      
+      tickerBuySignal(btc_Rsi_14, "BTC", btc_Rsi14_input.period);
     });
   }
 
@@ -130,12 +136,14 @@ mongo.connect(err => {
     //Find ETH tickers & calculate RSI
     db.collection("BTC-tickers").find().toArray((err, btc_tickers) => {
       var btc_prices = [];
-      for(var i = 0; i < btc_tickers.length; i++){
-        if(btc_prices != undefined  && i%3==0){
+      for(var i = btc_tickers.length - 1; i >= 0 ; i--){
+        if(btc_prices != undefined  && i%5==0){
           btc_prices.push(btc_tickers[i].price);
           // console.log(i + " " + btc_prices);
         }
       }
+      // var len = btc_tickers.length - 1;
+      // console.log("btc tickers len: " +  len);
       var btc28_RSI_input = {
         values : btc_prices,
         period : 28
@@ -169,11 +177,11 @@ mongo.connect(err => {
    */
   function calcEthRSI14 () {
     //Find ETH tickers & calculate RSI
-    db.collection("ETH-tickers").find().toArray((err, price_data) => {
+    db.collection("ETH-tickers").find().toArray((err, eth_tickers) => {
       var eth_prices = [];
-      for(var i = 0; i < price_data.length; i++){
-        if(eth_prices != undefined && i%3==0){
-          eth_prices.push(price_data[i].price);
+      for(var i = eth_tickers.length - 1; i >= 0; i--){
+        if(eth_prices != undefined && i%5==0){
+          eth_prices.push(eth_tickers[i].price);
           // console.log(i + " " + prices);
         }
       }
@@ -189,11 +197,11 @@ mongo.connect(err => {
 
   function calcEthRSI28 () {
     //Find ETH tickers & calculate RSI
-    db.collection("ETH-tickers").find().toArray((err, price_data) => {
+    db.collection("ETH-tickers").find().toArray((err, eth_tickers) => {
       var eth_prices = [];
-      for(var i = 0; i < price_data.length; i++){
-        if(eth_prices != undefined && i%3==0){
-          eth_prices.push(price_data[i].price);
+      for(var i = eth_tickers.length - 1; i >= 0; i--){
+        if(eth_prices != undefined && i%5==0){
+          eth_prices.push(eth_tickers[i].price);
           // console.log(i + " " + prices);
         }
       }
