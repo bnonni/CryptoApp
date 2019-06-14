@@ -1,9 +1,5 @@
 #!/usr/bin/env nodejs
-/*jshint esversion: 6 */
-require('@tensorflow/tfjs');
-require('@tensorflow/tfjs-node');
-require('@tensorflow/tfjs-node-gpu');
-const RSI = require('technicalindicators').RSI;
+/*jshint esversion: 6 */ 
 
 /**
  * Coinbase Connection Setup
@@ -16,14 +12,10 @@ const apiURI = 'https://api.pro.coinbase.com';
 const authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
 
 
-const MongoClient = require('mongodb').MongoClient;
-const express = require('express');
-const app = express();
-const path = require('path');
-
 /**
  * MongoDB Setup
  */
+const MongoClient = require('mongodb').MongoClient;
 const password = process.env.password;
 const uri = "mongodb+srv://hu5ky5n0w:"+password+"@cryptowallet-glvp8.mongodb.net/crypto_wallet?retryWrites=true";
 const mongo = new MongoClient(uri, { useNewUrlParser: true });
@@ -33,14 +25,20 @@ var db;
  * Mongo Connection + Collection Access & Price Parsing + RSI Calculation
  */
 mongo.connect(err => {
-  let port = 443;  
-  if (err) return console.log(err);
-  db = mongo.db("crypto_wallet");
-  
-  /**
-   * Coinbase API call - ETH Tickers
-   */
-function ethTickers(){
+ let port = 3000;  
+ if (err) return console.log(err);
+ db = mongo.db("crypto_wallet");
+ 
+//Init app
+ app.listen(port, () => {
+   console.log("Server listening on port " + port + ".");
+ });
+}); /* End mongo.connect*/
+
+ /**
+  * Coinbase API call - ETH Tickers
+  */
+ function ethTickers(){
   const eth_ticker_cb = (err, response, tickers) => {
     // console.log(tickers);
     db.collection("ETHtickers").insertOne(tickers, (err, result) => {
@@ -119,63 +117,3 @@ function calculateTradesRSI () {
   });
 }
 calculateTradesRSI();
-  
-//Init app
-  app.listen(port, () => {
-    console.log("Server listening on port " + port + ".");
-  });
-}); /* End mongo.connect*/
-
-
-/**
- * Render HP
- */
-app.get('/', (req, res) => {
-  res.sendFile('index.html', {
-    root: path.join(__dirname, './views')
-  });
-});
-
-/**
- * Render ETH Trades
- */
-app.get('/eth-trades', (req, res) => {
-  // console.log(res);
-  db.collection("ETHtrades").find().toArray((err, trads) => {
-    res.render('ETHtrades.ejs', {
-      ETHtrades: trads,
-      root: path.join(__dirname, './views')
-    });
-  });
-});
-
-/**
- * Render ETH Tickers
- */
-app.get('/eth-tickers', (req, res) => {
-  // console.log(res);
-  db.collection("ETHtickers").find().toArray((err, trads) => {
-    res.render('ETHtickers.ejs', {
-      ETHtickers: trads,
-      root: path.join(__dirname, './views')
-    });
-  });
-});
-
-/**
- * jQuery Setup
- */
-//   var jsdom = require('jsdom');
-//   app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
-//   const { JSDOM } = jsdom;
-//   const { window } = new JSDOM();
-//   var $ = require('jquery')(window);
-//   const { document } = (new JSDOM('')).window;
-//   global.document = document;
-//   $(document).ready(() => {
-//     console.log('Test!');
-//     $('.ETH').text('Hello World!');
-//   });
-
-// app.use(bodyParser.urlencoded({extended: true}));
-// app.use(bodyParser.json());
