@@ -154,8 +154,23 @@ mongo.connect(err => {
   /**
    * Calculate RSI - ETH Trades
    */
+  function tradeSignalOne(arr){
+    var buyCompOne = false;
+    if(arr[0] >= arr[1]){
+      if(arr[1] <= 28){
+        if(arr[2] <= 29){
+          if(arr[4] <= 32){
+            buyCompOne = true;
+          }
+        }
+      }
+    }
+    else buyCompOne = false;
+    console.log("The Comp Decision " + buyCompOne);   
+    }
 
-  function calculateTradesRSI () {
+
+  function calculateTradesRSI14 () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH-trades").find().toArray((err, trade_data) => {
       var prices = [];
@@ -170,11 +185,34 @@ mongo.connect(err => {
         period : 14
       };
       var RSIs = RSI.calculate(inputRSI);  
-      console.log("Trade RSI: " + RSIs);
+      console.log("Trade RSI: " + RSIs);      
+      tradeSignalOne(RSIs);
     });
   }
   calculateTradesRSI();
   
+  function calculateTradesRSI28 () {
+    //Find ETH tickers & calculate RSI
+    db.collection("ETH-trades").find().toArray((err, trade_data) => {
+      var prices = [];
+      for(var i = 0; i < trade_data.length; i++){
+        if(prices != undefined){
+          prices.push(trade_data[i].price);
+          // console.log(i + " " + prices);
+        }
+      }
+      var inputRSI = {
+        values : prices,
+        period : 28
+      };
+      var RSIs2 = RSI.calculate(inputRSI);  
+      console.log("Trade RSI: " + RSIs);      
+      tradeSignalOne(RSIs2);
+    });
+  }
+  calculateTradesRSI();
+
+
 //Init app
   app.listen(port, () => {
     console.log("Server listening on port " + port + ".");
