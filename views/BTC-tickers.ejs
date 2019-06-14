@@ -10,7 +10,7 @@
     margin-bottom: 0;
     text-align: center;
     }
-    .BTC-tickers{
+    .BTC_tickers{
          display: flex;
          width: 85%;
          flex-wrap: wrap;
@@ -20,15 +20,15 @@
 </head>
 <body>
  <h1>BTC Tickers</h1>
-  <ul class="BTC-tickers">
-      <% for(var i=BTC-tickers.length - 1; i>=0; i--){%>
-        <li class="BTC-tickers">
-          <% if(BTC-tickers[i].price != undefined){%>
-          <div class="BTC-tickers-data">Price: <%= BTC-tickers[i].price %></div>
-          <div class="BTC-tickers-data">Datetime: <%= BTC-tickers[i].time %> </div>
-          <div class="BTC-tickers-data">Bid: $<%= BTC-tickers[i].bid %></div>
-          <div class="BTC-tickers-data">Ask: $<%= BTC-tickers[i].ask %></div>
-           <div class="BTC-tickers-data">Volume: <%= BTC-tickers[i].volume %></div>
+  <ul class="BTC_tickers">
+      <% for(var i=BTC_tickers.length - 1; i>=0; i--){%>
+        <li class="BTC_tickers">
+          <% if(BTC_tickers[i].price != undefined){%>
+          <div class="BTC_tickers-data">Price: <%= BTC_tickers[i].price %></div>
+          <div class="BTC_tickers-data">Datetime: <%= BTC_tickers[i].time %> </div>
+          <div class="BTC_tickers-data">Bid: $<%= BTC_tickers[i].bid %></div>
+          <div class="BTC_tickers-data">Ask: $<%= BTC_tickers[i].ask %></div>
+           <div class="BTC_tickers-data">Volume: <%= BTC_tickers[i].volume %></div>
            <%}%>
         </li>
       <%}%>

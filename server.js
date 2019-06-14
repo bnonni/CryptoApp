@@ -45,15 +45,17 @@ mongo.connect(err => {
       root: path.join(__dirname, './views')
     });
   });
+
+
   /**
    * BTC Functions
    */
   //Render BTC Trades 
   app.get('/btc-trades', (req, res) => {
     // console.log(res);
-    db.collection("BTC-trades").find().toArray((err, trads) => {
+    db.collection("BTC-trades").find().toArray((err, btc_trade_data) => {
       res.render('BTC-trades.ejs', {
-        ETHtrades: trads,
+        BTC_trades: btc_trade_data,
         root: path.join(__dirname, './views')
       });
     });
@@ -62,68 +64,40 @@ mongo.connect(err => {
   //Render BTC Tickers
   app.get('/btc-tickers', (req, res) => {
     // console.log(res);
-    db.collection("BTC-tickers").find().toArray((err, trads) => {
+    db.collection("BTC-tickers").find().toArray((err, btc_ticker_data) => {
       res.render('BTC-tickers.ejs', {
-        ETHtickers: trads,
+        BTC_tickers: btc_ticker_data,
         root: path.join(__dirname, './views')
       });
     });
   });
 
-  /**
-   * ETH Functions
-   */
-  //Render ETH Trades 
-  app.get('/eth-trades', (req, res) => {
-    // console.log(res);
-    db.collection("ETH-trades").find().toArray((err, eth_trades) => {
-      res.render('ETH-trades.ejs', {
-        ETH_trades: eth_trades,
-        root: path.join(__dirname, './views')
-      });
-    });
-  });
-
-  //Render ETH Tickers
-  app.get('/eth-tickers', (req, res) => {
-    // console.log(res);
-    db.collection("ETH-tickers").find().toArray((err, eth_tickers) => {
-      res.render('ETH-tickers.ejs', {
-        ETH_tickers: eth_tickers,
-        root: path.join(__dirname, './views')
-      });
-    });
-  });
-
-  //Coinbase API call - ETH Tickers
-  function ethTickers(){
-    const eth_ticker_cb = (err, response, tickers) => {
-       console.log(tickers);
-      db.collection("ETH-tickers").insertOne(tickers, (err, result) => {
+  //Coinbase API call - BTC Tickers
+  function getBtcTickers(){
+    const btc_ticker_cb = (err, response, btc_tickers) => {
+      //  console.log(tickers);
+      db.collection("BTC-tickers").insertOne(btc_tickers, (err, result) => {
         if (err) return console.log(err);
-        console.log("Saved tickers to ETH-tickers.");
+        console.log("Saved tickers to BTC-tickers.");
       });
     };
-    authedClient.getProductTicker('ETH-USD', eth_ticker_cb);
+    authedClient.getProductTicker('BTC-USD', btc_ticker_cb);
   }
-  ethTickers();
+  getBtcTickers();
 
-  /**
-   * Calculate RSI - ETH Tickers
-   */
 
-  function calculateTickerRSI () {
+  function calcBtcTickerRSI () {
     //Find ETH tickers & calculate RSI
-    db.collection("ETH-tickers").find().toArray((err, ticker_data) => {
-      var prices = [];
+    db.collection("BTC-tickers").find().toArray((err, ticker_data) => {
+      var btc_prices = [];
       for(var i = 0; i < ticker_data.length; i++){
-        if(prices != undefined){
-          prices.push(ticker_data[i].price);
+        if(btc_prices != undefined){
+          btc_prices.push(ticker_data[i].price);
           // console.log(i + " " + prices);
         }
       }
       var inputRSI = {
-        values : prices,
+        values : btc_prices,
         period : 14
       };
       var RSIs = RSI.calculate(inputRSI);  
@@ -131,31 +105,28 @@ mongo.connect(err => {
       // tradeETH(RSIs);
     });
   }
-  calculateTickerRSI();
+  calcBtcTickerRSI();
 
-  /**
-   * Coinbase API call - ETH Trades
-   */
-
-  function ethTrades(){
-    const eth_trades_cb = (err, response, trades) => {
+  //Coinbase API call - BTC Trades
+  function getBtcTrades(){
+    const btc_trades_cb = (err, response, btc_trades) => {
       if (err) return console.log(err);
       // console.log(trades);
-      db.collection("ETH-trades").insertOne(trades, (err, result) => {
-        console.log("Saved trades to ETH-trades.");
+      db.collection("BTC-trades").insertOne(btc_trades, (err, result) => {
+        console.log("Saved trades to BTC-trades.");
       });
     };
-    authedClient.getProductTrades('ETH-USD', eth_trades_cb);
+    authedClient.getProductTrades('BTC-USD', btc_trades_cb);
     var today = Date.now();
-    const trades = authedClient.getProductTradeStream('ETH-USD', 1559869200, today);
+    const trades = authedClient.getProductTradeStream('BTC-USD', 1559869200, today);
   }
-  ethTrades();
+  getBtcTrades();
 
   /**
-   * Calculate RSI - ETH Trades
+   * Calculate RSI - BTC Trades
    */
 
-  function calculateTradesRSI () {
+  function calcEthTradeRSI () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH-trades").find().toArray((err, trade_data) => {
       var prices = [];
@@ -170,10 +141,117 @@ mongo.connect(err => {
         period : 14
       };
       var RSIs = RSI.calculate(inputRSI);  
-      console.log("Trade RSI: " + RSIs);
+      // console.log("Trade RSI: " + RSIs);
     });
   }
-  calculateTradesRSI();
+  calcEthTradeRSI();
+
+  
+
+  /**
+   * ETH Functions
+   */
+  //Render ETH Trades 
+  app.get('/eth-trades', (req, res) => {
+    // console.log(res);
+    db.collection("ETH-trades").find().toArray((err, eth_trade_data) => {
+      res.render('ETH-trades.ejs', {
+        ETH_trades: eth_trade_data,
+        root: path.join(__dirname, './views')
+      });
+    });
+  });
+
+  //Render ETH Tickers
+  app.get('/eth-tickers', (req, res) => {
+    // console.log(res);
+    db.collection("ETH-tickers").find().toArray((err, eth_ticker_data) => {
+      res.render('ETH-tickers.ejs', {
+        ETH_tickers: eth_ticker_data,
+        root: path.join(__dirname, './views')
+      });
+    });
+  });
+
+  //Coinbase API call - ETH Tickers
+  function getEthTickers(){
+    const eth_tickers_cb = (err, response, eth_tickers) => {
+      //  console.log(tickers);
+      db.collection("ETH-tickers").insertOne(eth_tickers, (err, result) => {
+        if (err) return console.log(err);
+        console.log("Saved tickers to ETH-tickers.");
+      });
+    };
+    authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
+  }
+  getEthTickers();
+
+  /**
+   * Calculate RSI - ETH Tickers
+   */
+
+  function calcEthTickerRSI () {
+    //Find ETH tickers & calculate RSI
+    db.collection("ETH-tickers").find().toArray((err, ticker_data) => {
+      var eth_prices = [];
+      for(var i = 0; i < ticker_data.length; i++){
+        if(eth_prices != undefined){
+          eth_prices.push(ticker_data[i].price);
+          // console.log(i + " " + prices);
+        }
+      }
+      var inputRSI = {
+        values : eth_prices,
+        period : 14
+      };
+      var RSIs = RSI.calculate(inputRSI);  
+      // console.log("\nTick RSI: " + RSIs);
+      // tradeETH(RSIs);
+    });
+  }
+  calcEthTickerRSI();
+
+  /**
+   * Coinbase API call - ETH Trades
+   */
+
+  function getEthTrades(){
+    const eth_trades_cb = (err, response, trades) => {
+      if (err) return console.log(err);
+      // console.log(trades);
+      db.collection("ETH-trades").insertOne(trades, (err, result) => {
+        console.log("Saved trades to ETH-trades.");
+      });
+    };
+    authedClient.getProductTrades('ETH-USD', eth_trades_cb);
+    var today = Date.now();
+    const trades = authedClient.getProductTradeStream('ETH-USD', 1559869200, today);
+  }
+  getEthTrades();
+
+  /**
+   * Calculate RSI - ETH Trades
+   */
+
+  function calcEthTradeRSI () {
+    //Find ETH tickers & calculate RSI
+    db.collection("ETH-trades").find().toArray((err, trade_data) => {
+      var prices = [];
+      for(var i = 0; i < trade_data.length; i++){
+        if(prices != undefined){
+          prices.push(trade_data[i].price);
+          // console.log(i + " " + prices);
+        }
+      }
+      var inputRSI = {
+        values : prices,
+        period : 14
+      };
+      var RSIs = RSI.calculate(inputRSI);  
+      // console.log("Trade RSI: " + RSIs);
+    });
+  }
+  calcEthTradeRSI();
   
 //Init app
   app.listen(port, () => {
