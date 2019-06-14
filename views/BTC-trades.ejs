@@ -10,7 +10,7 @@
     margin-bottom: 0;
     text-align: center;
     }
-    .ETH-trades{
+    .BTC-trades{
          display: flex;
          width: 85%;
          flex-wrap: wrap;
@@ -19,15 +19,15 @@
   </style>
 </head>
 <body>
- <h1>ETH Trades</h1>
-  <ul class="ETH-trades">
-      <% for(var i=ETHtrades.length - 1; i>=0; i--){%>
-        <li class="ETH-trades">
-            <% if(ETHtrades[i].price != undefined){%>
-          <div class="ETH-trades-data">Datetime: <%= ETHtrades[i].time %> </div>
-          <div class="ETH-trades-data">Price: <%= ETHtrades[i].price %></div>
-          <div class="ETH-trades-data">Size: $<%= ETHtrades[i].size %></div>
-          <div class="ETH-trades-data">Side: <%= ETHtrades[i].side %></div>
+ <h1>BTC Trades</h1>
+  <ul class="BTC-trades">
+      <% for(var i=BTC-trades.length - 1; i>=0; i--){%>
+        <li class="BTC-trades">
+            <% if(BTC-trades[i].price != undefined){%>
+          <div class="BTC-trades-data">Datetime: <%= BTC-trades[i].time %> </div>
+          <div class="BTC-trades-data">Price: <%= BTC-trades[i].price %></div>
+          <div class="BTC-trades-data">Size: $<%= BTC-trades[i].size %></div>
+          <div class="BTC-trades-data">Side: <%= BTC-trades[i].side %></div>
           <%}%>
         </li>
       <%}%>

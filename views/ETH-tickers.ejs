@@ -10,7 +10,7 @@
     margin-bottom: 0;
     text-align: center;
     }
-    .ETH-tickers{
+    .ETH_tickers{
          display: flex;
          width: 85%;
          flex-wrap: wrap;
@@ -20,15 +20,15 @@
 </head>
 <body>
  <h1>ETH Tickers</h1>
-  <ul class="ETH-tickers">
-      <% for(var i=ETHtickers.length - 1; i>=0; i--){%>
-        <li class="ETH-tickers">
-          <% if(ETHtickers[i].price != undefined){%>
-          <div class="ETH-tickers-data">Price: <%= ETHtickers[i].price %></div>
-          <div class="ETH-tickers-data">Datetime: <%= ETHtickers[i].time %> </div>
-          <div class="ETH-tickers-data">Bid: $<%= ETHtickers[i].bid %></div>
-          <div class="ETH-tickers-data">Ask: $<%= ETHtickers[i].ask %></div>
-           <div class="ETH-tickers-data">Volume: <%= ETHtickers[i].volume %></div>
+  <ul class="ETH_tickers">
+      <% for(var i=ETH_tickers.length - 1; i>=0; i--){%>
+        <li class="ETH_tickers">
+          <% if(ETH_tickers[i].price != undefined){%>
+          <div class="ETH_tickers-data">Price: <%= ETH_tickers[i].price %></div>
+          <div class="ETH_tickers-data">Datetime: <%= ETH_tickers[i].time %> </div>
+          <div class="ETH_tickers-data">Bid: $<%= ETH_tickers[i].bid %></div>
+          <div class="ETH_tickers-data">Ask: $<%= ETH_tickers[i].ask %></div>
+           <div class="ETH_tickers-data">Volume: <%= ETH_tickers[i].volume %></div>
            <%}%>
         </li>
       <%}%>
