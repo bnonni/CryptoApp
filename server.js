@@ -112,11 +112,13 @@ mongo.connect(err => {
    * Calculate RSI - ETH Tickers
    */
 
-  function calculateTickerRSI () {
+
+   /** Five Minute RSI Calculation - need to edit to pull every fifth minute ticker */
+  function calculateTickerRSIMin5 () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH-tickers").find().toArray((err, ticker_data) => {
       var prices = [];
-      for(var i = 0; i < ticker_data.length; i++){
+      for(var i = 0; i < ticker_data.length && i+1%3==0; i++){
         if(prices != undefined){
           prices.push(ticker_data[i].price);
           // console.log(i + " " + prices);
@@ -127,11 +129,11 @@ mongo.connect(err => {
         period : 14
       };
       var RSIs = RSI.calculate(inputRSI);  
-      // console.log("\nTick RSI: " + RSIs);
+      console.log("\nTick RSI: " + RSIs);
       // tradeETH(RSIs);
     });
   }
-  calculateTickerRSI();
+  calculateTickerRSIMin5();
 
   /**
    * Coinbase API call - ETH Trades
@@ -170,7 +172,7 @@ mongo.connect(err => {
     }
 
 
-  function calculateTradesRSI14 () {
+  function calculateTradesRSI14Min () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH-trades").find().toArray((err, trade_data) => {
       var prices = [];
@@ -189,9 +191,9 @@ mongo.connect(err => {
       tradeSignalOne(RSIs);
     });
   }
-  calculateTradesRSI();
+  calculateTradesRSI14Min();
   
-  function calculateTradesRSI28 () {
+  function calculateTradesRSI28Min () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH-trades").find().toArray((err, trade_data) => {
       var prices = [];
@@ -206,11 +208,12 @@ mongo.connect(err => {
         period : 28
       };
       var RSIs2 = RSI.calculate(inputRSI);  
-      console.log("Trade RSI: " + RSIs);      
+      console.log("Trade RSI: " + RSIs2);      
       tradeSignalOne(RSIs2);
     });
   }
-  calculateTradesRSI();
+  calculateTradesRSI28Min();
+  
 
 
 //Init app
