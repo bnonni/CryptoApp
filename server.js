@@ -72,7 +72,7 @@ mongo.connect(err => {
   /**
    * trade signal logic
    */
-  function tickerBuySignal(tickers, currency){
+  function tickerBuySignal(tickers, currency, period){
     var buy_comp_one = false;
     if(tickers[0] >= tickers[1]){
       if(tickers[1] <= 28){
@@ -84,7 +84,7 @@ mongo.connect(err => {
       }
     }
     else buy_comp_one = false;
-    console.log("The " + currency + " Buy Decision is " + buy_comp_one);   
+    console.log(currency + " " + period + " Minute Buy Decision is " + buy_comp_one);   
   }
 
   /**
@@ -100,28 +100,49 @@ mongo.connect(err => {
       });
     };
     authedClient.getProductTicker('BTC-USD', btc_ticker_cb);
-    setTimeout(calcBtcTickerRSI, 500);
+    calcBtcRSI14();
+    calcBtcRSI28();
     setTimeout(getBtcTickers, 60000);
-  }
+  };
 
   //Calc BTC Ticker RSI
-  function calcBtcTickerRSI () {
+  function calcBtcRSI14 () {
     //Find ETH tickers & calculate RSI
     db.collection("BTC-tickers").find().toArray((err, btc_tickers) => {
       var btc_prices = [];
       for(var i = 0; i < btc_tickers.length; i++){
-        if(btc_prices != undefined){
+        if(btc_prices != undefined  && i%3==0){
           btc_prices.push(btc_tickers[i].price);
           // console.log(i + " " + btc_prices);
         }
       }
-      var btc_RSI_input = {
+      var btc14_RSI_input = {
         values : btc_prices,
         period : 14
       };
-      var btc_RSIs = RSI.calculate(btc_RSI_input);  
+      var btc14_RSIs = RSI.calculate(btc14_RSI_input);  
       // console.log("\nBTC Ticker RSI: " + btc_RSI);
-      tickerBuySignal(btc_RSIs, "BTC");
+      tickerBuySignal(btc14_RSIs, "BTC", btc14_RSI_input.period);
+    });
+  }
+
+  function calcBtcRSI28 () {
+    //Find ETH tickers & calculate RSI
+    db.collection("BTC-tickers").find().toArray((err, btc_tickers) => {
+      var btc_prices = [];
+      for(var i = 0; i < btc_tickers.length; i++){
+        if(btc_prices != undefined  && i%3==0){
+          btc_prices.push(btc_tickers[i].price);
+          // console.log(i + " " + btc_prices);
+        }
+      }
+      var btc28_RSI_input = {
+        values : btc_prices,
+        period : 28
+      };
+      var btc28_RSIs = RSI.calculate(btc28_RSI_input);  
+      // console.log("\nBTC Ticker RSI: " + btc_RSI);
+      tickerBuySignal(btc28_RSIs, "BTC", btc28_RSI_input.period);
     });
   }
 
@@ -138,30 +159,51 @@ mongo.connect(err => {
       });
     };
     authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
-    setTimeout(calcEthTickerRSI, 500);
+    setTimeout(calcEthRSI14, 500);
+    setTimeout(calcEthRSI28, 500);
     setTimeout(getEthTickers, 60000);
   }
 
   /**
    * Calculate RSI - ETH Tickers
    */
-  function calcEthTickerRSI () {
+  function calcEthRSI14 () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH-tickers").find().toArray((err, price_data) => {
       var eth_prices = [];
       for(var i = 0; i < price_data.length; i++){
-        if(eth_prices != undefined){
+        if(eth_prices != undefined && i%3==0){
           eth_prices.push(price_data[i].price);
           // console.log(i + " " + prices);
         }
       }
-      var eth_RSI_input = {
+      var eth14_RSI_input = {
         values : eth_prices,
         period : 14
       };
-      var eth_RSIs = RSI.calculate(eth_RSI_input);  
+      var eth14_RSIs = RSI.calculate(eth14_RSI_input);  
       // console.log("\nTick RSI: " + RSIs);
-      tickerBuySignal(eth_RSIs, "ETH");
+      tickerBuySignal(eth14_RSIs, "ETH", eth14_RSI_input.period);
+    });
+  }
+
+  function calcEthRSI28 () {
+    //Find ETH tickers & calculate RSI
+    db.collection("ETH-tickers").find().toArray((err, price_data) => {
+      var eth_prices = [];
+      for(var i = 0; i < price_data.length; i++){
+        if(eth_prices != undefined && i%3==0){
+          eth_prices.push(price_data[i].price);
+          // console.log(i + " " + prices);
+        }
+      }
+      var eth28_RSI_input = {
+        values : eth_prices,
+        period : 28
+      };
+      var eth28_RSIs = RSI.calculate(eth28_RSI_input);  
+      // console.log("\nTick RSI: " + RSIs);
+      tickerBuySignal(eth28_RSIs, "ETH", eth28_RSI_input.period);
     });
   }
 
