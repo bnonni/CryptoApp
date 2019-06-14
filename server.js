@@ -98,7 +98,7 @@ mongo.connect(err => {
   //Coinbase API call - ETH Tickers
   function ethTickers(){
     const eth_ticker_cb = (err, response, tickers) => {
-      // console.log(tickers);
+       console.log(tickers);
       db.collection("ETH-tickers").insertOne(tickers, (err, result) => {
         if (err) return console.log(err);
         console.log("Saved tickers to ETH-tickers.");
@@ -170,7 +170,7 @@ mongo.connect(err => {
         period : 14
       };
       var RSIs = RSI.calculate(inputRSI);  
-      // console.log("Trade RSI: " + RSIs);
+      console.log("Trade RSI: " + RSIs);
     });
   }
   calculateTradesRSI();
