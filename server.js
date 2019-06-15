@@ -62,32 +62,58 @@ mongo.connect(err => {
  db = mongo.db("crypto_wallet");
 
 function buySignalRSI(currency, period, RSIs, prices){
-  var start_time = new Date(Date.now() - 300000).toLocaleString();
-  var end_time = new Date(Date.now()).toLocaleString();
-  var today = new Date(Date.now()).toLocaleString();
+  var start_time, end_time, today;
   var rsi_buy_decision = false;
-  ((RSIs[0] >= RSIs[1]) && (RSIs[1] <= 28) && (RSIs[2] <= 29) && (RSIs[3] <= 32)) ? (rsi_buy_decision = true, logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time)) : rsi_buy_decision = false;
+  if(RSIs[0] >= RSIs[1]){
+    if(RSIs[1] <= 28){
+      if(RSIs[2] <= 29){
+        if(RSIs[3] <= 32){
+          rsi_buy_decision = true;
+          start_time = new Date(Date.now() - 300000).toLocaleString();
+          end_time = new Date(Date.now()).toLocaleString();
+          logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time);
+        }
+      }
+    }
+  }else{
+    rsi_buy_decision = false;
+  }
+  today = new Date(Date.now()).toLocaleString();
   console.log(currency + ": " + period + " Period Buy Decision => " + rsi_buy_decision + " @ " + today);
 }
 
 function sellSignalRSI(currency, period, RSIs, prices){
-  var start_time = new Date(Date.now() - 300000).toLocaleString();
-  var end_time = new Date(Date.now()).toLocaleString();
-  var today = new Date(Date.now()).toLocaleString();
+  var start_time, end_time, today;
   var rsi_sell_decision = false;
-
-  ((RSIs[0] >= RSIs[1]) && (RSIs[1] >= RSIs[2]) && (RSIs[2] >= RSIs[3]) && (RSIs[3] >= 50) && (RSIs[4] >= RSIs[3])) ? (rsi_sell_decision = true, logBuySellDataToMongo(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time, "sell")) : rsi_sell_decision = false;
+  if(RSIs[0] >= RSIs[1]){
+    if(RSIs[1] >= RSIs[2]){
+      if(RSIs[2] >= RSIs[3]){
+        if(RSIs[3] >= 50){
+          if(RSIs[4] >= RSIs[3]){
+            rsi_sell_decision = true;
+            start_time = new Date(Date.now() - 300000).toLocaleString();
+            end_time = new Date(Date.now()).toLocaleString();
+            logBuySellDataToMongo(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time);
+          }
+        }
+      }
+    }
+  }else{
+    rsi_sell_decision = false;
+  }
+  today = new Date(Date.now()).toLocaleString();
   console.log(currency + ": " + period + " Period Sell Decision => " + rsi_sell_decision + " @ " + today);
  }
 
 function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
-  var today = new Date(Date.now()).toLocaleString();
+  var today;
   if(type == "buy"){
     var buy_data = create_btc_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
     console.log("BTC Buy!");
     console.log(buy_data);
     db.collection("BTC_RSI14_Buys").insertOne(buy_data, (err, result) => {
       if (err) return console.log(err);
+      today = new Date(Date.now()).toLocaleString();
       console.log("Buy successful!! Saved data to BTC_RSI14_Buys @ " + today);
     });
   }else{
@@ -96,6 +122,7 @@ function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
     console.log(sell_data);
     db.collection("BTC_RSI14_Sells").insertOne(sell_data, (err, result) => {
       if (err) return console.log(err);
+      today = new Date(Date.now()).toLocaleString();
       console.log("Sell successful!! Saved data to BTC_RSI14_Sells @ " + today);
     });
   }
@@ -159,15 +186,13 @@ function getBtcTickers(){
 
 //Calc BTC Ticker RSI
 function calcBtcRSI14 () {
-  var today = new Date(Date.now()).toLocaleString();
- //Find ETH tickers & calculate RSI
- db.collection("BTC_Tickers").find().toArray((err, btc_tickers) => {
+ db.collection("BTC-Tickers").find().toArray((err, btc_tickers) => {
   if (err) return console.log(err);
   var btc_prices = [];
   var btc_prices_log = [];
   var j = 0;
   for(var i = btc_tickers.length - 1; i >= 0 ; i--){
-    if(btc_tickers[i] != undefined  && i%5==0){
+    if(btc_tickers[i] != undefined){
       btc_prices.push(btc_tickers[i].price);
       if(j < 5){
         btc_prices_log.push(btc_tickers[j].price);
@@ -188,7 +213,7 @@ function calcBtcRSI14 () {
    //New Object - RSI MongoDB Log
    var BTC_RSI_log = {
      currency : "BTC",
-     time : today,
+     time : new Date(Date.now()).toLocaleString(),
      period : 14,
      RSI : BTC_RSI_output
    };
@@ -197,8 +222,12 @@ function calcBtcRSI14 () {
      if (err) return console.log(err);
      console.log("Saved RSIs to BTC_RSI14_Data.");
     });
-    buySignalRSI("BTC",  BTC_RSI_input.period, BTC_RSI_output, btc_prices);
-    sellSignalRSI("BTC",  BTC_RSI_input.period, BTC_RSI_output, btc_prices);
+    setTimeout(() => {
+      buySignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
+    }, 1000);
+    setTimeout(() => {
+      sellSignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
+    }, 1000);
   });
 }
   getBtcTickers();
