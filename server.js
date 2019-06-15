@@ -138,16 +138,16 @@ function calcBtcRSI14 () {
       }
     }
   }
-  console.log("Line 148: BTC Price: " + btc_prices[0]);
+  // console.log("Line 148: BTC Price: " + btc_prices[0]);
   //Input Object - RSI Calculation
    var BTC_RSI_input = {
      values : btc_prices,
      period : 14
    };
-   console.log(BTC_RSI_input);
+  //  console.log(BTC_RSI_input);
    //Output Object - RSI Calculation
    var BTC_RSI_output = RSI.calculate(BTC_RSI_input);
-   console.log(BTC_RSI_output);
+  //  console.log(BTC_RSI_output);
    //New Object - RSI MongoDB Log
    var BTC_RSI_log = {
      currency : "BTC",
@@ -155,7 +155,7 @@ function calcBtcRSI14 () {
      period : 14,
      RSI : BTC_RSI_output
    };
-   console.log(BTC_RSI_log);
+  //  console.log(BTC_RSI_log);
    db.collection("BTC_RSI14_Data").insertOne(BTC_RSI_log, (err, result) => {
      if (err) return console.log(err);
      console.log("Saved RSIs to BTC_RSI14_Data.");
@@ -196,16 +196,16 @@ function calcBtcRSI14 () {
           }
         }
       }
-      console.log("ETH Price: " + eth_prices[0]);
+      // console.log("ETH Price: " + eth_prices[0]);
       //Input Object - RSI Calculation
       var ETH_RSI_input = {
         values : eth_prices,
         period : 14
       };
-      console.log(ETH_RSI_input);
+      // console.log(ETH_RSI_input);
       //Output Object - RSI Calculation
       var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
-      console.log(ETH_RSI_output);
+      // console.log(ETH_RSI_output);
       //New Object - RSI MongoDB Log
       var ETH_RSI_log = {
         currency : "ETH",
@@ -213,7 +213,7 @@ function calcBtcRSI14 () {
         period : 14,
         RSI : ETH_RSI_output
       };
-      console.log(ETH_RSI_log);
+      // console.log(ETH_RSI_log);
       db.collection("ETH_RSI14_Data").insertOne(ETH_RSI_log, (err, result) => {
         if (err) return console.log(err);
         console.log("Saved RSIs to ETH_RSI14_Data.");
