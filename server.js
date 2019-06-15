@@ -27,6 +27,12 @@ app.listen(port, () => {
  });
 
  /**
+  * Global Time Variables
+  */
+ var start_time = new Date(Date.now() - 300000).toLocaleString();
+ var end_time = new Date(Date.now()).toLocaleString();
+ var today = new Date(Date.now()).toLocaleString();
+ /**
   * Render HP
   */
  app.get("/", (req, res) => {
@@ -59,18 +65,18 @@ mongo.connect(err => {
 
 function buySignalRSI(currency, period, RSIs, prices){
  var rsi_buy_decision = false;
- var end_time = Date.now();
- var start_time = Date.now() - 300000;
+//  var end_time = new Date(Date.now()).toLocaleString();
+//  var start_time = new Date(Date.now() - 300000).toLocaleString();
  ((RSIs[0] >= RSIs[1]) && (RSIs[1] <= 28) && (RSIs[2] <= 29) && (RSIs[3] <= 32)) ? (rsi_buy_decision = true, logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time)) : rsi_buy_decision = false;
- console.log(currency + " " + period + " Period Buy Decision is " + rsi_buy_decision);   
+ console.log(currency + ": " + period + " Period Buy Decision => " + rsi_buy_decision + " @ " + today);
 }
 
 function sellSignalRSI(currency, period, RSIs, prices){
   var rsi_sell_decision = false;
-  var end_time = Date.now();
-  var start_time = Date.now() - 300000;
+  // var end_time = Date.now();
+  // var start_time = Date.now() - 300000;
   ((RSIs[0] >= RSIs[1]) && (RSIs[1] >= RSIs[2]) && (RSIs[2] >= RSIs[3]) && (RSIs[3] >= 50) && (RSIs[4] >= RSIs[3])) ? (rsi_sell_decision = true, logBuySellDataToMongo(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time, "sell")) : rsi_sell_decision = false;
-  console.log(currency + " " + period + " Period Sell Decision is " + rsi_sell_decision);   
+  console.log(currency + ": " + period + " Period Sell Decision => " + rsi_sell_decision + " @ " + today);
  }
 
 function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
@@ -80,7 +86,7 @@ function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
     console.log(buy_data);
     db.collection("BTC_RSI14_Buys").insertOne(buy_data, (err, result) => {
       if (err) return console.log(err);
-      console.log("Buy successful!! Saved data to BTC_RSI14_Buys.");
+      console.log("Buy successful!! Saved data to BTC_RSI14_Buys @ " + today);
     });
   }else{
     var sell_data = create_btc_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
@@ -88,7 +94,7 @@ function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
     console.log(sell_data);
     db.collection("BTC_RSI14_Sells").insertOne(sell_data, (err, result) => {
       if (err) return console.log(err);
-      console.log("Sell successful!! Saved data to BTC_RSI14_Sells.");
+      console.log("Sell successful!! Saved data to BTC_RSI14_Sells @ " + today);
     });
   }
 }
