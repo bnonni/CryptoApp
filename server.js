@@ -70,7 +70,7 @@ function tickerBuySignal(RSIs, prices, currency, period){
  var end_time = Date.now();
  var start_time = Date.now() - 300000;
  ((RSIs[0] >= RSIs[1]) && (RSIs[1] <= 28) && (RSIs[2] <= 29) && (RSIs[3] <= 32)) ? (rsi_buy_decision = true, logBtcBuyDataToMongo(currency, period, rsi_buy_decision, RSIs, prices, start_time, end_time)) : rsi_buy_decision = false;
- console.log("\n" + currency + " " + period + " Minute Buy Decision is " + rsi_buy_decision);   
+ console.log("\n" + currency + " " + period + " Period Buy Decision is " + rsi_buy_decision);
 }
 
 function logBtcBuyDataToMongo(curr, per, dec, rsi, pri, st, ed){
@@ -117,15 +117,16 @@ function getBtcTickers(){
     });
   };
   authedClient.getProductTicker("BTC-USD", btc_ticker_cb);
-  calcBtcRSI14();
+  calcBtcRSI14_FiveMin();
   setTimeout(getBtcTickers, 60000);
  }
 
 //Calc BTC Ticker RSI
-function calcBtcRSI14 () {
+function calcBtcRSI14_FiveMin () {
  //Find ETH tickers & calculate RSI
  db.collection("BTC_Tickers").find().toArray((err, btc_tickers) => {
   if (err) return console.log(err);
+  // calcBtcRSI14_OneMin(btc_tickers);
   var btc_prices = [];
   var btc_prices_log = [];
   var j = 0;
@@ -147,6 +148,7 @@ function calcBtcRSI14 () {
   //  console.log(BTC_RSI_input);
    //Output Object - RSI Calculation
    var BTC_RSI_output = RSI.calculate(BTC_RSI_input);
+  //  console.log("BTC RSI: ");
   //  console.log(BTC_RSI_output);
    //New Object - RSI MongoDB Log
    var BTC_RSI_log = {
@@ -163,6 +165,22 @@ function calcBtcRSI14 () {
     tickerBuySignal(BTC_RSI_output, btc_prices, "BTC", BTC_RSI_input.period);
   });
 }
+
+// function calcBtcRSI14_OneMin(btctickers){
+//   var btc_1_prices = [];
+//   for(var i = btctickers.length - 1; i >= 0 ; i--){
+//     if(btctickers[i] != undefined){
+//       btc_1_prices.push(btctickers[i].price);
+//     }
+//   }
+//   var BTC_1min_RSI_input = {
+//     values : btc_1_prices,
+//     period : 14
+//   };
+//   var BTC_1min_RSI_output = RSI.calculate(BTC_1min_RSI_input);
+//   console.log("One Min");
+//   tickerBuySignal(BTC_1min_RSI_output, btc_1_prices, "BTC", BTC_1min_RSI_input.period);
+// }
 
  /**
    * ETH Functions
@@ -205,6 +223,7 @@ function calcBtcRSI14 () {
       // console.log(ETH_RSI_input);
       //Output Object - RSI Calculation
       var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
+      // console.log("ETH RSI: ");
       // console.log(ETH_RSI_output);
       //New Object - RSI MongoDB Log
       var ETH_RSI_log = {
