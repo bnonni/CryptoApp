@@ -186,7 +186,7 @@ function calcBtcRSI14 () {
   var btc_prices_log = [];
   var j = 0;
   for(var i = btc_tickers.length - 1; i >= 0 ; i--){
-    if(btc_tickers[i] != undefined && i%5==0){
+    if(btc_tickers[i] != undefined){
       btc_prices.push(btc_tickers[i].price);
       if(j < 5){
         btc_prices_log.push(btc_tickers[j].price);
@@ -249,7 +249,7 @@ function calcBtcRSI14 () {
     var ltc_prices_log = [];
     var j = 0;
     for(var i = ltc_tickers.length - 1; i >= 0 ; i--){
-      if(ltc_tickers[i] != undefined  && i%5==0){
+      if(ltc_tickers[i] != undefined){
         ltc_prices.push(ltc_tickers[i].price);
         if(j < 5){
           ltc_prices_log.push(ltc_tickers[j].price);
@@ -312,7 +312,7 @@ function calcBtcRSI14 () {
       var eth_prices_log = [];
       var j = 0;
       for(var i = eth_tickers.length - 1; i >= 0; i--){
-        if(eth_tickers[i] != undefined  && i%5==0){
+        if(eth_tickers[i] != undefined){
           eth_prices.push(eth_tickers[i].price);
           if(j < 5){
             eth_prices_log.push(eth_tickers[j].price);
