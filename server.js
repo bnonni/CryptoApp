@@ -106,29 +106,28 @@ function sellSignalRSI(currency, period, RSIs, prices){
  }
 
 function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
-  var today;
   if(type == "buy"){
-    var buy_data = create_btc_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
-    console.log("BTC Buy!");
+    var buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
+    console.log(curr + " Buy!");
     console.log(buy_data);
-    db.collection("BTC_RSI14_Buys").insertOne(buy_data, (err, result) => {
+    var buy_collection = curr + "_RSI14_Buys";
+    db.collection(buy_collection).insertOne(buy_data, (err, result) => {
       if (err) return console.log(err);
-      today = new Date(Date.now()).toLocaleString();
-      console.log("Buy successful!! Saved data to BTC_RSI14_Buys @ " + today);
+      console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString());
     });
   }else{
-    var sell_data = create_btc_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
-    console.log("BTC Sell!");
+    var sell_data = create_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
+    console.log(curr + " Sell!");
     console.log(sell_data);
-    db.collection("BTC_RSI14_Sells").insertOne(sell_data, (err, result) => {
+    var sell_collection = curr + "_RSI14_Sells";
+    db.collection(sell_collection).insertOne(sell_data, (err, result) => {
       if (err) return console.log(err);
-      today = new Date(Date.now()).toLocaleString();
-      console.log("Sell successful!! Saved data to BTC_RSI14_Sells @ " + today);
+      console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString());
     });
   }
 }
 
-function create_btc_buy_obj(c, t, p, d, r, pr, s, e){
+function create_buy_obj(c, t, p, d, r, pr, s, e){
   var new_r = [];
   var new_p = [];
   for(var i = 0; i < 5; i++){
@@ -148,7 +147,7 @@ function create_btc_buy_obj(c, t, p, d, r, pr, s, e){
   return buy_data;
 }
 
-function create_btc_sell_obj(c, t, p, d, r, pr, s, e){
+function create_sell_obj(c, t, p, d, r, pr, s, e){
   var new_r = [];
   var new_p = [];
   for(var i = 0; i < 5; i++){
@@ -186,7 +185,7 @@ function getBtcTickers(){
 
 //Calc BTC Ticker RSI
 function calcBtcRSI14 () {
- db.collection("BTC-Tickers").find().toArray((err, btc_tickers) => {
+ db.collection("BTC_Tickers").find().toArray((err, btc_tickers) => {
   if (err) return console.log(err);
   var btc_prices = [];
   var btc_prices_log = [];
@@ -233,10 +232,10 @@ function calcBtcRSI14 () {
   /**
    * LTC Functions
    */
-  //Coinbase API call - ETH Tickers
+  //Coinbase API call - LTC Tickers
   function getLtcTickers(){
     const ltc_ticker_cb = (err, response, ltc) => {
-      //  console.log(ltc);
+      // console.log(ltc);
       db.collection("LTC_Tickers").insertOne(ltc, (err, result) => {
         if (err) return console.log(err);
         console.log("Saved tickers to LTC_Tickers.");
@@ -273,6 +272,7 @@ function calcBtcRSI14 () {
     //Output Object - RSI Calculation
     var LTC_RSI_output = RSI.calculate(LTC_RSI_input);
     //  console.log(LTC_RSI_output);
+
     //New Object - RSI MongoDB Log
     var LTC_RSI_log = {
       currency : "LTC",
@@ -280,13 +280,17 @@ function calcBtcRSI14 () {
       period : 14,
       RSI : LTC_RSI_output
     };
-  //   //  console.log(LTC_RSI_log);
+    //console.log(LTC_RSI_log);
     db.collection("LTC_RSI14_Data").insertOne(LTC_RSI_log, (err, result) => {
       if (err) return console.log(err);
       console.log("Saved RSIs to LTC_RSI14_Data.");
       });
-      // buySignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
-      // sellSignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
+      setTimeout(() => {
+        buySignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
+      }, 500);
+      setTimeout(() => {
+        sellSignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
+      }, 1000);
     });
   }
   /**
@@ -330,8 +334,8 @@ function calcBtcRSI14 () {
       // console.log(ETH_RSI_input);
       //Output Object - RSI Calculation
       var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
-      // console.log("ETH RSI: ");
       // console.log(ETH_RSI_output);
+
       //New Object - RSI MongoDB Log
       var ETH_RSI_log = {
         currency : "ETH",
@@ -344,7 +348,12 @@ function calcBtcRSI14 () {
         if (err) return console.log(err);
         console.log("Saved RSIs to ETH_RSI14_Data.");
        });
-      // tickerBuySignal(ETH_RSI_output, eth_prices, "ETH", ETH_RSI_input.period);
+       setTimeout(() => {
+        buySignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
+      }, 500);
+      setTimeout(() => {
+        sellSignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
+      }, 1000);
     });
   }
   getBtcTickers();
