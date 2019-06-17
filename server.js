@@ -66,7 +66,7 @@ function buySignalRSI(currency, period, RSIs, prices){
           rsi_buy_decision = true;
           start_time = new Date(Date.now() - 300000).toLocaleString();
           end_time = new Date(Date.now()).toLocaleString();
-          logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time);
+          buyCryptoLogData(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time);
         }
       }
     }
@@ -88,7 +88,7 @@ function sellSignalRSI(currency, period, RSIs, prices){
             rsi_sell_decision = true;
             start_time = new Date(Date.now() - 300000).toLocaleString();
             end_time = new Date(Date.now()).toLocaleString();
-            logBuySellDataToMongo(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time);
+            sellCryptoLogData(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time);
           }
         }
       }
@@ -100,17 +100,94 @@ function sellSignalRSI(currency, period, RSIs, prices){
   console.log(currency + ": " + period + " Period Sell Decision => " + rsi_sell_decision + " @ " + today);
  }
 
-function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
-  if(type == "buy"){
-    var buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
-    console.log(curr + " Buy!");
-    console.log(buy_data);
-    var buy_collection = curr + "_RSI14_Buys";
-    db.collection(buy_collection).insertOne(buy_data, (err, result) => {
+function buyCryptoLogData(curr, type, per, dec, rsi, pri, st, ed){
+  var buy_data, sell_data;
+  
+
+
+
+  if(type == "buy")
+  {
+    if(curr == "BTC")
+    {
+      // Buy BTC
+      const buyParams = {
+        price: buy_data.prices[0], // Last ticker
+        size: '0.00011000', //0.00011 BTC == $1.00 USD
+        product_id: 'BTC-USD',
+      };
+      buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, bys, st, ed);
+      authedClient.buy(buyParams, buy_callback);
+    }
+    else if(curr == 'ETH')
+    {
+        // Buy ETH
+       const buyParams = {
+        price: buy_data.prices[0], // Last ticker
+        size: '0.00011000', //0.00011 BTC == $1.00 USD
+        product_id: 'BTC-USD',
+      };
+      buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, bys, st, ed);
+      authedClient.buy(buyParams, buy_callback);
+    }
+    else
+    {
+       // Buy LTC
+       const buyParams = {
+        price: buy_data.prices[0], // Last ticker
+        size: '0.00011000', //0.00011 BTC == $1.00 USD
+        product_id: 'BTC-USD',
+      };
+      authedClient.buy(buyParams, buy_callback);
+    }
+      console.log(curr + " Buy!");
+      console.log(buy_data);
+  }
+  //else, type == sell
+  else
+  {
+    sell_data = create_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
+    console.log(curr + " Sell!");
+    console.log(sell_data);
+    var sell_collection = curr + "_RSI14_Sells";
+    db.collection(sell_collection).insertOne(sell_data, (err, result) => {
       if (err) return console.log(err);
-      console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString());
+      console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString());
     });
-  }else{
+    if(curr == "BTC")
+    {
+      // Buy BTC
+      const buyParams = {
+        price: buy_data.prices[0], // Last ticker
+        size: '0.00011000', //0.00011 BTC == $1.00 USD
+        product_id: 'BTC-USD',
+      };
+      // sell_data = create_buy_obj(curr, type, per, dec, rsi, pri, bys, st, ed);
+      authedClient.buy(buyParams, buy_callback);
+    }
+    else if(curr == 'ETH')
+    {
+        // Buy ETH
+       const buyParams = {
+        price: buy_data.prices[0], // Last ticker
+        size: '0.00011000', //0.00011 BTC == $1.00 USD
+        product_id: 'BTC-USD',
+      };
+      // sell_data = create_buy_obj(curr, type, per, dec, rsi, pri, bys, st, ed);
+      authedClient.buy(buyParams, buy_callback);
+    }
+    else
+    {
+       // Sell LTC
+       const buyParams = {
+        price: buy_data.prices[0], // Last ticker
+        size: '0.00011000', //0.00011 BTC == $1.00 USD
+        product_id: 'BTC-USD',
+      };
+      sell_data = create_buy_obj(curr, type, per, dec, rsi, pri, bys, st, ed);
+      authedClient.buy(buyParams, buy_callback);
+    }
+  }
     var sell_data = create_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
     console.log(curr + " Sell!");
     console.log(sell_data);
@@ -119,10 +196,10 @@ function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
       if (err) return console.log(err);
       console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString());
     });
-  }
 }
 
-function create_buy_obj(c, t, p, d, r, pr, s, e){
+
+function create_buy_obj(c, t, p, d, r, pr, bs, s, e){
   var new_r = [];
   var new_p = [];
   for(var i = 0; i < 5; i++){
@@ -136,6 +213,7 @@ function create_buy_obj(c, t, p, d, r, pr, s, e){
     buy_decision : d,
     RSIs : new_r,
     prices : new_p,
+    buy_size : bs,
     start_time : s,
     end_time : e
   };
