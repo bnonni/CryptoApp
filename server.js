@@ -15,7 +15,7 @@ const passphrase = process.env.passphrase;
 const apiURI = "https://api.pro.coinbase.com";
 const authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
 
-
+const
 const express = require("express");
 const app = express();
 const MongoClient = require("mongodb").MongoClient;
@@ -102,10 +102,10 @@ function sellSignalRSI(currency, period, RSIs, prices){
 
 function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
   if(type == "buy"){
-    var buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
     console.log(curr + " Buy!");
     console.log(buy_data);
     var buy_collection = curr + "_RSI14_Buys";
+    var buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
     db.collection(buy_collection).insertOne(buy_data, (err, result) => {
       if (err) return console.log(err);
       console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString());
@@ -216,14 +216,74 @@ function calcBtcRSI14 () {
      if (err) return console.log(err);
      console.log("Saved RSIs to BTC_RSI14_Data.");
     });
-    setTimeout(() => {
-      buySignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
-    }, 500);
+    buySignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
     setTimeout(() => {
       sellSignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
-    }, 1000);
+    }, 100);
   });
 }
+  /**
+   * ETH Functions
+   */
+  //Coinbase API call - ETH Tickers
+  function getEthTickers(){
+    const eth_tickers_cb = (err, response, eth) => {
+      //  console.log("ETH Ticker: " + eth[0]);
+      db.collection("ETH_Tickers").insertOne(eth, (err, result) => {
+        if (err) return console.log(err);
+        console.log("Saved tickers to ETH_Tickers.");
+      });
+      calcEthRSI14();
+    };
+    authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
+    setTimeout(getEthTickers, 60500);
+  }
+  //Calculate RSI - ETH Tickers
+  function calcEthRSI14 () {
+    //Find ETH tickers & calculate RSI
+    db.collection("ETH_Tickers").find().toArray((err, eth_tickers) => {
+      var eth_prices = [];
+      var eth_prices_log = [];
+      var j = 0;
+      for(var i = eth_tickers.length - 1; i >= 0; i--){
+        if(eth_tickers[i] != undefined){
+          eth_prices.push(eth_tickers[i].price);
+          if(j < 5){
+            eth_prices_log.push(eth_tickers[j].price);
+            j++;
+          }
+        }
+      }
+      // console.log("ETH Price: " + eth_prices[0]);
+      //Input Object - RSI Calculation
+      var ETH_RSI_input = {
+        values : eth_prices,
+        period : 14
+      };
+      // console.log(ETH_RSI_input);
+      //Output Object - RSI Calculation
+      var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
+      // console.log(ETH_RSI_output);
+
+      //New Object - RSI MongoDB Log
+      var ETH_RSI_log = {
+        currency : "ETH",
+        time : new Date(Date.now()).toLocaleString(),
+        period : 14,
+        RSI : ETH_RSI_output
+      };
+      // console.log(ETH_RSI_log);
+      db.collection("ETH_RSI14_Data").insertOne(ETH_RSI_log, (err, result) => {
+        if (err) return console.log(err);
+        console.log("Saved RSIs to ETH_RSI14_Data.");
+        buySignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
+        setTimeout(() => {
+          sellSignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
+        }, 100);
+       });
+    });
+  }
+
   /**
    * LTC Functions
    */
@@ -238,7 +298,7 @@ function calcBtcRSI14 () {
       calcLtcRSI14();
     };
     authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
-    setTimeout(getLtcTickers, 60500);
+    setTimeout(getLtcTickers, 61000);
   }
   //Calc LTC Ticker RSI
   function calcLtcRSI14 () {
@@ -279,82 +339,17 @@ function calcBtcRSI14 () {
     db.collection("LTC_RSI14_Data").insertOne(LTC_RSI_log, (err, result) => {
       if (err) return console.log(err);
       console.log("Saved RSIs to LTC_RSI14_Data.");
-      });
-      setTimeout(() => {
-        buySignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
-      }, 500);
+      buySignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
       setTimeout(() => {
         sellSignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
-      }, 1000);
-    });
-  }
-  /**
-   * ETH Functions
-   */
-  //Coinbase API call - ETH Tickers
-  function getEthTickers(){
-    const eth_tickers_cb = (err, response, eth) => {
-      //  console.log("ETH Ticker: " + eth[0]);
-      db.collection("ETH_Tickers").insertOne(eth, (err, result) => {
-        if (err) return console.log(err);
-        console.log("Saved tickers to ETH_Tickers.");
+      }, 100);
       });
-      calcEthRSI14();
-    };
-    authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
-    setTimeout(getEthTickers, 61000);
-  }
-  //Calculate RSI - ETH Tickers
-  function calcEthRSI14 () {
-    //Find ETH tickers & calculate RSI
-    db.collection("ETH_Tickers").find().toArray((err, eth_tickers) => {
-      var eth_prices = [];
-      var eth_prices_log = [];
-      var j = 0;
-      for(var i = eth_tickers.length - 1; i >= 0; i--){
-        if(eth_tickers[i] != undefined){
-          eth_prices.push(eth_tickers[i].price);
-          if(j < 5){
-            eth_prices_log.push(eth_tickers[j].price);
-            j++;
-          }
-        }
-      }
-      // console.log("ETH Price: " + eth_prices[0]);
-      //Input Object - RSI Calculation
-      var ETH_RSI_input = {
-        values : eth_prices,
-        period : 14
-      };
-      // console.log(ETH_RSI_input);
-      //Output Object - RSI Calculation
-      var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
-      // console.log(ETH_RSI_output);
-
-      //New Object - RSI MongoDB Log
-      var ETH_RSI_log = {
-        currency : "ETH",
-        time : new Date(Date.now()).toLocaleString(),
-        period : 14,
-        RSI : ETH_RSI_output
-      };
-      // console.log(ETH_RSI_log);
-      db.collection("ETH_RSI14_Data").insertOne(ETH_RSI_log, (err, result) => {
-        if (err) return console.log(err);
-        console.log("Saved RSIs to ETH_RSI14_Data.");
-       });
-       setTimeout(() => {
-        buySignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
-      }, 500);
-      setTimeout(() => {
-        sellSignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
-      }, 1000);
     });
   }
   getBtcTickers();
   setTimeout(() => {
     getLtcTickers();
-  }, 500);
+  }, 1000);
   setTimeout(() => {
     getEthTickers();
   }, 1000);
