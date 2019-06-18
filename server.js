@@ -15,7 +15,6 @@ const passphrase = process.env.passphrase;
 const apiURI = "https://api.pro.coinbase.com";
 const authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
 
-const
 const express = require("express");
 const app = express();
 const MongoClient = require("mongodb").MongoClient;
