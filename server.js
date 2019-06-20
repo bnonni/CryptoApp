@@ -78,8 +78,8 @@ function buySignalRSI(currency, period, RSIs, prices){
 
 function sellSignalRSI(currency, period, RSIs, prices){
   var start_time, end_time, today;
-  var rsi_sell_decision = true;
-  if(RSIs){
+  var rsi_sell_decision = false;
+  if(RSIs[0] >= RSIs[1]){
     if(RSIs[1] >= RSIs[2]){
       if(RSIs[2] >= RSIs[3]){
         if(RSIs[3] >= 50){
@@ -122,8 +122,10 @@ function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
 }
 
 function create_buy_obj(c, t, p, d, r, pr, s, e){
+  var new_r = [];
   var new_p = [];
   for(var i = 0; i < 5; i++){
+    new_r.push(r[i]);
     new_p.push(pr[i]);
   }
   var buy_data = {
@@ -131,7 +133,7 @@ function create_buy_obj(c, t, p, d, r, pr, s, e){
     type : t,
     period : p,
     buy_decision : d,
-    RSIs : r,
+    RSIs : new_r,
     prices : new_p,
     start_time : s,
     end_time : e
@@ -140,8 +142,10 @@ function create_buy_obj(c, t, p, d, r, pr, s, e){
 }
 
 function create_sell_obj(c, t, p, d, r, pr, s, e){
+  var new_r = [];
   var new_p = [];
   for(var i = 0; i < 5; i++){
+    new_r.push(r[i]);
     new_p.push(pr[i]);
   }
   var sell_data = {
@@ -149,7 +153,7 @@ function create_sell_obj(c, t, p, d, r, pr, s, e){
     type : t,
     period : p,
     sell_decision : d,
-    RSIs : r,
+    RSIs : new_r,
     prices : new_p,
     start_time : s,
     end_time : e
@@ -178,15 +182,10 @@ function calcBtcRSI14 () {
  db.collection("BTC_Tickers").find().toArray((err, btc_tickers) => {
   if (err) return console.log(err);
   var btc_prices = [];
-  var btc_prices_log = [];
   var j = 0;
   for(var i = btc_tickers.length - 1; i >= 0 ; i--){
     if(btc_tickers[i] != undefined){
       btc_prices.push(btc_tickers[i].price);
-      if(j < 5){
-        btc_prices_log.push(btc_tickers[j].price);
-        j++;
-      }
     }
   }
   // console.log("Line 148: BTC Price: " + btc_prices[0]);
@@ -214,7 +213,7 @@ function calcBtcRSI14 () {
     buySignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
     setTimeout(() => {
       sellSignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
-    }, 50);
+    }, 100);
   });
 }
   /**
@@ -231,22 +230,16 @@ function calcBtcRSI14 () {
       calcEthRSI14();
     };
     authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
-    setTimeout(getEthTickers, 60000);
+    setTimeout(getEthTickers, 60500);
   }
   //Calculate RSI - ETH Tickers
   function calcEthRSI14 () {
     //Find ETH tickers & calculate RSI
     db.collection("ETH_Tickers").find().toArray((err, eth_tickers) => {
       var eth_prices = [];
-      var eth_prices_log = [];
-      var j = 0;
       for(var i = eth_tickers.length - 1; i >= 0; i--){
         if(eth_tickers[i] != undefined){
           eth_prices.push(eth_tickers[i].price);
-          if(j < 5){
-            eth_prices_log.push(eth_tickers[j].price);
-            j++;
-          }
         }
       }
       // console.log("ETH Price: " + eth_prices[0]);
@@ -255,10 +248,10 @@ function calcBtcRSI14 () {
         values : eth_prices,
         period : 14
       };
-      // console.log(ETH_RSI_input);
+      console.log(ETH_RSI_input);
       //Output Object - RSI Calculation
       var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
-      // console.log(ETH_RSI_output);
+      console.log(ETH_RSI_output);
 
       //New Object - RSI MongoDB Log
       var ETH_RSI_log = {
@@ -274,7 +267,7 @@ function calcBtcRSI14 () {
         buySignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
         setTimeout(() => {
           sellSignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
-        }, 50);
+        }, 100);
        });
     });
   }
@@ -293,7 +286,7 @@ function calcBtcRSI14 () {
       calcLtcRSI14();
     };
     authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
-    setTimeout(getLtcTickers, 60000);
+    setTimeout(getLtcTickers, 61000);
   }
   //Calc LTC Ticker RSI
   function calcLtcRSI14 () {
@@ -301,15 +294,9 @@ function calcBtcRSI14 () {
   db.collection("LTC_Tickers").find().toArray((err, ltc_tickers) => {
     if (err) return console.log(err);
     var ltc_prices = [];
-    var ltc_prices_log = [];
-    var j = 0;
     for(var i = ltc_tickers.length - 1; i >= 0 ; i--){
       if(ltc_tickers[i] != undefined){
         ltc_prices.push(ltc_tickers[i].price);
-        if(j < 5){
-          ltc_prices_log.push(ltc_tickers[j].price);
-          j++;
-        }
       }
     }
     // console.log("Line 148: BTC Price: " + LTC_prices[0]);
@@ -344,8 +331,8 @@ function calcBtcRSI14 () {
   getBtcTickers();
   setTimeout(() => {
     getLtcTickers();
-  }, 1000);
+  }, 2000);
   setTimeout(() => {
     getEthTickers();
-  }, 1000);
+  }, 2500);
 });
