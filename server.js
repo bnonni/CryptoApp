@@ -24,7 +24,7 @@ let port = 443;
 app.listen(port, () => {
   console.log("Server listening on port " + port);
  });
- /**
+ /* 
   * Render HP
   */
  app.get("/", (req, res) => {
@@ -40,6 +40,16 @@ app.get("/btc-tickers", (req, res) => {
     res.render("btc-tickers.ejs", {
       BTC_tickers: btc_ticker_data,
       root: path.join(__dirname, "./views")
+    });
+  });
+});
+
+app.get('/btc-trades', (req, res) => {
+  // console.log(res);
+  db.collection("BTC-trades").find().toArray((err, btc_trade_data) => {
+    res.render('BTC-trades.ejs', {
+      BTC_trades: btc_trade_data,
+      root: path.join(__dirname, './views')
     });
   });
 });
@@ -123,6 +133,20 @@ function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
       console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString());
     });
   };
+};
+
+function getBtcTrades(){
+  const btc_trades_cb = (err, response, btc_trades) => {
+    if (err) return console.log(err);
+    console.log(trades);
+    db.collection("BTC-trades").insertOne(btc_trades, (err, result) => {
+      console.log("Saved trades to BTC-trades.");
+    });
+  };
+  authedClient.getProductTrades('BTC-USD', btc_trades_cb);
+  var today = Date.now();
+  const trades = authedClient.getProductTradeStream('BTC-USD', 1559869200, today);
+};
 
 function create_buy_obj(c, t, p, d, r, pr, s, e){
   var new_r = []; 
@@ -350,6 +374,7 @@ function calcBtcRSI14 () {
       });
     });
   }
+  getBtcTrades();
   getBtcTickers();
   setTimeout(() => {
     getLtcTickers();
@@ -357,4 +382,4 @@ function calcBtcRSI14 () {
   setTimeout(() => {
     getEthTickers();
   }, 1000);
-};
+});
