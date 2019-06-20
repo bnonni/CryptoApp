@@ -78,8 +78,8 @@ function buySignalRSI(currency, period, RSIs, prices){
 
 function sellSignalRSI(currency, period, RSIs, prices){
   var start_time, end_time, today;
-  var rsi_sell_decision = false;
-  if(RSIs[0] >= RSIs[1]){
+  var rsi_sell_decision = true;
+  if(RSIs){
     if(RSIs[1] >= RSIs[2]){
       if(RSIs[2] >= RSIs[3]){
         if(RSIs[3] >= 50){
@@ -101,10 +101,10 @@ function sellSignalRSI(currency, period, RSIs, prices){
 
 function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
   if(type == "buy"){
+    var buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
     console.log(curr + " Buy!");
     console.log(buy_data);
     var buy_collection = curr + "_RSI14_Buys";
-    var buy_data = create_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
     db.collection(buy_collection).insertOne(buy_data, (err, result) => {
       if (err) return console.log(err);
       console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString());
@@ -122,10 +122,8 @@ function logBuySellDataToMongo(curr, type, per, dec, rsi, pri, st, ed){
 }
 
 function create_buy_obj(c, t, p, d, r, pr, s, e){
-  var new_r = [];
   var new_p = [];
   for(var i = 0; i < 5; i++){
-    new_r.push(r[i]);
     new_p.push(pr[i]);
   }
   var buy_data = {
@@ -133,7 +131,7 @@ function create_buy_obj(c, t, p, d, r, pr, s, e){
     type : t,
     period : p,
     buy_decision : d,
-    RSIs : new_r,
+    RSIs : r,
     prices : new_p,
     start_time : s,
     end_time : e
@@ -142,10 +140,8 @@ function create_buy_obj(c, t, p, d, r, pr, s, e){
 }
 
 function create_sell_obj(c, t, p, d, r, pr, s, e){
-  var new_r = [];
   var new_p = [];
   for(var i = 0; i < 5; i++){
-    new_r.push(r[i]);
     new_p.push(pr[i]);
   }
   var sell_data = {
@@ -153,7 +149,7 @@ function create_sell_obj(c, t, p, d, r, pr, s, e){
     type : t,
     period : p,
     sell_decision : d,
-    RSIs : new_r,
+    RSIs : r,
     prices : new_p,
     start_time : s,
     end_time : e
@@ -208,7 +204,7 @@ function calcBtcRSI14 () {
      currency : "BTC",
      time : new Date(Date.now()).toLocaleString(),
      period : 14,
-     RSI : BTC_RSI_output
+     RSI : BTC_RSI_output[0]
    };
   //  console.log(BTC_RSI_log);
    db.collection("BTC_RSI14_Data").insertOne(BTC_RSI_log, (err, result) => {
@@ -218,7 +214,7 @@ function calcBtcRSI14 () {
     buySignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
     setTimeout(() => {
       sellSignalRSI("BTC", BTC_RSI_input.period, BTC_RSI_output, btc_prices);
-    }, 100);
+    }, 50);
   });
 }
   /**
@@ -235,7 +231,7 @@ function calcBtcRSI14 () {
       calcEthRSI14();
     };
     authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
-    setTimeout(getEthTickers, 60500);
+    setTimeout(getEthTickers, 60000);
   }
   //Calculate RSI - ETH Tickers
   function calcEthRSI14 () {
@@ -269,7 +265,7 @@ function calcBtcRSI14 () {
         currency : "ETH",
         time : new Date(Date.now()).toLocaleString(),
         period : 14,
-        RSI : ETH_RSI_output
+        RSI : ETH_RSI_output[0]
       };
       // console.log(ETH_RSI_log);
       db.collection("ETH_RSI14_Data").insertOne(ETH_RSI_log, (err, result) => {
@@ -278,7 +274,7 @@ function calcBtcRSI14 () {
         buySignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
         setTimeout(() => {
           sellSignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
-        }, 100);
+        }, 50);
        });
     });
   }
@@ -297,7 +293,7 @@ function calcBtcRSI14 () {
       calcLtcRSI14();
     };
     authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
-    setTimeout(getLtcTickers, 61000);
+    setTimeout(getLtcTickers, 60000);
   }
   //Calc LTC Ticker RSI
   function calcLtcRSI14 () {
@@ -332,9 +328,9 @@ function calcBtcRSI14 () {
       currency : "LTC",
       time : new Date(Date.now()).toLocaleString(),
       period : 14,
-      RSI : LTC_RSI_output
+      RSI : LTC_RSI_output[0]
     };
-    //console.log(LTC_RSI_log);
+    // console.log(LTC_RSI_log);
     db.collection("LTC_RSI14_Data").insertOne(LTC_RSI_log, (err, result) => {
       if (err) return console.log(err);
       console.log("Saved RSIs to LTC_RSI14_Data.");
