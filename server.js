@@ -216,123 +216,123 @@ function calcBtcRSI14 () {
     }, 100);
   });
 }
-  /**
-   * ETH Functions
-   */
-  //Coinbase API call - ETH Tickers
-  function getEthTickers(){
-    const eth_tickers_cb = (err, response, eth) => {
-      //  console.log("ETH Ticker: " + eth[0]);
-      db.collection("ETH_Tickers").insertOne(eth, (err, result) => {
-        if (err) return console.log(err);
-        console.log("Saved tickers to ETH_Tickers.");
-      });
-      calcEthRSI14();
-    };
-    authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
-    setTimeout(getEthTickers, 60500);
-  }
-  //Calculate RSI - ETH Tickers
-  function calcEthRSI14 () {
-    //Find ETH tickers & calculate RSI
-    db.collection("ETH_Tickers").find().toArray((err, eth_tickers) => {
-      var eth_prices = [];
-      for(var i = eth_tickers.length - 1; i >= 0; i--){
-        if(eth_tickers[i] != undefined){
-          eth_prices.push(eth_tickers[i].price);
-        }
-      }
-      // console.log("ETH Price: " + eth_prices[0]);
-      //Input Object - RSI Calculation
-      var ETH_RSI_input = {
-        values : eth_prices,
-        period : 14
-      };
-      console.log(ETH_RSI_input);
-      //Output Object - RSI Calculation
-      var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
-      console.log(ETH_RSI_output);
+  // /**
+  //  * ETH Functions
+  //  */
+  // //Coinbase API call - ETH Tickers
+  // function getEthTickers(){
+  //   const eth_tickers_cb = (err, response, eth) => {
+  //     //  console.log("ETH Ticker: " + eth[0]);
+  //     db.collection("ETH_Tickers").insertOne(eth, (err, result) => {
+  //       if (err) return console.log(err);
+  //       console.log("Saved tickers to ETH_Tickers.");
+  //     });
+  //     calcEthRSI14();
+  //   };
+  //   authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
+  //   setTimeout(getEthTickers, 60500);
+  // }
+  // //Calculate RSI - ETH Tickers
+  // function calcEthRSI14 () {
+  //   //Find ETH tickers & calculate RSI
+  //   db.collection("ETH_Tickers").find().toArray((err, eth_tickers) => {
+  //     var eth_prices = [];
+  //     for(var i = eth_tickers.length - 1; i >= 0; i--){
+  //       if(eth_tickers[i] != undefined){
+  //         eth_prices.push(eth_tickers[i].price);
+  //       }
+  //     }
+  //     // console.log("ETH Price: " + eth_prices[0]);
+  //     //Input Object - RSI Calculation
+  //     var ETH_RSI_input = {
+  //       values : eth_prices,
+  //       period : 14
+  //     };
+  //     console.log(ETH_RSI_input);
+  //     //Output Object - RSI Calculation
+  //     var ETH_RSI_output = RSI.calculate(ETH_RSI_input);
+  //     console.log(ETH_RSI_output);
 
-      //New Object - RSI MongoDB Log
-      var ETH_RSI_log = {
-        currency : "ETH",
-        time : new Date(Date.now()).toLocaleString(),
-        period : 14,
-        RSI : ETH_RSI_output[0]
-      };
-      // console.log(ETH_RSI_log);
-      db.collection("ETH_RSI14_Data").insertOne(ETH_RSI_log, (err, result) => {
-        if (err) return console.log(err);
-        console.log("Saved RSIs to ETH_RSI14_Data.");
-        buySignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
-        setTimeout(() => {
-          sellSignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
-        }, 100);
-       });
-    });
-  }
+  //     //New Object - RSI MongoDB Log
+  //     var ETH_RSI_log = {
+  //       currency : "ETH",
+  //       time : new Date(Date.now()).toLocaleString(),
+  //       period : 14,
+  //       RSI : ETH_RSI_output[0]
+  //     };
+  //     // console.log(ETH_RSI_log);
+  //     db.collection("ETH_RSI14_Data").insertOne(ETH_RSI_log, (err, result) => {
+  //       if (err) return console.log(err);
+  //       console.log("Saved RSIs to ETH_RSI14_Data.");
+  //       buySignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
+  //       setTimeout(() => {
+  //         sellSignalRSI("ETH",  ETH_RSI_input.period, ETH_RSI_output, eth_prices);
+  //       }, 100);
+  //      });
+  //   });
+  // }
 
-  /**
-   * LTC Functions
-   */
-  //Coinbase API call - LTC Tickers
-  function getLtcTickers(){
-    const ltc_ticker_cb = (err, response, ltc) => {
-      // console.log(ltc);
-      db.collection("LTC_Tickers").insertOne(ltc, (err, result) => {
-        if (err) return console.log(err);
-        console.log("Saved tickers to LTC_Tickers.");
-      });
-      calcLtcRSI14();
-    };
-    authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
-    setTimeout(getLtcTickers, 61000);
-  }
-  //Calc LTC Ticker RSI
-  function calcLtcRSI14 () {
-  //Find ETH tickers & calculate RSI
-  db.collection("LTC_Tickers").find().toArray((err, ltc_tickers) => {
-    if (err) return console.log(err);
-    var ltc_prices = [];
-    for(var i = ltc_tickers.length - 1; i >= 0 ; i--){
-      if(ltc_tickers[i] != undefined){
-        ltc_prices.push(ltc_tickers[i].price);
-      }
-    }
-    // console.log("Line 148: BTC Price: " + LTC_prices[0]);
-    //Input Object - RSI Calculation
-    var LTC_RSI_input = {
-      values : ltc_prices,
-      period : 14
-    };
-    //  console.log(LTC_RSI_input);
-    //Output Object - RSI Calculation
-    var LTC_RSI_output = RSI.calculate(LTC_RSI_input);
-    //  console.log(LTC_RSI_output);
+  // /**
+  //  * LTC Functions
+  //  */
+  // //Coinbase API call - LTC Tickers
+  // function getLtcTickers(){
+  //   const ltc_ticker_cb = (err, response, ltc) => {
+  //     // console.log(ltc);
+  //     db.collection("LTC_Tickers").insertOne(ltc, (err, result) => {
+  //       if (err) return console.log(err);
+  //       console.log("Saved tickers to LTC_Tickers.");
+  //     });
+  //     calcLtcRSI14();
+  //   };
+  //   authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
+  //   setTimeout(getLtcTickers, 61000);
+  // }
+  // //Calc LTC Ticker RSI
+  // function calcLtcRSI14 () {
+  // //Find ETH tickers & calculate RSI
+  // db.collection("LTC_Tickers").find().toArray((err, ltc_tickers) => {
+  //   if (err) return console.log(err);
+  //   var ltc_prices = [];
+  //   for(var i = ltc_tickers.length - 1; i >= 0 ; i--){
+  //     if(ltc_tickers[i] != undefined){
+  //       ltc_prices.push(ltc_tickers[i].price);
+  //     }
+  //   }
+  //   // console.log("Line 148: BTC Price: " + LTC_prices[0]);
+  //   //Input Object - RSI Calculation
+  //   var LTC_RSI_input = {
+  //     values : ltc_prices,
+  //     period : 14
+  //   };
+  //   //  console.log(LTC_RSI_input);
+  //   //Output Object - RSI Calculation
+  //   var LTC_RSI_output = RSI.calculate(LTC_RSI_input);
+  //   //  console.log(LTC_RSI_output);
 
-    //New Object - RSI MongoDB Log
-    var LTC_RSI_log = {
-      currency : "LTC",
-      time : new Date(Date.now()).toLocaleString(),
-      period : 14,
-      RSI : LTC_RSI_output[0]
-    };
-    // console.log(LTC_RSI_log);
-    db.collection("LTC_RSI14_Data").insertOne(LTC_RSI_log, (err, result) => {
-      if (err) return console.log(err);
-      console.log("Saved RSIs to LTC_RSI14_Data.");
-      buySignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
-      setTimeout(() => {
-        sellSignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
-      }, 100);
-      });
-    });
-  }
+  //   //New Object - RSI MongoDB Log
+  //   var LTC_RSI_log = {
+  //     currency : "LTC",
+  //     time : new Date(Date.now()).toLocaleString(),
+  //     period : 14,
+  //     RSI : LTC_RSI_output[0]
+  //   };
+  //   // console.log(LTC_RSI_log);
+  //   db.collection("LTC_RSI14_Data").insertOne(LTC_RSI_log, (err, result) => {
+  //     if (err) return console.log(err);
+  //     console.log("Saved RSIs to LTC_RSI14_Data.");
+  //     buySignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
+  //     setTimeout(() => {
+  //       sellSignalRSI("LTC",  LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
+  //     }, 100);
+  //     });
+  //   });
+  // }
   getBtcTickers();
-  setTimeout(() => {
-    getLtcTickers();
-  }, 2000);
-  setTimeout(() => {
-    getEthTickers();
-  }, 2500);
+  // setTimeout(() => {
+  //   getLtcTickers();
+  // }, 2000);
+  // setTimeout(() => {
+  //   getEthTickers();
+  // }, 2500);
 });
