@@ -13,7 +13,7 @@ Purpose:
 
 ## How to Install and Run Crypto Algo 
 1. Clone the Crypto_Algo repo
-   **SSH**
+  **SSH**
    ```
    git clone git@github.com:bnonni/Crypto_Algo.git
    ```
