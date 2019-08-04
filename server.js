@@ -56,6 +56,8 @@ mongo.connect(err => {
     if (err) return console.log(err);
     db = mongo.db("crypto_wallet");
 
+
+
     function buySignalRSI(currency, period, RSIs, prices) {
         var start_time, end_time, today;
         var rsi_buy_decision = false;
@@ -72,10 +74,12 @@ mongo.connect(err => {
             }
         } else {
             rsi_buy_decision = false;
+
         }
         today = new Date(Date.now()).toLocaleString();
         console.log(currency + ": " + period + " Period Buy Decision => " + rsi_buy_decision + " @ " + today);
     }
+
 
     function sellSignalRSI(currency, period, RSIs, prices) {
         var start_time, end_time, today;
@@ -95,17 +99,15 @@ mongo.connect(err => {
             }
         } else {
             rsi_sell_decision = false;
+
         }
         today = new Date(Date.now()).toLocaleString();
         console.log(currency + ": " + period + " Period Sell Decision => " + rsi_sell_decision + " @ " + today);
     }
 
+
     function buyCryptoLogData(curr, type, per, dec, rsi, pri, st, ed) {
         var buy_data, sell_data;
-
-
-
-
         if (type == "buy") {
             if (curr == "BTC") {
                 // Buy BTC
