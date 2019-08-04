@@ -1,8 +1,13 @@
 var express = require('express');
+var mongo = require('../config/db');
+var db;
+mongo.connectToServer(function (err, client) {
+ db = mongo.getDb();
+});
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
  res.render("index");
 });
 
@@ -11,24 +16,21 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/register", (req, res) => {
- res.render("login");
+ res.render("register");
 });
 
-//Render BTC Tickers
-router.get("/btc-tickers", (req, res) => {
- // console.log(res);
- db.collection("BTC_Tickers").find().toArray((err, btc_ticker_data) => {
-  res.render("btc-tickers.ejs", {
-   BTC_tickers: btc_ticker_data,
-   root: path.join(__dirname, "./views")
+router.post("/tickers", (req, res) => {
+ // var eth = req.body.ethereum;
+ // var btc = req.body.bitcoin
+ if (req.body.ethereum) {
+  db.collection("BTC_Tickers").find().toArray((err, btc) => {
+   res.render("tickers", { BTC_tickers: btc });
   });
- });
+ } else {
+  db.collection("ETH_Tickers").find().toArray((err, eth) => {
+   res.render("tickers", { ETH_tickers: eth });
+  });
+ }
 });
 
-//Render BTC Tickers
-router.get("/btctickers", (req, res) => {
- res.render("btctickers.ejs", {
-  BTC_tickers: btc_ticker_data
- });
-});
 module.exports = router;

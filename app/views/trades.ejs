@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Trading Algo</title>
+  <link rel="stylesheet" href="style.css" type="text/html">
+  <style>
+    h1 {
+      margin-top: 0;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
+    .BTC_trades {
+      display: flex;
+      width: 85%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>BTC Trades</h1>
+  <ul class="BTC_trades">
+    <!-- ETH_trades... -->
+    <% for(var i=BTC_trades.length - 1; i>=0; i--){%>
+    <li class="BTC_trades">
+      <% if(BTC_trades[i].price != undefined){%>
+      <div class="BTC-trades-data">Datetime: <%= BTC_trades[i].time %> </div>
+      <div class="BTC-trades-data">Price: <%= BTC_trades[i].price %></div>
+      <div class="BTC-trades-data">Size: $<%= BTC_trades[i].size %></div>
+      <div class="BTC-trades-data">Side: <%= BTC_trades[i].side %></div>
+      <%}%>
+        </li>
+      <%}%>
+  </ul>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+</html>

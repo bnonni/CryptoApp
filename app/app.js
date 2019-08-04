@@ -1,5 +1,4 @@
 #!/usr/bin/env nodejs
-/*jshint esversion: 6 */
 
 const tf = require('@tensorflow/tfjs-node'),
     express = require('express'),
@@ -21,7 +20,7 @@ var session_cookie = app.use(cookieParser(secret));
 var FileStore = require('session-file-store')(session);
 app.use(session({
     secret: secret,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     store: new FileStore,
     cookie: session_cookie
@@ -45,11 +44,12 @@ var mongo = require('./config/db');
 var buySellSignals = require('./coinbase/buySell');
 var calcLogRSI = require('./coinbase/calcLogRSI');
 var getTickers = require('./coinbase/getTickers');
+
 mongo.connectToServer(function (err, client) {
     if (err) console.log(err);
     getTickers.getBtcTickers();
-    getTickers.getEthTickers();
-    getTickers.getLtcTickers();
+    setTimeout(() => { getTickers.getEthTickers(); }, 100)
+    setTimeout(() => { getTickers.getLtcTickers(); }, 100)
 });
 
 app.use((err, req, res, next) => {
