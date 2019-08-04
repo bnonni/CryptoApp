@@ -15,7 +15,7 @@ router.get("/register", (req, res) => {
 });
 
 //Render BTC Tickers
-app.get("/btc-tickers", (req, res) => {
+router.get("/btc-tickers", (req, res) => {
  // console.log(res);
  db.collection("BTC_Tickers").find().toArray((err, btc_ticker_data) => {
   res.render("btc-tickers.ejs", {
