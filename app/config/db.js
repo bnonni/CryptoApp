@@ -6,11 +6,9 @@ var MongoURI = "mongodb://localhost:27017/crypto_wallet";
 var _db;
 
 module.exports = {
-
  connectToServer: function (callback) {
   MongoClient.connect(MongoURI, { useNewUrlParser: true }, (err, client) => {
    _db = client.db('crypto_wallet');
-   console.log(_db);
    return callback(err);
   });
  },

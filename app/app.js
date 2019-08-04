@@ -41,15 +41,16 @@ app.use((req, res, next) => {
 });
 
 /*Import MongoDB connection & Coinbase Functions*/
-var db = require('./config/db');
+var mongo = require('./config/db');
 var buySellSignals = require('./coinbase/buySell');
 var calcLogRSI = require('./coinbase/calcLogRSI');
 var getTickers = require('./coinbase/getTickers');
-db.connectToServer(function (err, client) {
+mongo.connectToServer(function (err, client) {
     if (err) console.log(err);
-    getTickers.getBtcTickers();
-    getTickers.getEthTickers();
-    getTickers.getLtcTickers();
+    var db = mongo.getDb();
+    getTickers.getBtcTickers(db);
+    getTickers.getEthTickers(db);
+    getTickers.getLtcTickers(db);
 });
 
 app.use((err, req, res, next) => {
