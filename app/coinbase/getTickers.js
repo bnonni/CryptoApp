@@ -33,7 +33,7 @@ module.exports = getTickers = {
    });
   };
   authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
-  setTimeout(getTickers.getEthTickers, 60001);
+  setTimeout(getTickers.getEthTickers, 60100);
  },
 
  //Coinbase API call - LTC Tickers
@@ -47,6 +47,6 @@ module.exports = getTickers = {
    });
   };
   authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
-  setTimeout(getTickers.getLtcTickers, 60002);
+  setTimeout(getTickers.getLtcTickers, 60200);
  }
 }

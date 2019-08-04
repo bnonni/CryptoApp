@@ -58,7 +58,7 @@ module.exports = buySellSignals = {
    var buy_collection = curr + "_RSI14_Buys";
    db.collection(buy_collection).insertOne(buy_data, (err, result) => {
     if (err) return console.log(err);
-    console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString());
+    console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString() + "\n");
    });
   } else {
    var sell_data = buySellSignals.create_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
@@ -67,7 +67,7 @@ module.exports = buySellSignals = {
    var sell_collection = curr + "_RSI14_Sells";
    db.collection(sell_collection).insertOne(sell_data, (err, result) => {
     if (err) return console.log(err);
-    console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString());
+    console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString() + "\n");
    });
   }
  },

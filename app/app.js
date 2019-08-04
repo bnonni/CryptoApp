@@ -47,10 +47,9 @@ var calcLogRSI = require('./coinbase/calcLogRSI');
 var getTickers = require('./coinbase/getTickers');
 mongo.connectToServer(function (err, client) {
     if (err) console.log(err);
-    var db = mongo.getDb();
-    getTickers.getBtcTickers(db);
-    getTickers.getEthTickers(db);
-    getTickers.getLtcTickers(db);
+    getTickers.getBtcTickers();
+    getTickers.getEthTickers();
+    getTickers.getLtcTickers();
 });
 
 app.use((err, req, res, next) => {

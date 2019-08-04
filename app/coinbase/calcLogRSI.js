@@ -48,10 +48,7 @@ module.exports = calcLogRSI = {
 
    buySellFunctions.buySignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices);
 
-   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices); }, 100);
-
-   calcLogRSI.logRSI(currency, BTC_RSI_output);
-
+   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices); calcLogRSI.logRSI(currency, BTC_RSI_output); }, 100);
   });
  },
 
@@ -79,9 +76,7 @@ module.exports = calcLogRSI = {
 
    buySellFunctions.buySignalRSI(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices);
 
-   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); }, 100);
-
-   calcLogRSI.logRSI(currency, ETH_RSI_output);
+   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); calcLogRSI.logRSI(currency, ETH_RSI_output); }, 100)
 
   });
  },
@@ -112,9 +107,7 @@ module.exports = calcLogRSI = {
 
    buySellFunctions.buySignalRSI(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
 
-   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); }, 100);
-
-   calcLogRSI.logRSI(currency, LTC_RSI_output);
+   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); calcLogRSI.logRSI(currency, LTC_RSI_output); }, 100);
 
   });
  }
