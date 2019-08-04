@@ -19,7 +19,7 @@
     "mongodb": "^2.2.33"
   },
   "devDependencies": {
-    "@tensorflow/tfjs": "^1.2.5",
+    "@tensorflow/tfjs": "^1.2.6",
     "@tensorflow/tfjs-node": "^1.2.5",
     "@tensorflow/tfjs-node-gpu": "^1.2.5",
     "bcryptjs": "^2.4.3",
@@ -29,6 +29,7 @@
     "express-session": "^1.16.2",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.13",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1",
     "passport": "^0.4.0",
@@ -40,10 +41,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bnonni/Crypto-Log.git"
+    "url": "git+https://github.com/bnonni/Crypto_Algo.git"
   },
   "bugs": {
-    "url": "https://github.com/bnonni/Crypto-Log/issues"
+    "url": "https://github.com/bnonni/Crypto_Algo/issues"
   },
-  "homepage": "https://github.com/bnonni/Crypto-Log#readme"
+  "homepage": "https://github.com/bnonni/Crypto_Algo#readme"
 }

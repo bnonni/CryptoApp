@@ -1,5 +1,8 @@
-var mongoUtil = require('../config/db');
-var db = mongoUtil.getDb();
+var mongo = require('../config/db');
+var db;
+mongo.connectToServer(function (err, client) {
+ db = mongo.getDb();
+});
 
 module.exports = buySellSignals = {
 

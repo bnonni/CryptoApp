@@ -1,7 +1,10 @@
-var mongoUtil = require('../config/db');
-var db = mongoUtil.getDb();
+var mongo = require('../config/db');
 var RSI = require("technicalindicators").RSI;
 var buySellFunctions = require('./buySell');
+var db = mongo.getDb();
+mongo.connectToServer(function (err, client) {
+ db = mongo.getDb();
+});
 
 module.exports = calcLogRSI = {
 
