@@ -12,7 +12,7 @@ Purpose:
 - Currencies: BTC, ETH, LTC
 
 ## How to Install and Run Crypto Algo 
-1. Clone the Crypto_Algo repo
+1. Clone the Crypto_Algo repo <br/>
   **SSH**
    ```
    git clone git@github.com:bnonni/Crypto_Algo.git
