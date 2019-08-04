@@ -1,5 +1,5 @@
 node_modules
-app-env
+crypto.env
 .DS_Store
 .bash_history
 .bashrc
