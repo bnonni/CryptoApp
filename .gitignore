@@ -14,3 +14,5 @@ crypto.env
 .viminfo
 nodesource_setup.sh
 npm-debug.log
+aux
+*.xlsx

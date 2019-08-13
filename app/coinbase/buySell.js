@@ -11,7 +11,7 @@ module.exports = buySellSignals = {
   var start_time, end_time, today, RSI5 = RSIs;;
   var rsi5_buy_decision, rsi14_buy_decision;
   /**
-   * (period == 5 && RSI5[4] < 50 && RSI5[3] < 45 && RSI5[2] < 30 && RSI5[1] < 28)
+   * (period == 5 && RSI5[4] < 50 && RSI5[3] < 45 && RSI5[2] < 30 && RSI5[1] < 28 && RSI5[0] > RSI5[1] && RSI5[0] > 32)
    */
   if (period == 5) {
    if (RSI5[4] < 50)
