@@ -24,6 +24,34 @@ module.exports = calcLogRSI = {
   });
  },
 
+ //Calculate RSI5
+ calcBtcRSI5: () => {
+  var currency = "BTC";
+  db.collection("BTC_Tickers").find().toArray((err, btc_tickers) => {
+   if (err) return console.log(err);
+   var btc_prices = [];
+   for (var i = btc_tickers.length - 1; i >= 0; i--) {
+    if (btc_tickers[i] != undefined) {
+     btc_prices.push(btc_tickers[i].price);
+    }
+   }
+   // console.log(btc_prices);
+   //Input Object - RSI Calculation
+   var BTC_RSI5_input = {
+    values: btc_prices,
+    period: 5
+   };
+   //  console.log(BTC_RSI_input);
+   //Output Object - RSI Calculation
+   var BTC_RSI5_output = RSI.calculate(BTC_RSI5_input);
+   //  console.log(BTC_RSI_output);
+
+   buySellFunctions.buySignalRSI(currency, BTC_RSI5_input.period, BTC_RSI5_output, btc_prices);
+
+   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, BTC_RSI5_input.period, BTC_RSI5_output, btc_prices); calcLogRSI.logRSI(currency, BTC_RSI5_output); }, 100);
+  });
+ },
+
  //Calc BTC Ticker RSI
  calcBtcRSI14: () => {
   var currency = "BTC";
@@ -37,18 +65,18 @@ module.exports = calcLogRSI = {
    }
    // console.log(btc_prices);
    //Input Object - RSI Calculation
-   var BTC_RSI_input = {
+   var BTC_RSI14_input = {
     values: btc_prices,
     period: 14
    };
    //  console.log(BTC_RSI_input);
    //Output Object - RSI Calculation
-   var BTC_RSI_output = RSI.calculate(BTC_RSI_input);
+   var BTC_RSI14_output = RSI.calculate(BTC_RSI14_input);
    //  console.log(BTC_RSI_output);
 
-   buySellFunctions.buySignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices);
+   buySellFunctions.buySignalRSI(currency, BTC_RSI14_input.period, BTC_RSI14_output, btc_prices);
 
-   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices); calcLogRSI.logRSI(currency, BTC_RSI_output); }, 100);
+   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, BTC_RSI14_input.period, BTC_RSI14_output, btc_prices); calcLogRSI.logRSI(currency, BTC_RSI14_output); }, 100);
   });
  },
 
