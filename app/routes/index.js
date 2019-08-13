@@ -1,9 +1,6 @@
 var express = require('express');
 var mongo = require('../config/db');
 var db;
-mongo.connectToServer(function (err, client) {
- db = mongo.getDb();
-});
 var router = express.Router();
 
 /* GET home page. */
@@ -20,15 +17,23 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/tickers", (req, res) => {
- // var eth = req.body.ethereum;
- // var btc = req.body.bitcoin
- if (req.body.ethereum) {
-  db.collection("BTC_Tickers").find().toArray((err, btc) => {
-   res.render("tickers", { BTC_tickers: btc });
+ var reqETH = req.body.ethereum;
+ var reqBTC = req.body.bitcoin
+ if (reqBTC != null) {
+  console.log(reqBTC);
+  mongo.connectToServer(function (err, client) {
+   db = mongo.getDb();
+   db.collection("BTC_Tickers").find().toArray((err, btc) => {
+    res.render("tickers", { title: reqBTC, tickers: btc });
+   });
   });
- } else {
-  db.collection("ETH_Tickers").find().toArray((err, eth) => {
-   res.render("tickers", { ETH_tickers: eth });
+ } else if (reqETH != null) {
+  console.log(reqETH);
+  mongo.connectToServer(function (err, client) {
+   db = mongo.getDb();
+   db.collection("ETH_Tickers").find().toArray((err, eth) => {
+    res.render("tickers", { title: reqETH, tickers: eth });
+   });
   });
  }
 });

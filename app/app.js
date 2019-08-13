@@ -18,21 +18,23 @@ var app = express();
 var secret = Math.ceil(Math.random() * 90000 + 10000).toString();
 var session_cookie = app.use(cookieParser(secret));
 var FileStore = require('session-file-store')(session);
+
 app.use(session({
     secret: secret,
     resave: true,
     saveUninitialized: true,
-    store: new FileStore,
+    store: new FileStore(FileStore),
     cookie: session_cookie
 }));
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 app.use('/', index);
 
 app.use((req, res, next) => {
@@ -48,8 +50,8 @@ var getTickers = require('./coinbase/getTickers');
 mongo.connectToServer(function (err, client) {
     if (err) console.log(err);
     getTickers.getBtcTickers();
-    setTimeout(() => { getTickers.getEthTickers(); }, 100)
-    setTimeout(() => { getTickers.getLtcTickers(); }, 100)
+    setTimeout(() => { getTickers.getEthTickers(); }, 100);
+    setTimeout(() => { getTickers.getLtcTickers(); }, 100);
 });
 
 app.use((err, req, res, next) => {

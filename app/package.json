@@ -20,7 +20,6 @@
     "@tensorflow/tfjs": "^1.2.6",
     "@tensorflow/tfjs-core": "^1.2.6",
     "@tensorflow/tfjs-node": "^1.2.5",
-    "@tensorflow/tfjs-node-gpu": "^1.2.5",
     "bcryptjs": "^2.4.3",
     "coinbase-pro": "^0.9.0",
     "ejs": "^2.6.2",

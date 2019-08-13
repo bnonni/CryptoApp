@@ -9,16 +9,13 @@ module.exports = buySellSignals = {
  buySignalRSI: (currency, period, RSIs, prices) => {
   var start_time, end_time, today;
   var rsi_buy_decision = false;
-  if (RSIs[0] >= RSIs[1]) {
-   if (RSIs[1] <= 28) {
-    if (RSIs[2] <= 29) {
-     if (RSIs[3] <= 32) {
-      rsi_buy_decision = true;
-      start_time = new Date(Date.now() - 300000).toLocaleString();
-      end_time = new Date(Date.now()).toLocaleString();
-      buySellSignals.logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time);
-     }
-    }
+  if (RSIs[1] <= 29) {
+   if (RSIs[1] >= RSIs[0]) {
+    rsi_buy_decision = true;
+    /*TODO: Add Coinbase API request to buy*/
+    start_time = new Date(Date.now() - 300000).toLocaleString();
+    end_time = new Date(Date.now()).toLocaleString();
+    buySellSignals.logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time);
    }
   } else {
    rsi_buy_decision = false;
@@ -30,18 +27,13 @@ module.exports = buySellSignals = {
  sellSignalRSI: (currency, period, RSIs, prices) => {
   let start_time, end_time, today;
   var rsi_sell_decision = false;
-  if (RSIs[0] >= RSIs[1]) {
-   if (RSIs[1] >= RSIs[2]) {
-    if (RSIs[2] >= RSIs[3]) {
-     if (RSIs[3] >= 50) {
-      if (RSIs[4] >= RSIs[3]) {
-       rsi_sell_decision = true;
-       start_time = new Date(Date.now() - 300000).toLocaleString();
-       end_time = new Date(Date.now()).toLocaleString();
-       buySellSignals.logBuySellDataToMongo(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time);
-      }
-     }
-    }
+  if (RSIs[1] >= 50) {
+   if (RSIs[0] >= RSIs[1]) {
+    rsi_sell_decision = true;
+    /*TODO: Add Coinbase API request to sell*/
+    start_time = new Date(Date.now() - 300000).toLocaleString();
+    end_time = new Date(Date.now()).toLocaleString();
+    buySellSignals.logBuySellDataToMongo(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time);
    }
   } else {
    rsi_sell_decision = false;
