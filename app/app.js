@@ -44,7 +44,7 @@ app.use((req, res, next) => {
 /*Import MongoDB connection & Coinbase Functions*/
 var mongo = require('./config/db');
 var buySellSignals = require('./coinbase/buySell');
-var calcLogRSI = require('./coinbase/calcLogRSI');
+var calcIndicators = require('./coinbase/calcIndicators');
 var getTickers = require('./coinbase/getTickers');
 
 mongo.connectToServer(function (err, client) {

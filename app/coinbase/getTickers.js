@@ -1,6 +1,6 @@
 var mongo = require('../config/db');
 var authedClient = require('./Coinbase');
-var calcLogRSI = require('./calcLogRSI');
+var calcIndicators = require('./calcIndicators');
 var db;
 mongo.connectToServer(function (err, client) {
  db = mongo.getDb();
@@ -15,7 +15,7 @@ module.exports = getTickers = {
    db.collection("BTC_Tickers").insertOne(btc, (err, result) => {
     if (err) return console.log(err);
     console.log("Saved tickers to BTC_Tickers.");
-    calcLogRSI.calcBtcRSI14(db);
+    calcIndicators.calcBtcRSI14(db);
    });
   };
   authedClient.getProductTicker("BTC-USD", btc_ticker_cb);
@@ -29,7 +29,7 @@ module.exports = getTickers = {
    db.collection("ETH_Tickers").insertOne(eth, (err, result) => {
     if (err) return console.log(err);
     console.log("Saved tickers to ETH_Tickers.");
-    calcLogRSI.calcEthRSI14(db);
+    calcIndicators.calcEthRSI14(db);
    });
   };
   authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
@@ -43,7 +43,7 @@ module.exports = getTickers = {
    db.collection("LTC_Tickers").insertOne(ltc, (err, result) => {
     if (err) return console.log(err);
     console.log("Saved tickers to LTC_Tickers.");
-    calcLogRSI.calcLtcRSI14(db);
+    calcIndicators.calcLtcRSI14(db);
    });
   };
   authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
