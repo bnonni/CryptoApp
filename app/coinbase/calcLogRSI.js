@@ -7,7 +7,6 @@ mongo.connectToServer(function (err, client) {
 });
 
 module.exports = calcLogRSI = {
-
  logRSI: (curr, rsi_output) => {
   //New Object - RSI MongoDB Log
   var RSI_log = {
@@ -17,7 +16,6 @@ module.exports = calcLogRSI = {
    RSI: rsi_output[0]
   };
   var collection = curr + "_RSI14_Data";
-
   db.collection(collection).insertOne(RSI_log, (err, result) => {
    if (err) return console.log(err);
    console.log("Saved RSIs to " + collection + ".");
@@ -46,9 +44,13 @@ module.exports = calcLogRSI = {
    var BTC_RSI_output = RSI.calculate(BTC_RSI_input);
    //  console.log(BTC_RSI_output);
 
+   //detect buy signal using RSI output @ 14 periods
    buySellFunctions.buySignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices);
 
-   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices); calcLogRSI.logRSI(currency, BTC_RSI_output); }, 100);
+   //log RSI output for record keeping
+   calcLogRSI.logRSI(currency, BTC_RSI_output);
+
+   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, BTC_RSI_input.period, BTC_RSI_output, btc_prices); }, 100);
   });
  },
 

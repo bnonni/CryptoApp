@@ -8,7 +8,7 @@ module.exports = buySellSignals = {
 
     buySignalRSI: (currency, period, RSIs, prices) => {
         var start_time, end_time, today;
-        var rsi_buy_decision = false;
+        var rsi_buy_decision;;
         if (RSIs[1] <= 29) {
             if (RSIs[1] >= RSIs[0]) {
                 rsi_buy_decision = true;
@@ -26,7 +26,7 @@ module.exports = buySellSignals = {
 
     sellSignalRSI: (currency, period, RSIs, prices) => {
         let start_time, end_time, today;
-        var rsi_sell_decision = false;
+        var rsi_sell_decision;
         if (RSIs[1] >= 50) {
             if (RSIs[0] >= RSIs[1]) {
                 rsi_sell_decision = true;
