@@ -5,19 +5,21 @@ mongo.connectToServer(function (err, client) {
 });
 
 module.exports = buySellSignals = {
-
-    buySignalRSI: (currency, period, RSIs, prices) => {
+    //"BTC", 14, RSI, OBV, ADL.ADL, ADL.prices
+    buySignal: (currency, period, RSIs, OBVs, ADLs, prices) => {
         var start_time, end_time, today;
-        var rsi_buy_decision;
+        var buy_decision;
         // IF(RSIFourteen[1]<29	IF(RSIFourteen[1]<RSI[0])
         if (RSIs[1] <= 29) {
             if (RSIs[1] >= RSIs[0]) {
-                rsi_buy_decision = true;
-                /*TODO: Add Coinbase API request to buy*/
-                // calcIndicators.calcBtcOBV(btc_prices, btc_volume);
-                start_time = new Date(Date.now() - 300000).toLocaleString();
-                end_time = new Date(Date.now()).toLocaleString();
-                buySellSignals.logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time);
+                if (true) {
+                    buy_decision = true;
+                    /*TODO: Add Coinbase API request to buy*/
+                    // calcIndicators.calcBtcOBV(btc_prices, btc_volume);
+                    start_time = new Date(Date.now() - 300000).toLocaleString();
+                    end_time = new Date(Date.now()).toLocaleString();
+                    buySellSignals.logBuySellDataToMongo(currency, "buy", period, buy_decision, RSIs, prices, start_time, end_time);
+                }
             }
         } else {
             rsi_buy_decision = false;
@@ -26,7 +28,7 @@ module.exports = buySellSignals = {
         console.log(currency + ": " + period + " Period Buy Decision => " + rsi_buy_decision + " @ " + today);
     },
 
-    sellSignalRSI: (currency, period, RSIs, prices) => {
+    sellSignal: (currency, period, RSIs, prices) => {
         let start_time, end_time, today;
         var rsi_sell_decision;
         if (RSIs[1] >= 50) {

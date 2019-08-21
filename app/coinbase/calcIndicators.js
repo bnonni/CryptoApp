@@ -2,6 +2,7 @@ var mongo = require('../config/db');
 const RSI = require('technicalindicators').RSI;
 const OBV = require('technicalindicators').OBV;
 const ADL = require('technicalindicators').ADL;
+var LR = require('simple-statistics').linearRegression;
 var buySellFunctions = require('./buySell');
 var db;
 mongo.connectToServer((err, client) => {
@@ -27,6 +28,7 @@ module.exports = calcIndicators = {
      data.high.push(btc_tickers[i].ask);
     }
    }
+   console.log(data)
    return data;
   });
  },
@@ -35,7 +37,7 @@ module.exports = calcIndicators = {
  calcBtcRSI14: () => {
   var btc_tickers = calcIndicators.pullBTCtickers();
   var currency = "BTC", btc_prices = [], btc_volume = [];
-  for (var i = btc_tickers.length - 1; i >= 0; i--) {
+  for (var i = btc_tickers.prices.length - 1; i >= 0; i--) {
    if (btc_tickers[i] != undefined) {
     btc_prices.push(btc_tickers[i].price);
     btc_volume.push(btc_tickers[i].volume);
@@ -94,6 +96,12 @@ module.exports = calcIndicators = {
 
   //log the OBV to Mongo
   calcIndicators.logOBV("BTC", input, OBVs);
+
+  var slope = LR(OBV);
+  console.log("slope");
+  console.log(slope);
+
+  //IF(Slope(OBV[0],OBV[1],OBV[2])>0
 
   //return OBV data
   return OBVs;

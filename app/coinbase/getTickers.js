@@ -26,8 +26,8 @@ module.exports = getTickers = {
     var ADL = calcIndicators.calcAccDist();
 
     //detect buy/sell signal using RSI output @ 14 periods & OBV
-    buySellFunctions.buySignalRSI("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices);
-    setTimeout(() => { buySellFunctions.sellSignalRSI("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices); }, 100);
+    // buySellFunctions.buySignal("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices);
+    // setTimeout(() => { buySellFunctions.sellSignal("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices); }, 100);
 
    });
   };
