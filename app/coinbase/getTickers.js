@@ -10,15 +10,29 @@ module.exports = getTickers = {
 
  //Coinbase API call - BTC Tickers
  getBtcTickers: () => {
-  const btc_ticker_cb = (err, response, btc) => {
+  const btc_callback = (err, response, btc) => {
    db.collection("BTC_Tickers").insertOne(btc, (err, result) => {
     if (err) return console.log(err);
     console.log("Saved tickers to BTC_Tickers.");
     console.log(btc);
-    calcIndicators.calcBtcRSI14(db);
+
+    //calculate BTC RSI
+    var RSI = calcIndicators.calcBtcRSI14();
+
+    //calculate BTC OBV
+    var OBV = calcIndicators.calcBtcOBV();
+
+    //calculate BTC accumulation distribution
+    var ADL = calcIndicators.calcAccDist();
+
+    //detect buy/sell signal using RSI output @ 14 periods & OBV
+    buySellFunctions.buySignalRSI("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices);
+    setTimeout(() => { buySellFunctions.sellSignalRSI("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices); }, 100);
+
    });
   };
-  authedClient.getProductTicker("BTC-USD", btc_ticker_cb);
+
+  authedClient.getProductTicker("BTC-USD", btc_callback);
   setTimeout(getTickers.getBtcTickers, 60000);
  },
 

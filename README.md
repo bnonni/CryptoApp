@@ -56,5 +56,5 @@ Purpose:
 
 6. Finally, let's run our app!
    ```
-   npm run dev
+   npm run app
    ```
