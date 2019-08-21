@@ -23,6 +23,22 @@ module.exports = calcIndicators = {
   });
  },
 
+ logOBV: (curr, obv_out, obv_in) => {
+  //log OBV to Mongo
+  var OBV_log = {
+   currency: curr,
+   time: new Date(Date.now()).toLocaleString(),
+   close: [obv_in.close[0], obv_in.close[1], obv_in.close[2]],
+   volume: [obv_in.volume[0], obv_in.volume[1], obv_in.volume[2]],
+   OBV: [OBV_output[0], OBV_output[1], OBV_output[2]]
+  };
+  var collection = curr + "_OBV_Data";
+  db.collection(collection).insertOne(OBV_log, (err, result) => {
+   if (err) return console.log(err);
+   console.log("Saved OBVs to " + collection + ".");
+  });
+ },
+
  //Calc BTC Ticker RSI
  calcBtcRSI14: () => {
   var currency = "BTC";
@@ -35,37 +51,50 @@ module.exports = calcIndicators = {
      btc_volume.push(btc_tickers[i].volume);
     }
    }
-   // console.log(btc_prices);
+   console.log(btc_prices);
+   console.log(btc_volume);
    //Input Object - RSI Calculation
    var RSI_input = {
     values: btc_prices,
     period: 14
    };
-   //  console.log(input);
+   //console.log(input);
    //Output Object - RSI Calculation
    var RSI_output = RSI.calculate(RSI_input);
-   //  console.log(RSI_output);
-
-   //detect buy signal using RSI output @ 14 periods
-   // buySellFunctions.buySignalRSI(currency, input.period, RSI_output, btc_prices);
 
    //log RSI output for record keeping
    calcIndicators.logRSI(currency, RSI_output);
+
+   //calculate the OBV for BTC
    calcIndicators.calcBtcOBV(btc_prices, btc_volume);
-
-
-   // setTimeout(() => { buySellFunctions.sellSignalRSI(currency, input.period, RSI_output, btc_prices); }, 100);
   });
  },
 
  calcBtcOBV: (prices, volumes) => {
-  let OBV_input = {
-   close: prices,
-   volume: volumes
+  var i = 0, btc_pri = [], btc_vol = [];
+  while (i <= 20) {
+   var pri = Number(parseFloat(prices[i]).toFixed(2));
+   btc_pri.push(pri);
+   var vol = Number(Math.round(volumes[i]));
+   btc_vol.push(vol);
+   i++;
   }
-  console.log("OBV input: ");
-  console.log(OBV_input);
-  OBV.calculate(OBV_input)
+  // console.log(typeof (btc_pri[0]));
+  var OBV_input = {
+   close: btc_pri,
+   volume: btc_vol
+  }
+  //OBV Output Object
+  //console.log(OBV_input);
+  var OBV_output = OBV.calculate(OBV_input)
+  //console.log(OBV_output)
+  calcIndicators.logOBV("BTC", OBV_output, OBV_input);
+ },
+
+ calcAccDist: () => {
+  //detect buy/sell signal using RSI output @ 14 periods & OBV
+  buySellFunctions.buySignalRSI(currency, RSI_input.period, RSI_output, btc_prices);
+  setTimeout(() => { buySellFunctions.sellSignalRSI(currency, input.period, RSI_output, btc_prices); }, 100);
  },
 
  //Calculate RSI - ETH Tickers
@@ -98,7 +127,6 @@ module.exports = calcIndicators = {
 
   });
  },
-
 
  //Calc LTC Ticker RSI
  calcLtcRSI14: () => {

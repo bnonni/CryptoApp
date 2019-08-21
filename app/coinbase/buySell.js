@@ -14,6 +14,7 @@ module.exports = buySellSignals = {
             if (RSIs[1] >= RSIs[0]) {
                 rsi_buy_decision = true;
                 /*TODO: Add Coinbase API request to buy*/
+                // calcIndicators.calcBtcOBV(btc_prices, btc_volume);
                 start_time = new Date(Date.now() - 300000).toLocaleString();
                 end_time = new Date(Date.now()).toLocaleString();
                 buySellSignals.logBuySellDataToMongo(currency, "buy", period, rsi_buy_decision, RSIs, prices, start_time, end_time);
@@ -51,7 +52,7 @@ module.exports = buySellSignals = {
             var buy_collection = curr + "_RSI14_Buys";
             db.collection(buy_collection).insertOne(buy_data, (err, result) => {
                 if (err) return console.log(err);
-                console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString() + "\n");
+                console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString());
             });
         } else {
             var sell_data = buySellSignals.create_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
@@ -60,7 +61,7 @@ module.exports = buySellSignals = {
             var sell_collection = curr + "_RSI14_Sells";
             db.collection(sell_collection).insertOne(sell_data, (err, result) => {
                 if (err) return console.log(err);
-                console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString() + "\n");
+                console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString());
             });
         }
     },

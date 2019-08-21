@@ -11,10 +11,10 @@ module.exports = getTickers = {
  //Coinbase API call - BTC Tickers
  getBtcTickers: () => {
   const btc_ticker_cb = (err, response, btc) => {
-   //  console.log(btc);
    db.collection("BTC_Tickers").insertOne(btc, (err, result) => {
     if (err) return console.log(err);
     console.log("Saved tickers to BTC_Tickers.");
+    // console.log(btc);
     calcIndicators.calcBtcRSI14(db);
    });
   };
