@@ -14,7 +14,7 @@ module.exports = getTickers = {
    db.collection("BTC_Tickers").insertOne(btc, (err, result) => {
     if (err) return console.log(err);
     console.log("Saved tickers to BTC_Tickers.");
-    // console.log(btc);
+    console.log(btc);
     calcIndicators.calcBtcRSI14(db);
    });
   };
