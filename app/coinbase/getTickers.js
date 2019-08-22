@@ -1,6 +1,6 @@
-var mongo = require('../config/db');
-var authedClient = require('./Coinbase');
-var calcIndicators = require('./calcIndicators');
+const mongo = require('../config/db'),
+ authedClient = require('./Coinbase'),
+ calcIndicators = require('./calcIndicators');
 var db;
 mongo.connectToServer(function (err, client) {
  db = mongo.getDb();
@@ -8,45 +8,61 @@ mongo.connectToServer(function (err, client) {
 
 module.exports = getTickers = {
 
+ // pullBTCtickers: () => { },
+
  //Coinbase API call - BTC Tickers
  getBtcTickers: () => {
   const btc_callback = (err, response, btc) => {
-   db.collection("BTC_Tickers").insertOne(btc, (err, result) => {
+   db.collection('BTC_Tickers').insertOne(btc, (err, result) => {
     if (err) return console.log(err);
-    console.log("Saved tickers to BTC_Tickers.");
-    console.log(btc);
+    console.log('Saved tickers to BTC_Tickers.');
+    // console.log(btc);
+   });
+   var data = { high: [], low: [], volumes: [], prices: [] }
+   db.collection('BTC_Tickers').find().toArray((err, tickers) => {
+    if (err) return console.log(err);
+    for (var i = tickers.length - 1; i >= 0; i--) {
+     if (tickers[i] != undefined) {
+      data.prices.push(tickers[i].price);
+      data.volumes.push(tickers[i].volume);
+      data.low.push(tickers[i].bid);
+      data.high.push(tickers[i].ask);
+     }
+    }
+    // console.log(data);
+    // calculate BTC RSI
+    var RSI = calcIndicators.calcBtcRSI14(data);
+    // console.log(RSI);
 
-    //calculate BTC RSI
-    var RSI = calcIndicators.calcBtcRSI14();
+    // calculate BTC OBV
+    var OBV = calcIndicators.calcBtcOBV(data);
+    // console.log(OBV);
 
-    //calculate BTC OBV
-    var OBV = calcIndicators.calcBtcOBV();
+    // calculate BTC accumulation distribution
+    var ADL = calcIndicators.calcAccDist(data);
+    // console.log(ADL);
 
-    //calculate BTC accumulation distribution
-    var ADL = calcIndicators.calcAccDist();
-
-    //detect buy/sell signal using RSI output @ 14 periods & OBV
-    // buySellFunctions.buySignal("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices);
-    // setTimeout(() => { buySellFunctions.sellSignal("BTC", 14, RSI, OBV, ADL.ADL, ADL.prices); }, 100);
-
+    // detect buy/sell signal using RSI output @ 14 periods & OBV
+    buySellFunctions.buySignal('BTC', 14, RSI, OBV, ADL.ADL, ADL.prices);
+    setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL.ADL, ADL.prices); }, 100);
    });
   };
 
-  authedClient.getProductTicker("BTC-USD", btc_callback);
+  authedClient.getProductTicker('BTC-USD', btc_callback);
   setTimeout(getTickers.getBtcTickers, 60000);
  },
 
  //Coinbase API call - ETH Tickers
  getEthTickers: () => {
   const eth_tickers_cb = (err, response, eth) => {
-   //  console.log("ETH Ticker: " + eth[0]);
-   db.collection("ETH_Tickers").insertOne(eth, (err, result) => {
+   //  console.log('ETH Ticker: ' + eth[0]);
+   db.collection('ETH_Tickers').insertOne(eth, (err, result) => {
     if (err) return console.log(err);
-    console.log("Saved tickers to ETH_Tickers.");
+    console.log('Saved tickers to ETH_Tickers.');
     calcIndicators.calcEthRSI14(db);
    });
   };
-  authedClient.getProductTicker("ETH-USD", eth_tickers_cb);
+  authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
   setTimeout(getTickers.getEthTickers, 60100);
  },
 
@@ -54,13 +70,13 @@ module.exports = getTickers = {
  getLtcTickers: () => {
   const ltc_ticker_cb = (err, response, ltc) => {
    // console.log(ltc);
-   db.collection("LTC_Tickers").insertOne(ltc, (err, result) => {
+   db.collection('LTC_Tickers').insertOne(ltc, (err, result) => {
     if (err) return console.log(err);
-    console.log("Saved tickers to LTC_Tickers.");
+    console.log('Saved tickers to LTC_Tickers.');
     calcIndicators.calcLtcRSI14(db);
    });
   };
-  authedClient.getProductTicker("LTC-USD", ltc_ticker_cb);
+  authedClient.getProductTicker('LTC-USD', ltc_ticker_cb);
   setTimeout(getTickers.getLtcTickers, 60200);
  }
 }

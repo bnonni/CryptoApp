@@ -1,11 +1,11 @@
-var mongo = require('../config/db');
+const mongo = require('../config/db');
 var db;
 mongo.connectToServer(function (err, client) {
     db = mongo.getDb();
 });
 
 module.exports = buySellSignals = {
-    //"BTC", 14, RSI, OBV, ADL.ADL, ADL.prices
+    //'BTC', 14, RSI, OBV, ADL.ADL, ADL.prices
     buySignal: (currency, period, RSIs, OBVs, ADLs, prices) => {
         var start_time, end_time, today;
         var buy_decision;
@@ -18,14 +18,14 @@ module.exports = buySellSignals = {
                     // calcIndicators.calcBtcOBV(btc_prices, btc_volume);
                     start_time = new Date(Date.now() - 300000).toLocaleString();
                     end_time = new Date(Date.now()).toLocaleString();
-                    buySellSignals.logBuySellDataToMongo(currency, "buy", period, buy_decision, RSIs, prices, start_time, end_time);
+                    buySellSignals.logBuySellDataToMongo(currency, 'buy', period, buy_decision, RSIs, prices, start_time, end_time);
                 }
             }
         } else {
             rsi_buy_decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ": " + period + " Period Buy Decision => " + rsi_buy_decision + " @ " + today);
+        console.log(currency + ': ' + period + ' Period Buy Decision => ' + rsi_buy_decision + ' @ ' + today);
     },
 
     sellSignal: (currency, period, RSIs, prices) => {
@@ -37,33 +37,33 @@ module.exports = buySellSignals = {
                 /*TODO: Add Coinbase API request to sell*/
                 start_time = new Date(Date.now() - 300000).toLocaleString();
                 end_time = new Date(Date.now()).toLocaleString();
-                buySellSignals.logBuySellDataToMongo(currency, "sell", period, rsi_sell_decision, RSIs, prices, start_time, end_time);
+                buySellSignals.logBuySellDataToMongo(currency, 'sell', period, rsi_sell_decision, RSIs, prices, start_time, end_time);
             }
         } else {
             rsi_sell_decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ": " + period + " Period Sell Decision => " + rsi_sell_decision + " @ " + today);
+        console.log(currency + ': ' + period + ' Period Sell Decision => ' + rsi_sell_decision + ' @ ' + today);
     },
 
     logBuySellDataToMongo: (curr, type, per, dec, rsi, pri, st, ed) => {
-        if (type == "buy") {
+        if (type == 'buy') {
             var buy_data = buySellSignals.create_buy_obj(curr, type, per, dec, rsi, pri, st, ed);
-            console.log(curr + " Buy!");
+            console.log(curr + ' Buy!');
             console.log(buy_data);
-            var buy_collection = curr + "_RSI14_Buys";
+            var buy_collection = curr + '_RSI14_Buys';
             db.collection(buy_collection).insertOne(buy_data, (err, result) => {
                 if (err) return console.log(err);
-                console.log("Buy successful!! Saved data to " + curr + "_RSI14_Buys @ " + new Date(Date.now()).toLocaleString());
+                console.log('Buy successful!! Saved data to ' + curr + '_RSI14_Buys @ ' + new Date(Date.now()).toLocaleString());
             });
         } else {
             var sell_data = buySellSignals.create_sell_obj(curr, type, per, dec, rsi, pri, st, ed);
-            console.log(curr + " Sell!");
+            console.log(curr + ' Sell!');
             console.log(sell_data);
-            var sell_collection = curr + "_RSI14_Sells";
+            var sell_collection = curr + '_RSI14_Sells';
             db.collection(sell_collection).insertOne(sell_data, (err, result) => {
                 if (err) return console.log(err);
-                console.log("Sell successful!! Saved data to " + curr + "_RSI14_Sells @ " + new Date(Date.now()).toLocaleString());
+                console.log('Sell successful!! Saved data to ' + curr + '_RSI14_Sells @ ' + new Date(Date.now()).toLocaleString());
             });
         }
     },
