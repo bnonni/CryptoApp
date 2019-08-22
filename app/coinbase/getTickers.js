@@ -18,7 +18,12 @@ module.exports = getTickers = {
     console.log('Saved tickers to BTC_Tickers.');
     // console.log(btc);
    });
-   var data = { high: [], low: [], volumes: [], prices: [] }
+   var data = {
+    high: [],
+    low: [],
+    volumes: [],
+    prices: []
+   }
    db.collection('BTC_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
     for (var i = tickers.length - 1; i >= 0; i--) {
@@ -43,8 +48,9 @@ module.exports = getTickers = {
     // console.log(ADL);
 
     // detect buy/sell signal using RSI output @ 14 periods & OBV
-    buySellFunctions.buySignal('BTC', 14, RSI, OBV, ADL.ADL, ADL.prices);
-    setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL.ADL, ADL.prices); }, 100);
+    buySellFunctions.buySignal('BTC', 14, RSI, OBV, ADL);
+
+    setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL); }, 100);
    });
   };
 

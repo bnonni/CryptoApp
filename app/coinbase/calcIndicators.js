@@ -3,7 +3,7 @@ const mongo = require('../config/db'),
  RSI = require('technicalindicators').RSI,
  OBV = require('technicalindicators').OBV,
  ADL = require('technicalindicators').ADL,
- LR = require('simple-statistics');
+ SS = require('simple-statistics');
 var db;
 mongo.connectToServer((err, client) => {
  db = mongo.getDb();
@@ -14,7 +14,10 @@ module.exports = calcIndicators = {
  calcBtcRSI14: (data) => {
 
   // Input Object - RSI Calculation
-  let input = { values: data.prices, period: 14 };
+  let input = {
+   values: data.prices,
+   period: 14
+  };
   //console.log(input);
 
   // Output Object - RSI Calculation
@@ -28,7 +31,25 @@ module.exports = calcIndicators = {
 
  logRSI: (currency, input, RSI) => {
   // New Object - RSI MongoDB Log
-  let RSI_log = { currency: currency, time: new Date(Date.now()).toLocaleString(), period: input.period, prices: { price1: input.values[0], price2: input.values[1], price3: input.values[2], price4: input.values[3], price5: input.values[4] }, RSI: { RSI1: RSI[0], RSI2: RSI[1], RSI3: RSI[2], RSI4: RSI[3], RSI5: RSI[4] } };
+  let RSI_log = {
+   currency: currency,
+   time: new Date(Date.now()).toLocaleString(),
+   period: input.period,
+   prices: {
+    price1: input.values[0],
+    price2: input.values[1],
+    price3: input.values[2],
+    price4: input.values[3],
+    price5: input.values[4]
+   },
+   RSI: {
+    RSI1: RSI[0],
+    RSI2: RSI[1],
+    RSI3: RSI[2],
+    RSI4: RSI[3],
+    RSI5: RSI[4]
+   }
+  };
   let collection = currency + '_RSI14_Data';
   db.collection(collection).insertOne(RSI_log, (err, result) => {
    if (err) return console.log(err);
@@ -46,26 +67,32 @@ module.exports = calcIndicators = {
    i++;
   }
   // console.log(typeof (btc_pri[0]));
-  let input = { close: prices, volume: volumes }
+  let input = {
+   close: prices,
+   volume: volumes
+  }
 
   // OBV Output Object - console.log(OBV_input);
   let OBVs = OBV.calculate(input)
   // console.log(OBV_output)
 
-  // log the OBV to Mongo
-  calcIndicators.logOBV('BTC', input, OBVs);
-
-  let slope = LR.linearRegression([[OBVs[0], OBVs[1], OBVs[2]], [2, 1, 0]]);
+  let slope = SS.linearRegression([[OBVs[0], OBVs[1], OBVs[2]], [2, 1, 0]]);
   console.log('slope');
   console.log(slope);
 
-  let OBV_data = { slope: slope, OBV: OBVs }
+  let OBV_data = {
+   OBV: OBVs,
+   slope: slope.m
+  }
+
+  // log the OBV to Mongo
+  calcIndicators.logOBV('BTC', input, OBV_data);
 
   // return OBV data
   return OBV_data;
  },
 
- logOBV: (currency, input, OBV) => {
+ logOBV: (currency, input, OBV_data) => {
   //log OBV to Mongo
   let OBV_log = {
    currency: currency,
@@ -81,10 +108,11 @@ module.exports = calcIndicators = {
     volume3: input.volume[2]
    },
    OBVs: {
-    OBV1: OBV[0],
-    OBV2: OBV[1],
-    OBV3: OBV[2]
-   }
+    OBV1: OBV_data.OBV[0],
+    OBV2: OBV_data.OBV[1],
+    OBV3: OBV_data.OBV[2]
+   },
+   slope: OBV_data.slope
   };
 
   let collection = currency + '_OBV_Data';
@@ -104,17 +132,22 @@ module.exports = calcIndicators = {
   }
   let ADLs = ADL.calculate(input);
 
-  calcIndicators.logADL('BTC', input, ADLs);
+  let slope = SS.linearRegression([[ADLs[0], ADLs[1], ADLs[2]], [2, 1, 0]]);
+  console.log('slope');
+  console.log(slope);
 
   let ADL_data = {
    prices: data.prices,
+   slope: slope.m,
    ADL: ADLs
   }
+
+  calcIndicators.logADL('BTC', input, ADL_data);
 
   return ADL_data;
  },
 
- logADL: (currency, input, ADL) => {
+ logADL: (currency, input, ADL_data) => {
   //log OBV to Mongo
   let ADL_log = {
    currency: currency,
@@ -130,10 +163,11 @@ module.exports = calcIndicators = {
     volume3: input.volume[2]
    },
    ADLs: {
-    ADL1: ADL[0],
-    ADL2: ADL[1],
-    ADL3: ADL[2]
-   }
+    ADL1: ADL_data.ADL[0],
+    ADL2: ADL_data.ADL[1],
+    ADL3: ADL_data.ADL[2]
+   },
+   slope: ADL_data.slope
   };
 
   let collection = currency + '_ADL_Data';
@@ -144,6 +178,7 @@ module.exports = calcIndicators = {
   });
  },
 
+ /*------------------------------------------------------------*/
  /**TODO: Build out RSI, OBV & ADL functions for ETH and LTC */
  //Calculate RSI - ETH Tickers
  calcEthRSI14: () => {
