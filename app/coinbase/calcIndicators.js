@@ -77,8 +77,7 @@ module.exports = calcIndicators = {
   // console.log(OBV_output)
 
   let slope = SS.linearRegression([[OBVs[0], OBVs[1], OBVs[2]], [2, 1, 0]]);
-  console.log('slope');
-  console.log(slope);
+  // console.log('slope'); console.log(slope);
 
   let OBV_data = {
    OBV: OBVs,
@@ -133,8 +132,7 @@ module.exports = calcIndicators = {
   let ADLs = ADL.calculate(input);
 
   let slope = SS.linearRegression([[ADLs[0], ADLs[1], ADLs[2]], [2, 1, 0]]);
-  console.log('slope');
-  console.log(slope);
+  // console.log('slope'); console.log(slope);
 
   let ADL_data = {
    prices: data.prices,

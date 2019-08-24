@@ -1,6 +1,7 @@
 const mongo = require('../config/db'),
  authedClient = require('./Coinbase'),
- calcIndicators = require('./calcIndicators');
+ calcIndicators = require('./calcIndicators'),
+ buySellFunctions = require('./buySell');
 var db;
 mongo.connectToServer(function (err, client) {
  db = mongo.getDb();
@@ -8,14 +9,14 @@ mongo.connectToServer(function (err, client) {
 
 module.exports = getTickers = {
 
- // pullBTCtickers: () => { },
+ // pullBTCtickers: () => { },/** */
 
  //Coinbase API call - BTC Tickers
  getBtcTickers: () => {
   const btc_callback = (err, response, btc) => {
    db.collection('BTC_Tickers').insertOne(btc, (err, result) => {
     if (err) return console.log(err);
-    console.log('Saved tickers to BTC_Tickers.');
+    console.log('\n/* --------------------------------------------------- */\n\nSaved tickers to BTC_Tickers.');
     // console.log(btc);
    });
    var data = {
@@ -49,6 +50,7 @@ module.exports = getTickers = {
 
     // detect buy/sell signal using RSI output @ 14 periods & OBV
     buySellFunctions.buySignal('BTC', 14, RSI, OBV, ADL);
+    // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
 
     setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL); }, 100);
    });

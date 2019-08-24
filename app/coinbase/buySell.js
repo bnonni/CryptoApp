@@ -10,48 +10,62 @@ module.exports = buySellSignals = {
         let start, end, today, decision, tickers = ADL.prices;
         // IF( RSI14[1] < 29 && RSI14[1] < RSI[0] )
         if ((RSI[1] < 29) && (RSI[1] < RSI[0])) {
+            console.log('Buy RSI => true');
 
             // IF(Slope(OBV[0],OBV[1],OBV[2])>0
             if (OBV.slope > 0) {
+                console.log('Buy OBV => true');
 
                 // IF(Slope(AccDis[0],AccDis[1],AccDis[2])>0
                 if (ADL.slope > 0) {
-
+                    console.log('Buy ADL => true');
                     decision = true;
                     /*TODO: Add Coinbase API request to buy*/
                     start = new Date(Date.now() - 300000).toLocaleString();
                     end = new Date(Date.now()).toLocaleString();
-                    buySellSignals.logBuySellDataToMongo(currency, 'buy', period, decision, RSI, OBV.OBV, ADL.ADL, tickers, start, end);
+                    buySellSignals.logTransaction(currency, 'buy', period, decision, RSI, OBV, ADL, tickers, start, end);
+                } else {
+                    decision = false;
+                    console.log('Buy ADL => false');
                 }
+            } else {
+                decision = false;
+                console.log('Buy OBV => false');
             }
         } else {
             decision = false;
+            console.log('Buy RSI => false');
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ': ' + period + ' Period Buy Decision => ' + decision + ' @ ' + today);
+        console.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
     },
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
-        let start_time, end_time, today;
-        var rsi_sell_decision;
-        if (RSIs[1] >= 50) {
-            if (RSIs[0] >= RSIs[1]) {
-                rsi_sell_decision = true;
+        let start, end, today, decision, tickers = ADL.prices;
+        if ((RSI[1] >= 50) || (RSI[0] >= RSI[1])) {
+            console.log('Sell RSI => true');
+            if ((OBV.slope < 0) || (ADL.slope < 0)) {
+                console.log('Sell OBV || ADL => true');
+                decision = true;
                 /*TODO: Add Coinbase API request to sell*/
-                start_time = new Date(Date.now() - 300000).toLocaleString();
-                end_time = new Date(Date.now()).toLocaleString();
-                buySellSignals.logBuySellDataToMongo(currency, 'sell', period, rsi_sell_decision, RSI, prices, start_time, end_time);
+                start = new Date(Date.now() - 300000).toLocaleString();
+                end = new Date(Date.now()).toLocaleString();
+                buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
+            } else {
+                decision = false;
+                console.log('Sell OBV || ADL => false');
             }
         } else {
-            rsi_sell_decision = false;
+            decision = false;
+            console.log('Sell RSI => false');
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ': ' + period + ' Period Sell Decision => ' + rsi_sell_decision + ' @ ' + today);
+        console.log(currency + ': Period Sell Decision => ' + decision + ' @ ' + today);
     },
 
-    logBuySellDataToMongo: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
+    logTransaction: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
         if (type == 'buy') {
-            var buy_data = buySellSignals.create_buy_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end)
+            var buy_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
             console.log(currency + ' Buy!');
             console.log(buy_data);
             var buy_collection = currency + '_Buys';
@@ -60,7 +74,7 @@ module.exports = buySellSignals = {
                 console.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
             });
         } else {
-            var sell_data = buySellSignals.create_sell_obj(currency, type, per, dec, rsi, pri, st, ed);
+            var sell_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end)
             console.log(currency + ' Sell!');
             console.log(sell_data);
             var sell_collection = currency + '_Sells';
@@ -71,46 +85,28 @@ module.exports = buySellSignals = {
         }
     },
 
-    create_buy_obj: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
+    create_data_obj: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
         let RSIs = [], OBVs = [], ADLs = [], prices = [];
         for (var i = 0; i < 5; i++) {
             RSIs.push(RSI[i]);
-            OBVs.push(OBV[i]);
-            ADLs.push(ADL[i]);
+            OBVs.push(OBV.OBV[i]);
+            ADLs.push(ADL.ADL[i]);
             prices.push(tickers[i]);
         }
-        var buy_data = {
+        var data = {
             currency: currency,
             type: type,
             period: period,
-            buy_decision: decision,
+            decision: decision,
             RSI: RSIs,
             OBV: OBVs,
+            OBV_slope: OBV.slope,
             ADL: ADLs,
+            ADL_slope: ADL.slope,
             prices: prices,
             start_time: start,
             end_time: end
         };
-        return buy_data;
+        return data;
     },
-
-    create_sell_obj: (c, t, p, d, r, pr, s, e) => {
-        var new_r = [];
-        var new_p = [];
-        for (var i = 0; i < 5; i++) {
-            new_r.push(r[i]);
-            new_p.push(pr[i]);
-        }
-        var sell_data = {
-            currency: c,
-            type: t,
-            period: p,
-            sell_decision: d,
-            RSIs: new_r,
-            prices: new_p,
-            start_time: s,
-            end_time: e
-        };
-        return sell_data;
-    }
 };
