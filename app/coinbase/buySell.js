@@ -9,7 +9,7 @@ module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
         let start, end, today, decision, tickers = ADL.prices;
         // IF( RSI14[1] < 29 && RSI14[1] < RSI[0] )
-        if ((RSI[1] < 29) && (RSI[1] < RSI[0])) {
+        if ((RSI[1] < 29.99) && (RSI[1] < RSI[0])) {
             console.log('Buy RSI => true');
 
             // IF(Slope(OBV[0],OBV[1],OBV[2])>0
@@ -42,18 +42,24 @@ module.exports = buySellSignals = {
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
         let start, end, today, decision, tickers = ADL.prices;
-        if ((RSI[1] >= 50) || (RSI[0] >= RSI[1])) {
+        if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {
             console.log('Sell RSI => true');
-            if ((OBV.slope < 0) || (ADL.slope < 0)) {
-                console.log('Sell OBV || ADL => true');
-                decision = true;
-                /*TODO: Add Coinbase API request to sell*/
-                start = new Date(Date.now() - 300000).toLocaleString();
-                end = new Date(Date.now()).toLocaleString();
-                buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
+            if (OBV.slope < 0) {
+                console.log('Buy OBV => true');
+                if (ADL.slope < 0) {
+                    console.log('ADL => true');
+                    decision = true;
+                    /*TODO: Add Coinbase API request to sell*/
+                    start = new Date(Date.now() - 300000).toLocaleString();
+                    end = new Date(Date.now()).toLocaleString();
+                    buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
+                } else {
+                    decision = false;
+                    console.log('ADL => false');
+                }
             } else {
                 decision = false;
-                console.log('Sell OBV || ADL => false');
+                console.log('Buy OBV => false');
             }
         } else {
             decision = false;
