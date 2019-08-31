@@ -1,9 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
-const user = "admin";
-const password = process.env.password;
-//mongodb://192.241.152.52:27017/
-const MongoURI = "mongodb://admin:" + password + "192.241.152.52:27017/crypto_wallet";
-// "mongodb://localhost:27017/crypto_wallet"
+const MongoURI = "mongodb://localhost:27017/crypto_wallet"
 var _db;
 
 module.exports = {
