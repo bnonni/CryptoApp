@@ -16,3 +16,4 @@ nodesource_setup.sh
 npm-debug.log
 aux
 *.xlsx
+mongo.admin

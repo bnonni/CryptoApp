@@ -1,13 +1,15 @@
 const MongoClient = require("mongodb").MongoClient;
 const password = process.env.password;
-const MongoURI = "mongodb+srv://hu5ky5n0w:" + password + "@cryptowallet-glvp8.mongodb.net/test?retryWrites=true&w=majority";
+//mongodb://192.241.152.52:27017/
+const MongoURI = "mongodb://192.241.152.52:27017";
 // "mongodb://localhost:27017/crypto_wallet"
 var _db;
 
 module.exports = {
  connectToServer: function (callback) {
   MongoClient.connect(MongoURI, { useNewUrlParser: true }, (err, client) => {
-   _db = client.db('crypto_wallet');
+   _db = client.db("crypto_wallet");
+   console.log("Connected to " + _db);
    return callback(err);
   });
  },
