@@ -46,12 +46,9 @@ var mongo = require('./config/db');
 var buySellSignals = require('./coinbase/buySell');
 var calcIndicators = require('./coinbase/calcIndicators');
 var getTickers = require('./coinbase/getTickers');
-var db;
 mongo.connectToServer(function (err, client) {
-    db = mongo.getDb();
-    console.log(db);
     if (err) console.log(err);
-    getTickers.getBtcTickers(db);
+    getTickers.getBtcTickers();
     // setTimeout(() => { getTickers.getEthTickers(); }, 100);
     // setTimeout(() => { getTickers.getLtcTickers(); }, 100);
 });
