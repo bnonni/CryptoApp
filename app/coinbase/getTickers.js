@@ -67,7 +67,7 @@ module.exports = getTickers = {
    db.collection('ETH_Tickers').insertOne(eth, (err, result) => {
     if (err) return console.log(err);
     console.log('Saved tickers to ETH_Tickers.');
-    calcIndicators.calcEthRSI14(db);
+    // calcIndicators.calcEthRSI14(db);
    });
   };
   authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
@@ -81,7 +81,7 @@ module.exports = getTickers = {
    db.collection('LTC_Tickers').insertOne(ltc, (err, result) => {
     if (err) return console.log(err);
     console.log('Saved tickers to LTC_Tickers.');
-    calcIndicators.calcLtcRSI14(db);
+    // calcIndicators.calcLtcRSI14(db);
    });
   };
   authedClient.getProductTicker('LTC-USD', ltc_ticker_cb);

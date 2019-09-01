@@ -17,8 +17,7 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/tickers", (req, res) => {
- var reqETH = req.body.ethereum;
- var reqBTC = req.body.bitcoin
+ var reqETH = req.body.ethereum, reqBTC = req.body.bitcoin, reqLTC = req.body.litecoin;
  if (reqBTC != null) {
   console.log(reqBTC);
   mongo.connectToServer(function (err, client) {
@@ -33,6 +32,14 @@ router.post("/tickers", (req, res) => {
    db = mongo.getDb();
    db.collection("ETH_Tickers").find().toArray((err, eth) => {
     res.render("tickers", { title: reqETH, tickers: eth });
+   });
+  });
+ } else if (reqLTC != null) {
+  console.log(reqLTC);
+  mongo.connectToServer(function (err, client) {
+   db = mongo.getDb();
+   db.collection("LTC_Tickers").find().toArray((err, ltc) => {
+    res.render("tickers", { title: reqLTC, tickers: ltc });
    });
   });
  }

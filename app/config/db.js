@@ -4,7 +4,7 @@ var _db;
 
 module.exports = {
  connectToServer: function (callback) {
-  MongoClient.connect(MongoURI, { useNewUrlParser: true }, (err, client) => {
+  MongoClient.connect(MongoURI, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
    _db = client.db("crypto_wallet");
    return callback(err);
   });

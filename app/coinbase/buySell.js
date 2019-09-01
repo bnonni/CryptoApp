@@ -66,7 +66,7 @@ module.exports = buySellSignals = {
             console.log('Sell RSI => false');
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ': Period Sell Decision => ' + decision + ' @ ' + today);
+        console.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
     },
 
     logTransaction: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {

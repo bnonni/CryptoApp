@@ -7,6 +7,5 @@ const CoinbasePro = require('coinbase-pro'),
  passphrase = process.env.passphrase,
  apiURI = 'https://api.pro.coinbase.com',
  authedClient = new CoinbasePro.AuthenticatedClient(key, secret, passphrase, apiURI);
-console.log(authedClient)
 
 module.exports = authedClient;
