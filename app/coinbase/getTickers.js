@@ -16,10 +16,12 @@ module.exports = getTickers = {
   const btc_callback = (err, response, btc) => {
    db.collection('BTC_Tickers').insertOne(btc, (err, result) => {
     if (err) return console.log(err);
-    console.log('\n/* --------------------------------------------------- */\n\nSaved tickers to BTC_Tickers.');
+    console.log('\n/* -------------------------BTC------------------------- */\n\nSaved tickers to BTC_Tickers.');
     // console.log(btc);
    });
    var data = {
+    currency: 'BTC',
+    period: 14,
     high: [],
     low: [],
     volumes: [],
@@ -27,7 +29,7 @@ module.exports = getTickers = {
    }
    db.collection('BTC_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
-    for (var i = tickers.length - 1; i >= 0; i--) {
+    for (var i = tickers.length - 1; i >= 0; i -= 5) {
      if (tickers[i] != undefined) {
       data.prices.push(tickers[i].price);
       data.volumes.push(tickers[i].volume);
@@ -37,11 +39,11 @@ module.exports = getTickers = {
     }
     // console.log(data);
     // calculate BTC RSI
-    var RSI = calcIndicators.calcBtcRSI14(data);
+    var RSI = calcIndicators.calcRSI(data);
     // console.log(RSI);
 
     // calculate BTC OBV
-    var OBV = calcIndicators.calcBtcOBV(data);
+    var OBV = calcIndicators.calcOBV(data);
     // console.log(OBV);
 
     // calculate BTC accumulation distribution
@@ -49,10 +51,11 @@ module.exports = getTickers = {
     // console.log(ADL);
 
     // detect buy/sell signal using RSI output @ 14 periods & OBV
-    buySellFunctions.buySignal('BTC', 14, RSI, OBV, ADL);
+    buySellFunctions.buySignal(data.currency, 14, RSI, OBV, ADL);
     // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
 
     setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL); }, 100);
+    // getTickers.getEthTickers();
    });
   };
 
@@ -66,10 +69,47 @@ module.exports = getTickers = {
    //  console.log('ETH Ticker: ' + eth[0]);
    db.collection('ETH_Tickers').insertOne(eth, (err, result) => {
     if (err) return console.log(err);
-    console.log('Saved tickers to ETH_Tickers.');
-    // calcIndicators.calcEthRSI14(db);
+    console.log('\n/* -------------------------ETH------------------------- */\n\nSaved tickers to ETH_Tickers.');
    });
-  };
+   var data = {
+    currency: 'ETH',
+    period: 14,
+    high: [],
+    low: [],
+    volumes: [],
+    prices: []
+   }
+   db.collection('ETH_Tickers').find().toArray((err, tickers) => {
+    if (err) return console.log(err);
+    for (var i = tickers.length - 1; i >= 0; i -= 5) {
+     if (tickers[i] != undefined) {
+      data.prices.push(tickers[i].price);
+      data.volumes.push(tickers[i].volume);
+      data.low.push(tickers[i].bid);
+      data.high.push(tickers[i].ask);
+     }
+    }
+    // console.log(data);
+    // calculate BTC RSI
+    var RSI = calcIndicators.calcRSI(data);
+    // console.log(RSI);
+
+    // calculate BTC OBV
+    var OBV = calcIndicators.calcOBV(data);
+    // console.log(OBV);
+
+    // calculate BTC accumulation distribution
+    var ADL = calcIndicators.calcAccDist(data);
+    // console.log(ADL);
+
+    // detect buy/sell signal using RSI output @ 14 periods & OBV
+    buySellFunctions.buySignal('ETH', 14, RSI, OBV, ADL);
+    // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
+
+    setTimeout(() => { buySellFunctions.sellSignal('ETH', 14, RSI, OBV, ADL); }, 100);
+
+   });
+  }
   authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
   setTimeout(getTickers.getEthTickers, 60100);
  },
@@ -80,10 +120,46 @@ module.exports = getTickers = {
    // console.log(ltc);
    db.collection('LTC_Tickers').insertOne(ltc, (err, result) => {
     if (err) return console.log(err);
-    console.log('Saved tickers to LTC_Tickers.');
-    // calcIndicators.calcLtcRSI14(db);
+    console.log('\n/* -------------------------LTC------------------------- */\n\nSaved tickers to LTC_Tickers.');
    });
-  };
+   var data = {
+    currency: 'LTC',
+    period: 14,
+    high: [],
+    low: [],
+    volumes: [],
+    prices: []
+   }
+   db.collection('LTC_Tickers').find().toArray((err, tickers) => {
+    if (err) return console.log(err);
+    for (var i = tickers.length - 1; i >= 0; i -= 5) {
+     if (tickers[i] != undefined) {
+      data.prices.push(tickers[i].price);
+      data.volumes.push(tickers[i].volume);
+      data.low.push(tickers[i].bid);
+      data.high.push(tickers[i].ask);
+     }
+    }
+    // console.log(data);
+    // calculate BTC RSI
+    var RSI = calcIndicators.calcRSI(data);
+    // console.log(RSI);
+
+    // calculate BTC OBV
+    var OBV = calcIndicators.calcOBV(data);
+    // console.log(OBV);
+
+    // calculate BTC accumulation distribution
+    var ADL = calcIndicators.calcAccDist(data);
+    // console.log(ADL);
+
+    // detect buy/sell signal using RSI output @ 14 periods & OBV
+    buySellFunctions.buySignal('LTC', 14, RSI, OBV, ADL);
+    // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
+
+    setTimeout(() => { buySellFunctions.sellSignal('LTC', 14, RSI, OBV, ADL); }, 100);
+   });
+  }
   authedClient.getProductTicker('LTC-USD', ltc_ticker_cb);
   setTimeout(getTickers.getLtcTickers, 60200);
  }

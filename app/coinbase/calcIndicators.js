@@ -11,12 +11,12 @@ mongo.connectToServer((err, client) => {
 
 module.exports = calcIndicators = {
  //Calc BTC Ticker RSI 14
- calcBtcRSI14: (data) => {
+ calcRSI: (data) => {
 
   // Input Object - RSI Calculation
   let input = {
    values: data.prices,
-   period: 14
+   period: data.period
   };
   //console.log(input);
 
@@ -24,7 +24,7 @@ module.exports = calcIndicators = {
   let RSIs = RSI.calculate(input);
 
   // Log RSI output for record keeping
-  calcIndicators.logRSI('BTC', input, RSIs);
+  calcIndicators.logRSI(data.currency, input, RSIs);
 
   return RSIs;
  },
@@ -57,7 +57,7 @@ module.exports = calcIndicators = {
   });
  },
 
- calcBtcOBV: (data) => {
+ calcOBV: (data) => {
   let i = 0, prices = [], volumes = [];
   while (i <= 20) {
    let price = Number(parseFloat(data.prices[i]).toFixed(2));
@@ -85,7 +85,7 @@ module.exports = calcIndicators = {
   }
 
   // log the OBV to Mongo
-  calcIndicators.logOBV('BTC', input, OBV_data);
+  calcIndicators.logOBV(data.currency, input, OBV_data);
 
   // return OBV data
   return OBV_data;
@@ -140,7 +140,7 @@ module.exports = calcIndicators = {
    ADL: ADLs
   }
 
-  calcIndicators.logADL('BTC', input, ADL_data);
+  calcIndicators.logADL(data.currency, input, ADL_data);
 
   return ADL_data;
  },
@@ -176,38 +176,10 @@ module.exports = calcIndicators = {
   });
  },
 
+ calcMovAvg: () => { },
+
  /*------------------------------------------------------------*/
  /**TODO: Build out RSI, OBV & ADL functions for ETH and LTC */
- //Calculate RSI - ETH Tickers
- calcEthRSI14: () => {
-  let currency = 'ETH';
-  //Find ETH tickers & calculate RSI
-  db.collection('ETH_Tickers').find().toArray((err, eth_tickers) => {
-   let eth_prices = [];
-   for (let i = eth_tickers.length - 1; i >= 0; i--) {
-    if (eth_tickers[i] != undefined) {
-     eth_prices.push(eth_tickers[i].price);
-    }
-   }
-   // console.log('ETH Price: ' + eth_prices[0]);
-   //Input Object - RSI Calculation
-   let ETH_RSI_input = {
-    values: eth_prices,
-    period: 14
-   };
-   // console.log(ETH_RSI_input);
-   //Output Object - RSI Calculation
-   let ETH_RSI_output = RSI.calculate(ETH_RSI_input);
-   // console.log(ETH_RSI_output);
-
-   buySellFunctions.buySignalRSI(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices);
-
-   calcIndicators.logRSI(currency, ETH_RSI_output);
-
-   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); }, 100)
-
-  });
- },
 
  //Calc LTC Ticker RSI
  calcLtcRSI14: () => {
@@ -231,11 +203,11 @@ module.exports = calcIndicators = {
    //Output Object - RSI Calculation
    let LTC_RSI_output = RSI.calculate(LTC_RSI_input);
    //  console.log(LTC_RSI_output);
-   buySellFunctions.buySignalRSI(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
+   buySellFunctions.buySignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
 
    calcIndicators.logRSI(currency, LTC_RSI_output);
 
-   setTimeout(() => { buySellFunctions.sellSignalRSI(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); }, 100);
+   setTimeout(() => { buySellFunctions.sellSignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); }, 100);
 
   });
  }
@@ -246,4 +218,5 @@ module.exports = calcIndicators = {
  * Extra Code
  * ----------
  * var btc_tickers = calcIndicators.pullBTCtickers(); var currency = 'BTC', btc_prices = [], btc_volume = []; for (var i = btc_tickers.prices.length - 1; i >= 0; i--) {if (btc_tickers[i] != undefined) {btc_prices.push(btc_tickers[i].price);btc_volume.push(btc_tickers[i].volume);}}console.log(btc_prices); console.log(btc_volume);
+ * //Calculate RSI - ETH Tickers calcRSI14: () => {let currency = 'ETH';db.collection('ETH_Tickers').find().toArray((err, eth_tickers) => {let eth_prices = [];for (let i = eth_tickers.length - 1; i >= 0; i--) {if (eth_tickers[i] != undefined) {eth_prices.push(eth_tickers[i].price);}}let ETH_RSI_input = {values: eth_prices,period: 14};let ETH_RSI_output = RSI.calculate(ETH_RSI_input);buySellFunctions.buySignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices);calcIndicators.logRSI(currency, ETH_RSI_output);setTimeout(() => { buySellFunctions.sellSignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); }, 100)});},
  */
