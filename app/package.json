@@ -9,6 +9,7 @@
   "author": "Bryan Nonni",
   "license": "ISC",
   "dependencies": {
+    "blockchain.info": "^2.12.1",
     "body-parser": "^1.19.0",
     "coinbase": "^2.0.8",
     "cookie-parser": "^1.4.4",
