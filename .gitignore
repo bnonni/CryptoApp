@@ -17,3 +17,7 @@ npm-debug.log
 aux
 *.xlsx
 dump
+data
+*.bson
+*.json
+*.csv

@@ -55,7 +55,7 @@ module.exports = getTickers = {
     // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
 
     setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL); }, 100);
-    // getTickers.getEthTickers();
+    // this.getEthTickers();
    });
   };
 

@@ -36,7 +36,7 @@ router.post("/register", (req, res) => {
       });
 
       // Hash password before saving in database
-      bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.genSalt(20, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
@@ -87,8 +87,8 @@ router.post("/login", (req, res) => {
         jwt.sign(
           payload,
           keys.secretOrKey, {
-            expiresIn: 31556926 // 1 year in seconds
-          },
+          expiresIn: 31556926 // 1 year in seconds
+        },
           (err, token) => {
             res.json({
               success: true,

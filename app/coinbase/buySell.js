@@ -1,4 +1,5 @@
 const mongo = require('../config/db');
+var tropowebapi = require('tropo-webapi');
 var db;
 mongo.connectToServer(function (err, client) {
     db = mongo.getDb();
@@ -42,29 +43,22 @@ module.exports = buySellSignals = {
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
         let start, end, today, decision, tickers = ADL.prices;
-        if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {
-            console.log('Sell RSI => true');
-            if (OBV.slope < 0) {
-                console.log('Buy OBV => true');
-                if (ADL.slope < 0) {
-                    console.log('ADL => true');
-                    decision = true;
-                    /*TODO: Add Coinbase API request to sell*/
-                    start = new Date(Date.now() - 300000).toLocaleString();
-                    end = new Date(Date.now()).toLocaleString();
-                    buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
-                } else {
-                    decision = false;
-                    console.log('ADL => false');
-                }
-            } else {
-                decision = false;
-                console.log('Buy OBV => false');
-            }
+        // if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {console.log('Sell RSI => true');
+        // if (OBV.slope < 0) {console.log('Buy OBV => true');
+        // ADL.slope < 0
+        if (true) {
+            console.log('ADL => true');
+            decision = true;
+            /*TODO: Add Coinbase API request to sell*/
+            start = new Date(Date.now() - 300000).toLocaleString();
+            end = new Date(Date.now()).toLocaleString();
+            buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
         } else {
             decision = false;
-            console.log('Sell RSI => false');
+            console.log('ADL => false');
         }
+        // } else {decision = false;console.log('Buy OBV => false');}
+        // } else {decision = false;console.log('Sell RSI => false');}
         today = new Date(Date.now()).toLocaleString();
         console.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
     },
@@ -72,6 +66,7 @@ module.exports = buySellSignals = {
     logTransaction: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
         if (type == 'buy') {
             var buy_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
+            buySellSignals.send_SMS(buy_data);
             console.log(currency + ' Buy!');
             console.log(buy_data);
             var buy_collection = currency + '_Buys';
@@ -80,7 +75,8 @@ module.exports = buySellSignals = {
                 console.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
             });
         } else {
-            var sell_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end)
+            var sell_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
+            buySellSignals.send_SMS(sell_data);
             console.log(currency + ' Sell!');
             console.log(sell_data);
             var sell_collection = currency + '_Sells';
@@ -115,4 +111,22 @@ module.exports = buySellSignals = {
         };
         return data;
     },
+
+    send_SMS: (data) => {
+        let text = {
+            currency: data.currency,
+            type: data.type,
+            period: data.period,
+            decision: data.decision,
+            RSI: data.RSI,
+            OBV: data.OBV,
+            OBV_slope: data.OBV_slope,
+            ADL: data.ADL,
+            ADL_slope: data.ADL_slope,
+            prices: data.prices,
+            start_time: data.start_time,
+            end_time: data.end_time
+        }
+
+    }
 };

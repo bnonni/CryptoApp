@@ -11,8 +11,9 @@ const tf = require('@tensorflow/tfjs-node'),
     passport = require("passport"),
     index = require('./routes/index'),
     usersRouter = require('./routes/users'),
-    RSI = require("technicalindicators").RSI,
-    session = require('express-session');
+    RSI = require("technicalindicators"),
+    session = require('express-session'),
+    tropowebapi = require('tropo-webapi');
 
 var app = express();
 var secret = Math.ceil(Math.random() * 90000 + 10000).toString();
@@ -43,8 +44,6 @@ app.use((req, res, next) => {
 
 /*Import MongoDB connection & Coinbase Functions*/
 var mongo = require('./config/db');
-var buySellSignals = require('./coinbase/buySell');
-var calcIndicators = require('./coinbase/calcIndicators');
 var getTickers = require('./coinbase/getTickers');
 mongo.connectToServer(function (err, client) {
     if (err) console.log(err);
