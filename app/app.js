@@ -1,5 +1,5 @@
 #!/usr/bin/env nodejs
-
+/*jshint esversion: 6 */
 const tf = require('@tensorflow/tfjs-node'),
     express = require('express'),
     createError = require('http-errors'),
