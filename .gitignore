@@ -26,3 +26,5 @@ data
 *-checkpoint.ipynb
 Images/
 *.png
+*.jpg
+package-lock.json
