@@ -28,3 +28,4 @@ Images/
 *.png
 *.jpg
 package-lock.json
+*.env

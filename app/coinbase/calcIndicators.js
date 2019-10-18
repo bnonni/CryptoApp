@@ -86,7 +86,7 @@ module.exports = calcIndicators = {
   let OBV_log = {
    currency: currency,
    time: Date.now(),
-   close: [input.values[0], input.values[1], input.values[2]],
+   close: [input.close[0], input.close[1], input.close[2]],
    volume: [input.volume[0], input.volume[1], input.volume[2]],
    OBV: OBV_data.OBV[0],
    slope: OBV_data.slope
@@ -128,7 +128,7 @@ module.exports = calcIndicators = {
   let ADL_log = {
    currency: currency,
    time: Date.now(),
-   close: [input.values[0], input.values[1], input.values[2]],
+   close: [input.close[0], input.close[1], input.close[2]],
    volume: [input.volume[0], input.volume[1], input.volume[2]],
    ADL: ADL_data.ADL[0],
    slope: ADL_data.slope
