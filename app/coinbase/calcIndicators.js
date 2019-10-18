@@ -177,7 +177,7 @@ module.exports = calcIndicators = {
 
   });
  }
-}
+};
 
 
 /**

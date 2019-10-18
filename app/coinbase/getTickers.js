@@ -11,8 +11,6 @@ mongo.connectToServer(function (err, client) {
 
 module.exports = getTickers = {
 
- // pullBTCtickers: () => { },/** */
-
  //Coinbase API call - BTC Tickers
  getBtcTickers: () => {
   const btc_callback = (err, response, btc) => {
@@ -80,7 +78,7 @@ module.exports = getTickers = {
     low: [],
     volumes: [],
     prices: []
-   }
+   };
    db.collection('ETH_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
     for (var i = tickers.length - 1; i >= 0; i -= 10) {
@@ -111,7 +109,7 @@ module.exports = getTickers = {
     setTimeout(() => { buySellFunctions.sellSignal('ETH', 14, RSI, OBV, ADL); }, 100);
 
    });
-  }
+  };
   authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
   setTimeout(getTickers.getEthTickers, 60100);
  },
@@ -131,7 +129,7 @@ module.exports = getTickers = {
     low: [],
     volumes: [],
     prices: []
-   }
+   };
    db.collection('LTC_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
     for (var i = tickers.length - 1; i >= 0; i -= 10) {
@@ -161,8 +159,8 @@ module.exports = getTickers = {
 
     setTimeout(() => { buySellFunctions.sellSignal('LTC', 14, RSI, OBV, ADL); }, 100);
    });
-  }
+  };
   authedClient.getProductTicker('LTC-USD', ltc_ticker_cb);
   setTimeout(getTickers.getLtcTickers, 60200);
  }
-}
+};

@@ -45,22 +45,29 @@ module.exports = buySellSignals = {
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
         let start, end, today, decision, tickers = ADL.prices;
-        // if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {console.log('Sell RSI => true');
-        // if (OBV.slope < 0) {console.log('Buy OBV => true');
-        // ADL.slope < 0
-        if (true) {
-            console.log('ADL => true');
-            decision = true;
-            /*TODO: Add Coinbase API request to sell*/
-            start = new Date(Date.now() - 300000).toLocaleString();
-            end = new Date(Date.now()).toLocaleString();
-            buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
+        if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {
+            console.log('Sell RSI => true');
+            if (OBV.slope < 0) {
+                console.log('Buy OBV => true');
+                if (ADL.slope < 0) {
+                    console.log('ADL => true');
+                    decision = true;
+                    /*TODO: Add Coinbase API request to sell*/
+                    start = new Date(Date.now() - 300000).toLocaleString();
+                    end = new Date(Date.now()).toLocaleString();
+                    buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
+                } else {
+                    decision = false;
+                    console.log('ADL => false');
+                }
+            } else {
+                decision = false;
+                console.log('Buy OBV => false');
+            }
         } else {
             decision = false;
-            console.log('ADL => false');
+            console.log('Sell RSI => false');
         }
-        // } else {decision = false;console.log('Buy OBV => false');}
-        // } else {decision = false;console.log('Sell RSI => false');}
         today = new Date(Date.now()).toLocaleString();
         console.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
     },
