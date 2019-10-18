@@ -141,46 +141,10 @@ module.exports = calcIndicators = {
  },
 
  calcMovAvg: () => { },
-
- /*------------------------------------------------------------*/
- /**TODO: Build out RSI, OBV & ADL functions for ETH and LTC */
-
- //Calc LTC Ticker RSI
- calcLtcRSI14: () => {
-  let currency = 'LTC';
-  //Find ETH tickers & calculate RSI
-  db.collection('LTC_Tickers').find().toArray((err, ltc_tickers) => {
-   if (err) return console.log(err);
-   let ltc_prices = [];
-   for (let i = ltc_tickers.length - 1; i >= 0; i--) {
-    if (ltc_tickers[i] != undefined) {
-     ltc_prices.push(ltc_tickers[i].price);
-    }
-   }
-   // console.log('Line 148: BTC Price: ' + LTC_prices[0]);
-   //Input Object - RSI Calculation
-   let LTC_RSI_input = {
-    values: ltc_prices,
-    period: 14
-   };
-   //  console.log(LTC_RSI_input);
-   //Output Object - RSI Calculation
-   let LTC_RSI_output = RSI.calculate(LTC_RSI_input);
-   //  console.log(LTC_RSI_output);
-   buySellFunctions.buySignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices);
-
-   calcIndicators.logRSI(currency, LTC_RSI_output);
-
-   setTimeout(() => { buySellFunctions.sellSignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); }, 100);
-
-  });
- }
 };
 
+/*TODO: Build out RSI, OBV & ADL functions for ETH and LTC 
 
-/**
- * Extra Code
- * ----------
- * var btc_tickers = calcIndicators.pullBTCtickers(); var currency = 'BTC', btc_prices = [], btc_volume = []; for (var i = btc_tickers.prices.length - 1; i >= 0; i--) {if (btc_tickers[i] != undefined) {btc_prices.push(btc_tickers[i].price);btc_volume.push(btc_tickers[i].volume);}}console.log(btc_prices); console.log(btc_volume);
- * //Calculate RSI - ETH Tickers calcRSI14: () => {let currency = 'ETH';db.collection('ETH_Tickers').find().toArray((err, eth_tickers) => {let eth_prices = [];for (let i = eth_tickers.length - 1; i >= 0; i--) {if (eth_tickers[i] != undefined) {eth_prices.push(eth_tickers[i].price);}}let ETH_RSI_input = {values: eth_prices,period: 14};let ETH_RSI_output = RSI.calculate(ETH_RSI_input);buySellFunctions.buySignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices);calcIndicators.logRSI(currency, ETH_RSI_output);setTimeout(() => { buySellFunctions.sellSignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); }, 100)});},
- */
+Calc LTC Ticker RSI calcLtcRSI14: () => { let currency = 'LTC'; Find ETH tickers & calculate RSI db.collection('LTC_Tickers').find().toArray((err,ltc_tickers) => { if (err) return console.log(err); let ltc_prices = []; for (let i = ltc_tickers.length - 1; i >= 0; i--) { if (ltc_tickers[i] != undefined) { ltc_prices.push(ltc_tickers[i].price); } } console.log('Line 148: BTC Price: ' + LTC_prices[0]);Input Object - RSI Calculationlet LTC_RSI_input = { values: ltc_prices, period: 14};console.log(LTC_RSI_input);Output Object - RSI Calculationlet LTC_RSI_output = RSI.calculate(LTC_RSI_input);console.log(LTC_RSI_output);buySellFunctions.buySignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); calcIndicators.logRSI(currency, LTC_RSI_output); setTimeout(() => { buySellFunctions.sellSignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); }, 100);});}};var btc_tickers = calcIndicators.pullBTCtickers(); var currency = 'BTC', btc_prices = [], btc_volume = []; for (var i = btc_tickers.prices.length - 1; i >= 0;i--) {if (btc_tickers[i] != undefined) {btc_prices.push(btc_tickers[i].price);btc_volume.push(btc_tickers[i].volume);}}console.log(btc_prices); console.log(btc_volume);Calculate RSI - ETH Tickers calcRSI14: () => {let currency = 'ETH';db.collection('ETH_Tickers').find().toArray((err, eth_tickers) => {let eth_prices = [];for (let i = eth_tickers.length - 1; i >= 0; i--) {if (eth_tickers[i] != undefined) {eth_prices.push(eth_tickers[i].price);}}let ETH_RSI_input = {values: eth_prices,period: 14};let ETH_RSI_output = RSI.calculate(ETH_RSI_input);buySellFunctions.buySignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices);calcIndicators.logRSI(currency, ETH_RSI_output);setTimeout(() => { buySellFunctions.sellSignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); }, 100)});},
+*/
+

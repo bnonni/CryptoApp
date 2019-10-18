@@ -12,15 +12,13 @@ module.exports = buySellSignals = {
         let start, end, today, decision, tickers = ADL.prices;
         // IF( RSI14[1] < 29 && RSI14[1] < RSI[0] )
         if ((RSI[1] < 29.99) && (RSI[1] < RSI[0])) {
-            console.log('Buy RSI => true');
-
+            // console.log('Buy RSI => true');
             // IF(Slope(OBV[0],OBV[1],OBV[2])>0
             if (OBV.slope > 0) {
-                console.log('Buy OBV => true');
-
+                // console.log('Buy OBV => true');
                 // IF(Slope(AccDis[0],AccDis[1],AccDis[2])>0
                 if (ADL.slope > 0) {
-                    console.log('Buy ADL => true');
+                    // console.log('Buy ADL => true');
                     decision = true;
                     /*TODO: Add Coinbase API request to buy*/
                     start = new Date(Date.now() - 300000).toLocaleString();
@@ -28,15 +26,15 @@ module.exports = buySellSignals = {
                     buySellSignals.logTransaction(currency, 'buy', period, decision, RSI, OBV, ADL, tickers, start, end);
                 } else {
                     decision = false;
-                    console.log('Buy ADL => false');
+                    // console.log('Buy ADL => false');
                 }
             } else {
                 decision = false;
-                console.log('Buy OBV => false');
+                // console.log('Buy OBV => false');
             }
         } else {
             decision = false;
-            console.log('Buy RSI => false');
+            // console.log('Buy RSI => false');
         }
         today = new Date(Date.now()).toLocaleString();
         console.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
@@ -45,11 +43,11 @@ module.exports = buySellSignals = {
     sellSignal: (currency, period, RSI, OBV, ADL) => {
         let start, end, today, decision, tickers = ADL.prices;
         if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {
-            console.log('Sell RSI => true');
+            // console.log('Sell RSI => true');
             if (OBV.slope < 0) {
-                console.log('Buy OBV => true');
+                // console.log('Buy OBV => true');
                 if (ADL.slope < 0) {
-                    console.log('ADL => true');
+                    // console.log('ADL => true');
                     decision = true;
                     /*TODO: Add Coinbase API request to sell*/
                     start = new Date(Date.now() - 300000).toLocaleString();
@@ -57,15 +55,15 @@ module.exports = buySellSignals = {
                     buySellSignals.logTransaction(currency, 'sell', period, decision, RSI, OBV, ADL, tickers, start, end);
                 } else {
                     decision = false;
-                    console.log('ADL => false');
+                    // console.log('ADL => false');
                 }
             } else {
                 decision = false;
-                console.log('Buy OBV => false');
+                // console.log('Buy OBV => false');
             }
         } else {
             decision = false;
-            console.log('Sell RSI => false');
+            // console.log('Sell RSI => false');
         }
         today = new Date(Date.now()).toLocaleString();
         console.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
@@ -118,23 +116,5 @@ module.exports = buySellSignals = {
             end_time: end
         };
         return data;
-    },
-
-    send_SMS: (data) => {
-        let text = {
-            currency: data.currency,
-            type: data.type,
-            period: data.period,
-            decision: data.decision,
-            RSI: data.RSI,
-            OBV: data.OBV,
-            OBV_slope: data.OBV_slope,
-            ADL: data.ADL,
-            ADL_slope: data.ADL_slope,
-            prices: data.prices,
-            start_time: data.start_time,
-            end_time: data.end_time
-        }
-
     }
 };

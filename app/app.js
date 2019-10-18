@@ -48,8 +48,12 @@ var getTickers = require('./coinbase/getTickers');
 mongo.connectToServer(function (err, client) {
     if (err) console.log(err);
     getTickers.getBtcTickers();
-    setTimeout(() => { getTickers.getEthTickers(); }, 1000);
-    setTimeout(() => { getTickers.getLtcTickers(); }, 2000);
+    setTimeout(() => { 
+        getTickers.getEthTickers(); 
+        setTimeout(() => { 
+            getTickers.getLtcTickers(); 
+        }, 3000);
+    }, 3000);
 });
 
 app.use((err, req, res, next) => {

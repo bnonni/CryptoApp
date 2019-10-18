@@ -54,7 +54,7 @@ module.exports = getTickers = {
     buySellFunctions.buySignal(data.currency, 14, RSI, OBV, ADL);
     // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
 
-    setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL); }, 100);
+    setTimeout(() => { buySellFunctions.sellSignal('BTC', 14, RSI, OBV, ADL); }, 50);
     // this.getEthTickers();
    });
   };
@@ -106,12 +106,12 @@ module.exports = getTickers = {
     buySellFunctions.buySignal('ETH', 14, RSI, OBV, ADL);
     // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
 
-    setTimeout(() => { buySellFunctions.sellSignal('ETH', 14, RSI, OBV, ADL); }, 100);
+    setTimeout(() => { buySellFunctions.sellSignal('ETH', 14, RSI, OBV, ADL); }, 50);
 
    });
   };
   authedClient.getProductTicker('ETH-USD', eth_tickers_cb);
-  setTimeout(getTickers.getEthTickers, 60100);
+  setTimeout(getTickers.getEthTickers, 60000);
  },
 
  //Coinbase API call - LTC Tickers
@@ -161,6 +161,6 @@ module.exports = getTickers = {
    });
   };
   authedClient.getProductTicker('LTC-USD', ltc_ticker_cb);
-  setTimeout(getTickers.getLtcTickers, 60200);
+  setTimeout(getTickers.getLtcTickers, 60000);
  }
 };
