@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 const Validator = require("validator");
 const isEmpty = require("is-empty");
 

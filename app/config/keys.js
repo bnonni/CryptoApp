@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 // var user = process.env.user;
 // var password = process.env.MongoPassword;
 

@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 const mongo = require('../config/db');
 var tropowebapi = require('tropo-webapi');
 var db;

@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 const mongo = require('../config/db'),
  authedClient = require('./Coinbase'),
  calcIndicators = require('./calcIndicators'),
@@ -26,7 +28,7 @@ module.exports = getTickers = {
     low: [],
     volumes: [],
     prices: []
-   }
+   };
    db.collection('BTC_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
     for (var i = tickers.length - 1; i >= 0; i -= 10) {

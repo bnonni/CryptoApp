@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 const MongoClient = require("mongodb").MongoClient;
 const MongoURI = "mongodb://localhost:27017/crypto_wallet"
 var _db;

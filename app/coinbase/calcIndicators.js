@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 const mongo = require('../config/db'),
  buySellFunctions = require('./buySell'),
  RSI = require('technicalindicators').RSI,
@@ -35,20 +37,8 @@ module.exports = calcIndicators = {
    currency: currency,
    time: new Date(Date.now()).toLocaleString(),
    period: input.period,
-   prices: {
-    price1: input.values[0],
-    price2: input.values[1],
-    price3: input.values[2],
-    price4: input.values[3],
-    price5: input.values[4]
-   },
-   RSI: {
-    RSI1: RSI[0],
-    RSI2: RSI[1],
-    RSI3: RSI[2],
-    RSI4: RSI[3],
-    RSI5: RSI[4]
-   }
+   close: [input.values[0], input.values[1], input.values[2]],
+   RSI: [RSI[0], RSI[1], RSI[2]],
   };
   let collection = currency + '_RSI14_Data';
   db.collection(collection).insertOne(RSI_log, (err, result) => {
@@ -70,10 +60,10 @@ module.exports = calcIndicators = {
   let input = {
    close: prices,
    volume: volumes
-  }
+  };
 
   // OBV Output Object - console.log(OBV_input);
-  let OBVs = OBV.calculate(input)
+  let OBVs = OBV.calculate(input);
   // console.log(OBV_output)
 
   let slope = SS.linearRegression([[OBVs[0], OBVs[1], OBVs[2]], [2, 1, 0]]);
@@ -82,7 +72,7 @@ module.exports = calcIndicators = {
   let OBV_data = {
    OBV: OBVs,
    slope: slope.m
-  }
+  };
 
   // log the OBV to Mongo
   calcIndicators.logOBV(data.currency, input, OBV_data);
@@ -96,21 +86,9 @@ module.exports = calcIndicators = {
   let OBV_log = {
    currency: currency,
    time: new Date(Date.now()).toLocaleString(),
-   close_prices: {
-    close_price1: input.close[0],
-    close_price2: input.close[1],
-    close_price3: input.close[2]
-   },
-   volumes: {
-    volume1: input.volume[0],
-    volume2: input.volume[1],
-    volume3: input.volume[2]
-   },
-   OBVs: {
-    OBV1: OBV_data.OBV[0],
-    OBV2: OBV_data.OBV[1],
-    OBV3: OBV_data.OBV[2]
-   },
+   close: [input.values[0], input.values[1], input.values[2]],
+   volume: [input.volume[0], input.volume[1], input.volume[2]],
+   OBV: OBV_data.OBV[0],
    slope: OBV_data.slope
   };
 
@@ -128,7 +106,7 @@ module.exports = calcIndicators = {
    low: data.low,
    close: data.prices,
    volume: data.volumes
-  }
+  };
   let ADLs = ADL.calculate(input);
 
   let slope = SS.linearRegression([[ADLs[0], ADLs[1], ADLs[2]], [2, 1, 0]]);
@@ -138,7 +116,7 @@ module.exports = calcIndicators = {
    prices: data.prices,
    slope: slope.m,
    ADL: ADLs
-  }
+  };
 
   calcIndicators.logADL(data.currency, input, ADL_data);
 
@@ -150,21 +128,9 @@ module.exports = calcIndicators = {
   let ADL_log = {
    currency: currency,
    time: new Date(Date.now()).toLocaleString(),
-   close_prices: {
-    close_price1: input.close[0],
-    close_price2: input.close[1],
-    close_price3: input.close[2]
-   },
-   volumes: {
-    volume1: input.volume[0],
-    volume2: input.volume[1],
-    volume3: input.volume[2]
-   },
-   ADLs: {
-    ADL1: ADL_data.ADL[0],
-    ADL2: ADL_data.ADL[1],
-    ADL3: ADL_data.ADL[2]
-   },
+   close: [input.values[0], input.values[1], input.values[2]],
+   volume: [input.volume[0], input.volume[1], input.volume[2]],
+   ADL: ADL_data.ADL[0],
    slope: ADL_data.slope
   };
 

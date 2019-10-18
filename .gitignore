@@ -21,3 +21,8 @@ data
 *.bson
 *.json
 *.csv
+*.log
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+Images/
+*.png
