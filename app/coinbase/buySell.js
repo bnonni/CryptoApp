@@ -1,7 +1,6 @@
 /*jshint esversion: 6 */
 
 const mongo = require('../config/db');
-var tropowebapi = require('tropo-webapi');
 var db;
 mongo.connectToServer(function (err, client) {
     db = mongo.getDb();

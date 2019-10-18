@@ -14,14 +14,12 @@ mongo.connectToServer((err, client) => {
 module.exports = calcIndicators = {
  //Calc BTC Ticker RSI 14
  calcRSI: (data) => {
-
   // Input Object - RSI Calculation
   let input = {
    values: data.prices,
    period: data.period
   };
-  //console.log(input);
-
+  
   // Output Object - RSI Calculation
   let RSIs = RSI.calculate(input);
 
