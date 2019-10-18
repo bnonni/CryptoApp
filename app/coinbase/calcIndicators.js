@@ -35,7 +35,7 @@ module.exports = calcIndicators = {
   // New Object - RSI MongoDB Log
   let RSI_log = {
    currency: currency,
-   time: new Date(Date.now()).toLocaleString(),
+   time: Date.now(),
    period: input.period,
    close: [input.values[0], input.values[1], input.values[2]],
    RSI: [RSI[0], RSI[1], RSI[2]],
@@ -85,7 +85,7 @@ module.exports = calcIndicators = {
   //log OBV to Mongo
   let OBV_log = {
    currency: currency,
-   time: new Date(Date.now()).toLocaleString(),
+   time: Date.now(),
    close: [input.values[0], input.values[1], input.values[2]],
    volume: [input.volume[0], input.volume[1], input.volume[2]],
    OBV: OBV_data.OBV[0],
@@ -127,7 +127,7 @@ module.exports = calcIndicators = {
   //log OBV to Mongo
   let ADL_log = {
    currency: currency,
-   time: new Date(Date.now()).toLocaleString(),
+   time: Date.now(),
    close: [input.values[0], input.values[1], input.values[2]],
    volume: [input.volume[0], input.volume[1], input.volume[2]],
    ADL: ADL_data.ADL[0],
