@@ -72,7 +72,6 @@ module.exports = buySellSignals = {
     logTransaction: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
         if (type == 'buy') {
             var buy_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            buySellSignals.send_SMS(buy_data);
             console.log(currency + ' Buy!');
             console.log(buy_data);
             var buy_collection = currency + '_Buys';
@@ -82,7 +81,6 @@ module.exports = buySellSignals = {
             });
         } else {
             var sell_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            buySellSignals.send_SMS(sell_data);
             console.log(currency + ' Sell!');
             console.log(sell_data);
             var sell_collection = currency + '_Sells';
