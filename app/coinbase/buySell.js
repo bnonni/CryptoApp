@@ -9,9 +9,10 @@ mongo.connectToServer(function (err, client) {
 module.exports = buySellSignals = {
     //'BTC', 14, RSI, OBV, ADL.ADL, ADL.prices
     buySignal: (currency, period, RSI, OBV, ADL) => {
+        // console.log('RSI');console.log(RSI);console.log('OBV');console.log(OBV);console.log('ADL');console.log(ADL);
         let start, end, today, decision, tickers = ADL.prices;
         // IF( RSI14[1] < 29 && RSI14[1] < RSI[0] )
-        if ((RSI[1] < 29.99) && (RSI[1] < RSI[0])) {
+        if ((RSI[1] <= 29.99) && (RSI[1] <= RSI[0])) {
             // console.log('Buy RSI => true');
             // IF(Slope(OBV[0],OBV[1],OBV[2])>0
             if (OBV.slope > 0) {

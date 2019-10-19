@@ -5,7 +5,9 @@ const mongo = require('../config/db'),
  RSI = require('technicalindicators').RSI,
  OBV = require('technicalindicators').OBV,
  ADL = require('technicalindicators').ADL,
- SS = require('simple-statistics');
+ SMA = require('technicalindicators').SMA,
+ // EMA = require('technicalindicators').EMA,
+ LR = require('simple-statistics').linearRegression;
 var db;
 mongo.connectToServer((err, client) => {
  db = mongo.getDb();
@@ -24,26 +26,27 @@ module.exports = calcIndicators = {
   let RSIs = RSI.calculate(input);
 
   // Log RSI output for record keeping
-  calcIndicators.logRSI(data.currency, input, RSIs);
-
-  return RSIs;
- },
-
- logRSI: (currency, input, RSI) => {
-  // New Object - RSI MongoDB Log
+  // calcIndicators.logRSI(data.currency, input, RSIs);
   let RSI_log = {
-   currency: currency,
+   currency: data.currency,
    time: Date.now(),
    period: input.period,
    close: [input.values[0], input.values[1], input.values[2]],
    RSI: [RSI[0], RSI[1], RSI[2]],
   };
-  let collection = currency + '_RSI14_Data';
+  let collection = data.currency + '_RSI14_Data';
   db.collection(collection).insertOne(RSI_log, (err, result) => {
    if (err) return console.log(err);
    console.log('Saved RSIs to ' + collection + '.');
   });
+
+  return RSIs;
  },
+
+ // logRSI: (currency, input, RSI) => {
+ //  // New Object - RSI MongoDB Log
+  
+ // },
 
  calcOBV: (data) => {
   let i = 0, prices = [], volumes = [];
@@ -64,7 +67,7 @@ module.exports = calcIndicators = {
   let OBVs = OBV.calculate(input);
   // console.log(OBV_output)
 
-  let slope = SS.linearRegression([[OBVs[0], OBVs[1], OBVs[2]], [2, 1, 0]]);
+  let slope = LR([[OBVs[0], OBVs[1], OBVs[2]], [2, 1, 0]]);
   // console.log('slope'); console.log(slope);
 
   let OBV_data = {
@@ -73,16 +76,10 @@ module.exports = calcIndicators = {
   };
 
   // log the OBV to Mongo
-  calcIndicators.logOBV(data.currency, input, OBV_data);
-
-  // return OBV data
-  return OBV_data;
- },
-
- logOBV: (currency, input, OBV_data) => {
+  // calcIndicators.logOBV(data.currency, input, OBV_data);
   //log OBV to Mongo
   let OBV_log = {
-   currency: currency,
+   currency: data.currency,
    time: Date.now(),
    close: [input.close[0], input.close[1], input.close[2]],
    volume: [input.volume[0], input.volume[1], input.volume[2]],
@@ -90,13 +87,20 @@ module.exports = calcIndicators = {
    slope: OBV_data.slope
   };
 
-  let collection = currency + '_OBV_Data';
+  let collection = data.currency + '_OBV_Data';
   db.collection(collection).insertOne(OBV_log, (err, result) => {
    if (err) return console.log(err);
    console.log('Saved OBVs to ' + collection + '.');
    // console.log(OBV_log);
   });
+
+  // return OBV data
+  return OBV_data;
  },
+
+ // logOBV: (currency, input, OBV_data) => {
+  
+ // },
 
  calcAccDist: (data) => {
   let input = {
@@ -107,7 +111,7 @@ module.exports = calcIndicators = {
   };
   let ADLs = ADL.calculate(input);
 
-  let slope = SS.linearRegression([[ADLs[0], ADLs[1], ADLs[2]], [2, 1, 0]]);
+  let slope = LR([[ADLs[0], ADLs[1], ADLs[2]], [2, 1, 0]]);
   // console.log('slope'); console.log(slope);
 
   let ADL_data = {
@@ -116,15 +120,10 @@ module.exports = calcIndicators = {
    ADL: ADLs
   };
 
-  calcIndicators.logADL(data.currency, input, ADL_data);
-
-  return ADL_data;
- },
-
- logADL: (currency, input, ADL_data) => {
+  // calcIndicators.logADL(data.currency, input, ADL_data);
   //log OBV to Mongo
   let ADL_log = {
-   currency: currency,
+   currency: data.currency,
    time: Date.now(),
    close: [input.close[0], input.close[1], input.close[2]],
    volume: [input.volume[0], input.volume[1], input.volume[2]],
@@ -132,13 +131,19 @@ module.exports = calcIndicators = {
    slope: ADL_data.slope
   };
 
-  let collection = currency + '_ADL_Data';
+  let collection = data.currency + '_ADL_Data';
   db.collection(collection).insertOne(ADL_log, (err, result) => {
    if (err) return console.log(err);
    console.log('Saved ADLs to ' + collection + '.');
    // console.log(ADL_log);
   });
+
+  return ADL_data;
  },
+
+ // logADL: (currency, input, ADL_data) => {
+  
+ // },
 
  calcMovAvg: () => { },
 };
