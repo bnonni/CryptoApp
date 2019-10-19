@@ -29,7 +29,7 @@ module.exports = getTickers = {
    };
    db.collection('BTC_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
-    for (var i = tickers.length - 1; i >= 0; i -= 10) {
+    for (var i = tickers.length - 1; i >= 0; i -= 5) {
      if (tickers[i] != undefined) {
       data.prices.push(tickers[i].price);
       data.volumes.push(tickers[i].volume);
@@ -81,7 +81,7 @@ module.exports = getTickers = {
    };
    db.collection('ETH_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
-    for (var i = tickers.length - 1; i >= 0; i -= 10) {
+    for (var i = tickers.length - 1; i >= 0; i -= 5) {
      if (tickers[i] != undefined) {
       data.prices.push(tickers[i].price);
       data.volumes.push(tickers[i].volume);
@@ -132,7 +132,7 @@ module.exports = getTickers = {
    };
    db.collection('LTC_Tickers').find().toArray((err, tickers) => {
     if (err) return console.log(err);
-    for (var i = tickers.length - 1; i >= 0; i -= 10) {
+    for (var i = tickers.length - 1; i >= 0; i -= 5) {
      if (tickers[i] != undefined) {
       data.prices.push(tickers[i].price);
       data.volumes.push(tickers[i].volume);
