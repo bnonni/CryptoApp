@@ -9,7 +9,7 @@ Technologies Leveraged:
 Purpose:
 - Leverage the Coinbase API to pull and store cryptocurrency data (tickers, volume, datetime)
 - Retrieve data from MongoDB and calculate technical indicators (RSI, OBV, ADL, EMA/SMA) to inform buy/sell decisions
-- Leverage neural networks to test and determine our best target variable to optmize trading decisions on
+- Leverage neural networks to test assumptions about features and determine best target variable to optmize trading decisions on
 - Currencies: BTC, ETH, LTC
 
 ## How to Install and Run Crypto Algo 
