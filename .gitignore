@@ -1,5 +1,5 @@
 node_modules
-crypto.env
+*.env
 .DS_Store
 .vscode
 .bash_history
