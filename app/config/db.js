@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
-
+const AdminPwd = process.env.MongoAdminPwd;
 const MongoClient = require("mongodb").MongoClient;
-const MongoURI = "mongodb://localhost:27017/crypto_wallet"
+const MongoURI = "mongodb://CryptoMongoAdmin:"+AdminPwd+":@localhost:27017/crypto_wallet"
 var _db;
 
 module.exports = {
