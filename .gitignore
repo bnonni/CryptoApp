@@ -30,3 +30,4 @@ Images/
 package-lock.json
 *.env
 .gitconfig
+crypto.env

@@ -1,7 +1,8 @@
 /*jshint esversion: 6 */
+'use strict'
 const AdminPwd = process.env.MongoAdminPwd;
 const MongoClient = require("mongodb").MongoClient;
-const MongoURI = "mongodb://CryptoMongoAdmin:"+AdminPwd+":@localhost:27017/crypto_wallet"
+const MongoURI = "mongodb://CryptoAlgoAdmin:cryptowallet@157.245.247.90:27017/admin"
 var _db;
 
 module.exports = {
@@ -12,7 +13,13 @@ module.exports = {
         });
     },
 
- getDb: function () {
-  return _db;
- }
+    getDb: function() {
+        return _db;
+    }
 };
+
+
+// db.createUser({ user: "CryptoAlgoAdmin", pwd: "cryptowallet", roles: [{ role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase"] })
+// db.createUser({ user: "CryptoAlgoAdmin", pwd: passwordPrompt(), roles: [{ role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase"] })
+
+// db.BTC_RSI14_Data.find({ "RSI": { $in: [null, null, null] } }).forEach(function(doc) { db.BTC_RSI14_Data.remove({ _id: doc._id }); })

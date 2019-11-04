@@ -1,4 +1,5 @@
 #!/usr/bin/env nodejs
+
 /*jshint esversion: 6 */
 const tf = require('@tensorflow/tfjs-node'),
     express = require('express'),
@@ -45,13 +46,13 @@ app.use((req, res, next) => {
 /*Import MongoDB connection & Coinbase Functions*/
 var mongo = require('./config/db');
 var getTickers = require('./coinbase/getTickers');
-mongo.connectToServer(function (err, client) {
+mongo.connectToServer(function(err, client) {
     if (err) console.log(err);
     getTickers.getBtcTickers();
-    setTimeout(() => { 
-        getTickers.getEthTickers(); 
-        setTimeout(() => { 
-            getTickers.getLtcTickers(); 
+    setTimeout(() => {
+        getTickers.getEthTickers();
+        setTimeout(() => {
+            getTickers.getLtcTickers();
         }, 3000);
     }, 3000);
 });

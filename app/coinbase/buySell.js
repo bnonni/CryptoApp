@@ -1,8 +1,7 @@
 /*jshint esversion: 6 */
-
 const mongo = require('../config/db');
 var db;
-mongo.connectToServer(function (err, client) {
+mongo.connectToServer(function(err, client) {
     db = mongo.getDb();
 });
 
@@ -46,7 +45,7 @@ module.exports = buySellSignals = {
             } else {
                 decision = false;
             }
-        } else{
+        } else {
             decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
@@ -76,7 +75,10 @@ module.exports = buySellSignals = {
     },
 
     create_data_obj: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
-        let RSIs = [], OBVs = [], ADLs = [], prices = [];
+        let RSIs = [],
+            OBVs = [],
+            ADLs = [],
+            prices = [];
         for (var i = 0; i < 5; i++) {
             RSIs.push(RSI[i]);
             OBVs.push(OBV.OBV[i]);
