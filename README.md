@@ -43,11 +43,10 @@ Purpose:
 
 4. Inside the app/ folder, create a file called crypto.env, add your database and Coinbase API credentials to the file.
    ```
-   export user="YOUR USERNAME"
    export key="YOUR COINBASE API KEY"
    export secret="YOUR COINBASE API SECRET"
    export passphrase="YOUR COINBASE API PASSPHRASE"
-   export password="YOUR PASSWORD"
+   export MongoDBPassword="YOUR PASSWORD"
    ```
 
 5. Source the crypto.env file to export env variables.
@@ -55,7 +54,9 @@ Purpose:
    source crypto.env
    ```
 
-6. Finally, let's run our app!
+6. Edit    
+
+7. Finally, let's run our app!
    ```
    npm run app
    ```
