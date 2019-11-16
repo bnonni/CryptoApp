@@ -1,0 +1,362 @@
+/*-------------------------------------Results-----------------------------------------*/
+Rd 1: 150 nodes, 0.4 dropout, 3 hidden layers, relu, 150 epochs
+Training loss = 593,138
+Testing loss = 67,419
+
+/*-------------------------------------------------------------------------------*/
+** TOP **
+** Rd 2: 250 nodes, 0.4 dropout, 3 hidden layers, relu, 150 epochs
+** Training loss = 354,512
+** Testing loss = 62,604
+
+/*-------------------------------------------------------------------------------*/
+Rd 3: 250 nodes, 0.4 dropout, 3 hidden layers, relu, 150 epochs
+Training loss = 375,805
+Testing loss = 62,286
+
+/*-------------------------------------------------------------------------------*/
+Rd 4: 250 nodes, 0.4 dropout, 3 hidden layers, sigmoid, 250 epochs
+Training loss = 1,090,656
+Testing loss = 804,823
+
+[X] dont use sigmoid activation
+
+/*-------------------------------------------------------------------------------*/
+** TOP **
+** Rd 5: 250 nodes, 0.4 dropout, 4 hidden layers, no activation, 150 epochs
+** Training loss = 356,730
+** Testing loss = 41,609
+
+[X] dont use an activation function, use more layers, more epochs
+
+/*-------------------------------------------------------------------------------*/
+Rd 6: 250 nodes, 0.4 dropout, 5 hidden layers, no activation, 150 epochs
+Training loss = 441,842
+Testing loss = 118,652
+
+/*-------------------------------------------------------------------------------*/
+Rd 7: 250 nodes, 0.4 dropout, 6 hidden layers, no activation, 150 epochs
+Training loss = 1,250,619
+Testing loss = 953,519
+
+/*-------------------------------------------------------------------------------*/
+Rd 8: 150 nodes, 0.4 dropout, 3 hidden layers, no activation, 150 epochs
+Training loss = 1,250,619
+Testing loss = 953,519
+
+/*-------------------------------------------------------------------------------*/
+Rd 9: 50 nodes, 0.2 dropout, 6 hidden layers, no activation, 150 epochs
+Training loss = 1,530,169
+Testing loss = 1,006,279
+
+/*-------------------------------------------------------------------------------*/
+Rd 10: 200 nodes, 0.4 dropout, 6 hidden layers, no activation, 150 epochs
+Training loss = 1,530,783
+Testing loss = 984,047
+
+/*-------------------------------------------------------------------------------*/
+Rd 11: 150 nodes, 0.3 dropout, 3 hidden layers, relu, 150 epochs
+Training loss = 654,876
+Testing loss = 77,345
+
+/*-------------------------------------------------------------------------------*/
+Rd 12: 150 nodes, 0.3 dropout, 4 hidden layers, relu, 150 epochs
+Training = 733,334, Validation = 65,941
+Testing = 70,519
+
+/*-------------------------------------------------------------------------------*/
+Rd 13: 150 nodes, 0.3 dropout, 5 hidden layers, relu, 150 epochs
+Training = 1,244,042, Validation = 208,015
+Testing = 227,881
+
+/*-------------------------------------------------------------------------------*/
+Rd 14: 150 nodes, 0.4 dropout, 5 hidden layers, relu, 150 epochs
+Training = 979,678, Validation = 68,156
+Testing = 74,350
+
+/*-------------------------------------------------------------------------------*/
+Rd 15: 200 nodes, 0.2 dropout, 2 hidden layers, relu, 150 epochs
+Training = 347,057, Validation = 77,211
+Testing = 61,476
+
+/*-------------------------------------------------------------------------------*/
+** BEST **
+** Rd 16: 200 nodes, 0.2 dropout, 2 hidden layers, relu, 500 epochs
+** Loss as low as 33x,xxx at epoch 200, then bounces up to 34 & 35, etc.
+** Training = 328,627, Validation = 62,207
+** Testing = 43,837
+
+[X] 500 epoch is wasting time, reduce to 200, max 250
+
+/*-------------------------------------------------------------------------------*/
+Rd 16.5: ONE OFF based on https://medium.com/neuronio/predicting-stock-prices-with-lstm-349f5a0974d4
+Params: input layer nodes = 128, 1 hidden layer nodes = 64, output layer nodes = 5, 200 epochs, batch_size=2
+    model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=200, shuffle=True, batch_size=2)
+Training = XX
+Validation = XX
+Testing = XX
+
+[XX] Input shape incorrect, revisit later
+
+/*-------------------------------------------------------------------------------*/
+Rd 17: 200 nodes, 0.2 dropout, 3 hidden layers, relu, 200 epochs, batch size=2, shuffle=true
+Training = 426,336
+Validation = 114,852
+Testing = 105,589
+
+** TOP **
+** Rd 18: 200 nodes, 0.2 dropout, 3 hidden layers, relu?, 200 epochs, batch size=32, shuffle=true
+** Training = 356,531; Validation = 38,981
+** Testing = 46,435
+
+/*-------------------------------------------------------------------------------*/
+Rd 19: 200 nodes, 0.25 dropout, 3 hidden layers, no activation, 200 epochs, batch size=200, shuffle=true
+Training = 16,871,960
+Validation = 17,376,531
+Testing = 16,535,485
+
+/*-------------------------------------------------------------------------------*/
+Rd 20: 200 nodes, 0.2 dropout, 3 hidden layers, no activation function, 200 epochs, batch size=4, shuffle=true
+Training = 205,818
+Validation = 47,796
+Testing = 41,876
+
+/*-------------------------------------------------------------------------------*/
+Rd 21: 200 nodes, 0.2 dropout, 4 hidden layers, no activation function, 250 epochs, batch size=20, shuffle=true
+Training = 200,310
+Validation = 43,350
+Testing = 43,535
+
+/*-------------------------------------------------------------------------------*/
+Rd 22: 200 nodes, 0.2 dropout, 4 hidden layers, no activation function, 250 epochs, batch size=30, shuffle=true
+Training = 203,681
+Validation = 32,057
+Testing = 42,704
+
+/*-------------------------------------------------------------------------------*/
+//Changed input to { High, Low } = X; y = price
+Rd 23: 200 nodes, 0.2 dropout, 4 hidden layers, no activation function, 250 epochs, batch size=32, shuffle=true
+Training Loss = 132,245
+Mean Abs Error = 288
+Mean Abs Percent Error = 2.8
+
+/*-------------------------------------------------------------------------------*/
+Rd 25: 200 nodes, 0.2 dropout, 4 hidden layers, no activation function, 100 epochs, batch size=32, shuffle=true
+Training:
+Loss = 149680
+Mean Abs Error = 308
+Mean Abs Percent Error = 3.0326
+
+Validation:
+Loss = 9732
+Mean Abs Error = 64
+Mean Abs Percent Error = 0.6570
+
+Testing:
+Loss = 6938
+Mean Abs Error = 64
+Mean Abs Percent Error = 0.66
+Acc = 1 - 0.66 = 33%
+
+/*-------------------------------------------------------------------------------*/
+Rd 26: 200 nodes, 0.2 dropout, 4 hidden layers, no activation function, 100 epochs, batch size=32, shuffle=true
+X = High, Low Prices; y = actual prices
+
+Training:
+Loss = 133182
+Mean Abs Error = 288
+Mean Abs Percent Error = 2.8333
+
+Validation:
+Loss = 3549
+Mean Abs Error = 47
+Mean Abs Percent Error = 0.4622
+
+Testing:
+Loss = 3212
+Mean Abs Error = 47
+Mean Abs Percent Error = 0.46
+Acc = 1 - 0.46 = 54%
+
+/*-------------------------------------------------------------------------------*/
+Rd 27: 200 nodes, 0.2 dropout, 5 hidden layers, no activation function, 300 epochs, batch size=32, shuffle=true
+X = High, Low; y = actual prices
+
+Training epoch 300:
+Loss = 131888
+Mean Abs Error = 287
+Mean Abs Percent Error = 2.8
+
+Validation:
+Loss = 1496
+Mean Abs Error = 29
+Mean Abs Percent Error = 0.29
+
+Testing:
+Loss = 1535
+Mean Abs Error = 29
+Mean Abs Percent Error = 0.29
+Acc = 1 - 0.29 = 71%
+
+/*-------------------------------------------------------------------------------*/
+Rd 28: 200 nodes, 0.2 dropout, 5 hidden layers, no activation function, 300 epochs, batch size=32, shuffle=true
+X = High, Low; y = actual prices
+
+Training epoch 300:
+Loss = 128,717
+Mean Abs Error = 283
+Mean Abs Percent Error = 2.8
+
+Validation:
+Loss = 462
+Mean Abs Error = 20
+Mean Abs Percent Error = 0.21
+
+Testing:
+Loss = 632
+Mean Abs Error = 20
+Mean Abs Percent Error = 0.21
+Acc = 1 - 0.21 = 79%
+
+/*-------------------------------------------------------------------------------*/
+Rd 29: 200 nodes, 0.2 dropout, 5 hidden layers, no activation function, 300 epochs, batch size=32, shuffle=true
+X = RSI; y = actual prices
+
+Training epoch 300:
+Loss = 1,542,088
+Mean Abs Error = 987
+Mean Abs Percent Error = 10
+
+Validation:
+Loss = 1200661
+Mean Abs Error = 933
+Mean Abs Percent Error = 9.4957
+
+Testing:
+Loss = 1,414,372
+Mean Abs Error = 933
+Mean Abs Percent Error = 9.49
+Acc = 1 - 9.49 = XXX
+
+[X] RSI alone not predictive
+
+/*-------------------------------------------------------------------------------*/
+Rd 30: 200 nodes, 0.2 dropout, 5 hidden layers, no activation function, 150 epochs, batch size=32, shuffle=true
+X = High, Low; y = actual prices test_size=0.4
+
+Training epoch 150: DONE, NEED TO INPUT VALS
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Validation:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Testing:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+Acc = 1 -  =
+
+/*-------------------------------------------------------------------------------*/
+Rd 31 OBV: 200 nodes, 0.2 dropout, 5 hidden layers, no activation function, 300 epochs, batch size=32, shuffle=true
+DONE NEED TO INPUT RESULTS BELOW
+X = OBV, OBV_slope; y = actual prices
+
+Training epoch :
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Validation:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Testing:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+Acc = 1 -  =
+
+/*-------------------------------------------------------------------------------*/
+Rd 32:
+X = ; y = actual prices
+
+Training epoch :
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Validation:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Testing:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+Acc = 1 -  =
+
+/*-------------------------------------------------------------------------------*/
+Rd :
+X = ; y = actual prices
+
+Training epoch :
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Validation:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Testing:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+Acc = 1 -  =
+
+/*-------------------------------------------------------------------------------*/
+Rd :
+X = ; y = actual prices
+
+Training epoch :
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Validation:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Testing:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+Acc = 1 -  =
+
+/*-------------------------------------------------------------------------------*/
+Rd :
+X = ; y = actual prices
+
+Training epoch :
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Validation:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+
+Testing:
+Loss =
+Mean Abs Error =
+Mean Abs Percent Error =
+Acc = 1 -  =

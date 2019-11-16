@@ -1,0 +1,12 @@
+
+model = Sequential()
+
+model.add(LSTM(128,input_shape=(40,1), return_sequences=True))
+
+model.add(LSTM(64,input_shape=(128,1)))
+
+model.add(Dense(10))
+
+model.compile(loss='mean_squared_error', optimizer='adam')
+
+history = model.fit(X_train, y_train, epochs=220, validation_data=(X_validate,y_validate),shuffle=True,batch_size=2, verbose=2)
