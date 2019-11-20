@@ -1,3 +1,5 @@
+#!/usr/bin/env rscript
+
 #clear environment and set seed
 rm(list = ls(all.names = TRUE))
 set.seed(1)

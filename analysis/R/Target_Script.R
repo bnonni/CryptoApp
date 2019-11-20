@@ -1,7 +1,14 @@
+#!/usr/bin/env rscript
+
 #clear environment and set seed
 rm(list = ls(all.names = TRUE))
 set.seed(1)
-setwd("//Users//armandk//Desktop//Personal Projects//Crypto Modeling")
+
+setwd_thisdir <- function () {
+  this.dir <- dirname(parent.frame(3)$ofile)
+  setwd(this.dir)
+}
+
 library(glmnet)
 library(MASS)
 library(tidyverse)
