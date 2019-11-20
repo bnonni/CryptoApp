@@ -1,0 +1,190 @@
+#clear environment and set seed
+rm(list = ls(all.names = TRUE))
+set.seed(1)
+setwd("//Users//armandk//Desktop//Personal Projects//Crypto Modeling")
+library(glmnet)
+library(MASS)
+library(tidyverse)
+library(broom)
+library(glmnet)
+library(cvTools)
+library(TTR)
+library(randomForest)
+
+#read data and remove worthless columns
+crypto_data <- read.csv("data.csv", header = TRUE)
+adl_obv_drop <- c("ADL_slope","OBV_slope")
+
+#save dataframe in cache. will not use this datafrom actively in script in case reset needed and I don't want to go through all of the script again
+btc_remove_adl_obv <- crypto_data[,!(names(crypto_data) %in% adl_obv_drop)]
+crypto_data <- crypto_data[,!(names(crypto_data) %in% adl_obv_drop)]
+head(crypto_data)
+
+#declare a bucnh of vectors for data munging and manipulation
+head(crypto_data)
+target_vector_class <- c()
+target_vector_regress <- c()
+
+#vector for forward price of target variables
+forward_price <- c()
+
+#vecctor for calculating difference % difference between high and low prices
+high_low_fluc <- c()
+x_hold <- c()
+removal_names <-c()
+removal_names_2 <- c()
+
+#dataframes for the calculation of attributes at different interval periods eg five minute 14 period rsi, etc.
+five_min <- crypto_data[c(TRUE,rep(FALSE,4)), ]
+fifteen_min <- crypto_data[c(TRUE,rep(FALSE,15)), ]
+thirty_min <- crypto_data[c(TRUE,rep(FALSE,30)), ]
+hour_df <- crypto_data[c(TRUE,rep(FALSE,60)), ]
+three_hour_df <- crypto_data[c(TRUE,rep(FALSE,180)), ]
+twelve_hour_df <- crypto_data[c(TRUE,rep(FALSE,60*12)), ]
+daily_df <- crypto_data[c(TRUE,rep(FALSE,60*24)), ]
+
+
+#creating vectors for targets in a regression analysis and in a classification analysis
+for (nn in seq(20, 50, 1)){
+  for(i in 1:(nrow(crypto_data))){
+    #find % difference in high to low
+    highLow <- crypto_data[i,5]/crypto_data[i,6]
+    high_low_fluc[i] <- highLow
+    
+    #determine % change in forward price.
+    #if forward price
+    if (i < (nrow(crypto_data)-nn)){
+      t <- crypto_data[i+nn,3]
+      forward_price[i] <- crypto_data[i+nn,3]
+      t <- t/crypto_data[i,3]
+      target_vector_regress[i] <- t
+      if (t > 1.04){
+        target_vector_class[i] <- 1
+      }
+      else{
+        target_vector_class[i] <- 0
+      }
+    }
+    else{
+      target_vector_regress[i] <- 0
+      target_vector_class[i] <- 0
+      forward_price[i] <- 0
+    }
+  }
+  
+  #bind all potential target variables to dataset and to removal dataset for to remove when fitting individual models
+  crypto_data <- cbind(crypto_data,target_vector_regress)
+  colnames(crypto_data)[colnames(crypto_data)=="target_vector_regress"] <- paste("tvr",toString.default(nn),sep="_")
+  crypto_data <- cbind(crypto_data,target_vector_class)
+  colnames(crypto_data)[colnames(crypto_data)=="target_vector_class"] <- paste("tvc",toString.default(nn),sep="_")
+  removal_names[nn] <- paste("tvr",toString.default(nn),sep="_")
+  removal_names_2[nn]<- paste("tvc",toString.default(nn),sep="_")
+}
+crypto_data <- cbind(crypto_data, forward_price)
+
+# #testing new lengths for obvslope. starting at 60. eventually will loop through multiple values and recalculate obvslope
+# for(i in 1:nrow(crypto_data)){
+#   if (i > (60)){
+#     for (s in 1:60){
+#       obv_calc[s] <- crypto_data[i-s,10]
+#       x_hold[s] <- crypto_data[i-s,1]
+#     }
+#     lmquick <- as.data.frame(cbind(obv_calc,x_hold))
+#     lmobv <- lm(obv_calc ~., data = lmquick)
+#     OBV_test_slope[i] <- coef(lmobv)[2]
+#     lmquick <- c()
+#     obv_calc[s]
+#     x_hold[s]
+#   }
+#   else{
+#     OBV_test_slope[i] <- 0
+#   }
+# }
+
+#crypto_data <- cbind(crypto_data, OBV_test_slope)
+
+#scale variables that require scaling
+#keeps <- c("ADL","OBV")
+#keep_data <- crypto_data[keeps]
+##scaled_data <- scale(keep_data, center = T, scale = T)
+#colnames(scaled_data)[colnames(scaled_data)=="ADL"] <- "ADLscale"
+#colnames(scaled_data)[colnames(scaled_data)=="OBV"] <- "OBVscale"
+
+#calculate one mine RSIs for modeling
+ff<-14
+for (i in 1:20){
+  new_RSI <- RSI(crypto_data[,"Prices"],n=ff)
+  crypto_data <- cbind(crypto_data,new_RSI)
+  colnames(crypto_data)[colnames(crypto_data)=="new_RSI"] <- paste("newRSI",toString.default(ff),sep="_")
+  ff = ff+1
+}
+ff<-1
+for (i in 1:20){
+  price_rate_change <- ROC(crypto_data[,"Prices"],n=ff)
+  crypto_data <- cbind(crypto_data,price_rate_change)
+  colnames(crypto_data)[colnames(crypto_data)=="price_rate_change"] <- paste("price_rate_change",toString.default(ff),sep="_")
+  ff = ff+1
+}
+ff<-1
+for (i in seq(5,70,5)){
+  simp_ma_price <- SMA(crypto_data[,"Prices"],n=ff)
+  crypto_data <- cbind(crypto_data,simp_ma_price)
+  colnames(crypto_data)[colnames(crypto_data)=="simp_ma_price"] <- paste("simp_ma_price",toString.default(i),sep="_")
+  ff = ff+1
+}
+
+for (i in 20:50){
+  targ_sum <- paste("tvc",toString.default(i),sep="_")
+  print(sum(crypto_data[,which(colnames(crypto_data) == targ_sum)]))
+}
+# #calculate five min RSIs for modeling
+# ff=14
+# for (i in 1:7){
+#   new_RSI <- RSI(five_min[,"Prices"],n=ff)
+#   five_min <- cbind(five_min,new_RSI)
+#   colnames(five_min)[colnames(five_min)=="new_RSI"] <- paste("5MiNnewRSI",toString.default(ff),sep="_")
+#   ff = ff+1
+# }
+
+# save_data <- base_data
+# model_data <- crypto_data
+# model_data <- cbind(crypto_data, high_low_fluc)
+# model_data <- na.omit(save_data[])
+# model_data2<- model_data
+# drops <- c(c("X","Datetime","Prices","forward_price"),removal_names, removal_names_2)
+# model_data <- model_data[ , !(names(model_data) %in% drops)]
+# 
+# 
+# check_means<-c()
+# check_names <- c()
+# average_gain <- c()
+# num_wins <- c()
+# model_name<-c()
+# model_accuracy <- c()
+# check_model <- c()
+# 
+# 
+# 
+# 
+# #iterate through all potential target variables
+# #determine model 
+# yy<-1
+# for (i in seq(1,4,1)){
+# 
+#   target_data <-  model_data2[,paste("tvr",toString.default(i),sep="_")]
+#   model_data <- cbind(model_data,target_data)
+#   check_names[yy] <- paste("Sell Period",toString.default(i), sep = "_")
+#   average_gain[yy] <- mean(model_data2[,paste("tvr",toString.default(i),sep="_")])
+#   lassoboi <- glm(target_data~., data = model_data)
+#   stepped <- step(lassoboi, direction = c("both"))
+#   model_name[yy] <- paste("tvr",toString.default(i),sep="_")
+#   print(summary(stepped))
+#   model_data <- model_data[ ,-ncol(model_data)]
+#   model_accuracy[stepped] <- lassoboi$a
+#   yy <- yy+1
+# }
+# check_model <- cbind(model_name,average_gain)
+# check_model <- cbind(check_model, num_wins)
+# check_model <- cbind(check_model, model_accuracy)
+# 
+# check_model
