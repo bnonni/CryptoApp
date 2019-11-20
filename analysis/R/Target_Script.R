@@ -104,33 +104,6 @@ for (gg in gain_vec){
   }
 } 
 
-# #calculate one min RSIs for modeling
-# ff<-14
-# for (i in 1:20){
-#   new_RSI <- RSI(crypto_data[,"Prices"],n=ff)
-#   crypto_data <- cbind(crypto_data,new_RSI)
-#   colnames(crypto_data)[colnames(crypto_data)=="new_RSI"] <- paste("newRSI",toString.default(ff),sep="_")
-#   ff = ff+1
-# }
-# 
-# #calculate one min rate of change values for modeling
-# ff<-1
-# for (i in 1:20){
-#   price_rate_change <- ROC(crypto_data[,"Prices"],n=ff)
-#   crypto_data <- cbind(crypto_data,price_rate_change)
-#   colnames(crypto_data)[colnames(crypto_data)=="price_rate_change"] <- paste("price_rate_change",toString.default(ff),sep="_")
-#   ff = ff+1
-# }
-# 
-# #calculate one min simple moving average values for modeling
-# ff<-1
-# for (i in seq(5,70,5)){
-#   simp_ma_price <- SMA(crypto_data[,"Prices"],n=ff)
-#   crypto_data <- cbind(crypto_data,simp_ma_price)
-#   colnames(crypto_data)[colnames(crypto_data)=="simp_ma_price"] <- paste("simp_ma_price",toString.default(i),sep="_")
-#   ff = ff+1
-# }
-
 #sum all instances for each target variable where classification target = 1 
 #classification target currently set to >= 4% gain in price
 tar_v <- c()
@@ -165,7 +138,6 @@ check_targets <- cbind(check_targets,append_future_average)
 check_targets <- cbind(check_targets,opportunity)
 check_targets[which(check_targets[,"opportunity"] == max(opportunity)),]
 head(check_targets[order(tar_v, decreasing = T),],10)
-namethis <- paste("//Users//armandk//Desktop//Personal Projects//Crypto Modeling//targets","start",toString.default(estart),
-                  "finish",toString.default(effinish),"by",toString.default(ehby),".csv", sep = "_")
+namethis <- paste(setwd_thisdir,"start",toString.default(estart), "finish",toString.default(effinish),"by",toString.default(ehby),".csv", sep = "_")
 write.csv(check_targets,file = namethis)
 
