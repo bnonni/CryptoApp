@@ -11,7 +11,7 @@ const tf = require('@tensorflow/tfjs-node'),
     authedClient = require('./coinbase/Coinbase'),
     passport = require("passport"),
     index = require('./routes/index'),
-    usersRouter = require('./routes/users'),
+    users = require('./routes/users'),
     RSI = require("technicalindicators"),
     session = require('express-session'),
     tropowebapi = require('tropo-webapi');
@@ -38,6 +38,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/users', users);
 
 app.use((req, res, next) => {
     next(createError(404));
