@@ -1,19 +1,21 @@
-#!/usr/bin/env rscript
+#!/usr/bin/env Rscript
 
 #clear environment and set seed
 rm(list = ls(all.names = TRUE))
 set.seed(1)
 
-setwd_thisdir <- function () {
-  this.dir <- dirname(parent.frame(3)$ofile)
-  setwd(this.dir)
-}
+args <- commandArgs(trailingOnly=TRUE)
+print(args)
+print(args[1])
+print(args[2])
 
-library(glmnet)
 library(MASS)
 library(tidyverse)
 library(broom)
 library(TTR)
+
+(WD <- getwd())
+setwd(WD)
 
 #read data and remove worthless columns
 crypto_data <- read.csv("data.csv", header = TRUE)
@@ -43,17 +45,20 @@ removal_names_2 <- c()
 #seq is sequence from x to y by z
 #example seq(x, y, z)
 estart = 5
-effinish = 10
+effinish = 900
 ehby = 5
 target_time_interval_sequence <- seq(estart, effinish, ehby)
-interval_seq <- .01
-gain_vec <- seq(1.02,1.03,interval_seq)
+interval_seq <- .01 
+gain_vec <- seq(1.02,1.25,interval_seq)
 gain_append <- data.frame()
+
+first <- suppressWarnings(as.integer(args[1]))
+last <- suppressWarnings(as.integer(args[2]))
 
 #creating vectors for targets in a regression analysis and in a classification analysis
 for (gg in gain_vec){
   for (nn in target_time_interval_sequence){
-    for(i in 1:(nrow(crypto_data))){
+    for(i in first:last){
       #find % difference in high to low
       highLow <- crypto_data[i,5]/crypto_data[i,6]
       high_low_fluc[i] <- highLow
@@ -138,6 +143,5 @@ check_targets <- cbind(check_targets,append_future_average)
 check_targets <- cbind(check_targets,opportunity)
 check_targets[which(check_targets[,"opportunity"] == max(opportunity)),]
 head(check_targets[order(tar_v, decreasing = T),],10)
-namethis <- paste(setwd_thisdir,"start",toString.default(estart), "finish",toString.default(effinish),"by",toString.default(ehby),".csv", sep = "_")
+namethis <- paste(WD,agrs[1],"start",toString.default(estart), "finish",toString.default(effinish),"by",toString.default(ehby),".csv", sep = "_")
 write.csv(check_targets,file = namethis)
-
