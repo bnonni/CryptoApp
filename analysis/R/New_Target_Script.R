@@ -44,9 +44,11 @@ removal_names_2 <- c()
 #seq is sequence from x to y by z
 #example seq(x, y, z)
 estart = suppressWarnings(as.integer(args[1]))
-paste('estart: ', estart)
+print(estart)
+print(typeof(estart))
 effinish = suppressWarnings(as.integer(args[2]))
-paste('effinish: ', effinish)
+print(effinish)
+print(typeof(effinish))
 ehby = 5
 target_time_interval_sequence <- seq(estart, effinish, ehby)
 interval_seq <- .01
