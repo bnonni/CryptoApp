@@ -146,5 +146,5 @@ check_targets <- cbind(check_targets, append_future_average)
 check_targets <- cbind(check_targets, opportunity)
 check_targets[which(check_targets[, "opportunity"] == max(opportunity)),]
 head(check_targets[order(tar_v, decreasing = T),], 10)
-namethis <- paste(WD, agrs[1], "start", toString.default(estart), "finish", toString.default(effinish), "by", toString.default(ehby), ".csv", sep = "_")
+namethis <- paste(WD, agrs[2], "start", toString.default(estart), "finish", toString.default(effinish), "by", toString.default(ehby), ".csv", sep = "_")
 write.csv(check_targets, file = namethis)
