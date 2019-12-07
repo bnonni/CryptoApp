@@ -30,8 +30,8 @@ app.use(session({
     cookie: session_cookie
 }));
 
-app.set('views', path.join(__dirname, '../client'));
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, "../client"));
 app.use(express.static(path.join(__dirname, '../client')));
 
 app.use(logger('dev'));
@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 /*Import MongoDB connection & Coinbase Functions*/
 var mongo = require('./config/db');
 var getTickers = require('./coinbase/getTickers');
-mongo.connectToServer(function(err, client) {
+mongo.connectToServer(function (err, client) {
     if (err) console.log(err);
     getTickers.getBtcTickers();
     setTimeout(() => {

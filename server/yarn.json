@@ -4,7 +4,7 @@
     "description": "nodejs, expressjs, mongodb crypto app",
     "main": "index.js",
     "scripts": {
-        "app": "nodemon ./bin/www"
+        "start": "nodemon ./bin/www"
     },
     "author": "Bryan Nonni",
     "license": "ISC",

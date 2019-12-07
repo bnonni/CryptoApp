@@ -1,18 +1,18 @@
 /*jshint esversion: 6 */
 const AdminPwd = process.env.MongoAdminPwd;
 const MongoClient = require("mongodb").MongoClient;
-const MongoURI = "mongodb://CryptoAlgoAdmin:cryptowallet@157.245.247.90:27017/admin"
+const MongoURI = `mongodb://CryptoAlgoAdmin:${AdminPwd}@157.245.247.90:27017/admin`
 var _db;
 
 module.exports = {
-    connectToServer: function(callback) {
+    connectToServer: function (callback) {
         MongoClient.connect(MongoURI, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
             _db = client.db("crypto_wallet");
             return callback(err);
         });
     },
 
-    getDb: function() {
+    getDb: function () {
         return _db;
     }
 };

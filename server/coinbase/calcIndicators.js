@@ -14,6 +14,16 @@ mongo.connectToServer((err, client) => {
 });
 
 module.exports = calcIndicators = {
+    calcIndHelper: (data) => {
+        var RSI = calcIndicators.calcRSI(data);
+        // console.log("RSI", RSI)
+        var OBV = calcIndicators.calcOBV(data);
+        // console.log("OBV", OBV)
+        var ADL = calcIndicators.calcAccDist(data);
+        // console.log("RSI", ADL)
+        var obj = { 'RSI': RSI, 'OBV': OBV, 'ADL': ADL };
+        return Promise.resolve(obj);
+    },
     calcRSI: (data) => {
         let input = {
             values: data.prices,
@@ -123,7 +133,7 @@ module.exports = calcIndicators = {
         return ADL_data;
     },
 
-    calcMovAvg: () => {},
+    calcMovAvg: () => { },
 };
 
 /*TODO:
