@@ -9,7 +9,7 @@ library(broom)
 library(TTR)
 
 start_time <- Sys.time()
-paste("Start Time: ", start_time)
+paste("Start Time:= ", start_time)
 
 (WD <- getwd())
 setwd(WD)
@@ -52,7 +52,7 @@ paste('estart: ', estart)
 effinish = suppressWarnings(as.integer(args[2]))
 paste('effinish: ', effinish)
 
-ehby = 0
+ehby = suppressWarnings(as.integer(args[3]))
 target_time_interval_sequence <- seq(estart, effinish, ehby)
 interval_seq <- .01
 gain_vec <- seq(1.01, 1.02, interval_seq)
@@ -68,6 +68,9 @@ for (gg in gain_vec) {
         print('Innermost Loop Initiated.')
         chck = FALSE
       }
+      intermittent_time <- Sys.time()
+      inter_elapsed = intermittent_time - start_time
+      paste("Time @ GainVec ", gg, ":=", inter_elapsed)
       #find % difference in high to low
       highLow <- crypto_data[i, 5] / crypto_data[i, 6]
       high_low_fluc[i] <- highLow
@@ -154,10 +157,10 @@ check_targets[which(check_targets[, "opportunity"] == max(opportunity)),]
 head(check_targets[order(tar_v, decreasing = T),], 10)
 # namethis <- paste(WD, agrs[2], "start", toString.default(estart), "finish", toString.default(effinish), "by", toString.default(ehby), ".csv", sep = "_")
 # write.csv(check_targets, file = namethis)
-nodename <- args[3]
+nodename <- args[4]
 namethis <- paste(WD, nodename, "start", toString.default(estart), "finish", toString.default(effinish), "by", toString.default(ehby), ".csv", sep = "_")
 write.csv(check_targets, file = namethis)
 end_time <- Sys.time()
 elapsed <- end_time - start_time
-paste("End Time: ", end_time)
-paste("Elapsed Time: ", elapsed)
+paste("End Time:= ", end_time)
+paste("Elapsed Time:= ", elapsed)
