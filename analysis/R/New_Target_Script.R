@@ -1,20 +1,24 @@
 #!/usr/bin/env Rscript
-
 #clear environment and set seed
 rm(list = ls(all.names = TRUE))
 set.seed(1)
-
-args <- commandArgs(trailingOnly = TRUE)
-print(args[1])
-print(args[2])
 
 library(MASS)
 library(tidyverse)
 library(broom)
 library(TTR)
 
+start_time <- Sys.time()
+paste("Start Time: ", start_time)
+
 (WD <- getwd())
 setwd(WD)
+
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) > 1) {
+  print(args[1])
+  print(args[2])
+}
 
 #read data and remove worthless columns
 crypto_data <- read.csv("data.csv", header = TRUE)
@@ -44,17 +48,17 @@ removal_names_2 <- c()
 #seq is sequence from x to y by z
 #example seq(x, y, z)
 estart = suppressWarnings(as.integer(args[1]))
-print(estart)
-print(typeof(estart))
+paste('estart: ', estart)
 effinish = suppressWarnings(as.integer(args[2]))
-print(effinish)
-print(typeof(effinish))
-ehby = 5
+paste('effinish: ', effinish)
+
+ehby = 0
 target_time_interval_sequence <- seq(estart, effinish, ehby)
 interval_seq <- .01
-gain_vec <- seq(1.02, 1.25, interval_seq)
+gain_vec <- seq(1.01, 1.02, interval_seq)
 gain_append <- data.frame()
 chck = TRUE
+
 #creating vectors for targets in a regression analysis and in a classification analysis
 print('Starting loops')
 for (gg in gain_vec) {
@@ -114,7 +118,7 @@ for (gg in gain_vec) {
   }
 }
 
-#sum all instances for each target variable where classification target = 1 
+#sum all instances for each target variable where classification target = 1
 #classification target currently set to >= 4% gain in price
 tar_v <- c()
 tar_seq_name <- c()
@@ -148,5 +152,12 @@ check_targets <- cbind(check_targets, append_future_average)
 check_targets <- cbind(check_targets, opportunity)
 check_targets[which(check_targets[, "opportunity"] == max(opportunity)),]
 head(check_targets[order(tar_v, decreasing = T),], 10)
-namethis <- paste(WD, agrs[2], "start", toString.default(estart), "finish", toString.default(effinish), "by", toString.default(ehby), ".csv", sep = "_")
+# namethis <- paste(WD, agrs[2], "start", toString.default(estart), "finish", toString.default(effinish), "by", toString.default(ehby), ".csv", sep = "_")
+# write.csv(check_targets, file = namethis)
+nodename <- args[3]
+namethis <- paste(WD, nodename, "start", toString.default(estart), "finish", toString.default(effinish), "by", toString.default(ehby), ".csv", sep = "_")
 write.csv(check_targets, file = namethis)
+end_time <- Sys.time()
+elapsed <- end_time - start_time
+paste("End Time: ", end_time)
+paste("Elapsed Time: ", elapsed)
