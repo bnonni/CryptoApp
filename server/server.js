@@ -10,8 +10,9 @@ const tf = require('@tensorflow/tfjs-node'),
     logger = require('morgan'),
     authedClient = require('./coinbase/Coinbase'),
     passport = require("passport"),
-    index = require('./routes/index'),
-    users = require('./routes/users'),
+    routes = require('./routes/routes'),
+    // index = require('./routes/index'),
+    // users = require('./routes/users'),
     RSI = require("technicalindicators"),
     session = require('express-session'),
     tropowebapi = require('tropo-webapi');
@@ -29,16 +30,16 @@ app.use(session({
     cookie: session_cookie
 }));
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../client'));
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, '../client')));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+
+app.use('/', routes);
 
 app.use((req, res, next) => {
     next(createError(404));
