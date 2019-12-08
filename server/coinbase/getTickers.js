@@ -24,7 +24,7 @@ module.exports = getTickers = {
                 prices: []
             };
             db.collection('BTC_Tickers').find().sort({ time: -1 }).limit(200).toArray((err, tickers) => {
-                console.log(tickers[0])
+                // console.log(tickers[0])
                 if (err) return console.log(err);
                 for (var i = tickers.length - 1; i >= 0; i -= 5) {
                     if (tickers[i] != undefined) {
