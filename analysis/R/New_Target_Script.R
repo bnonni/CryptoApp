@@ -52,25 +52,31 @@ paste('estart: ', estart)
 effinish = suppressWarnings(as.integer(args[2]))
 paste('effinish: ', effinish)
 
-ehby = suppressWarnings(as.integer(args[3]))
+ehby = 5
 target_time_interval_sequence <- seq(estart, effinish, ehby)
 interval_seq <- .01
-gain_vec <- seq(1.01, 1.02, interval_seq)
+gain_vec <- seq(1.01, 1.25, interval_seq)
 gain_append <- data.frame()
 chck = TRUE
 
 #creating vectors for targets in a regression analysis and in a classification analysis
 print('Starting loops')
 for (gg in gain_vec) {
+  intermittent_time <- Sys.time()
+  inter_elapsed = intermittent_time - start_time
+  print(paste("Time @ GainVec", gg, ":=", inter_elapsed))
   for (nn in target_time_interval_sequence) {
+    intermittent_time <- Sys.time()
+    inter_elapsed = intermittent_time - start_time
+    print(paste("Time @ time interval", nn, ":=", inter_elapsed))
     for (i in 1:(nrow(crypto_data))) {
+
       if (chck) {
         print('Innermost Loop Initiated.')
         chck = FALSE
       }
-      intermittent_time <- Sys.time()
-      inter_elapsed = intermittent_time - start_time
-      paste("Time @ GainVec ", gg, ":=", inter_elapsed)
+
+
       #find % difference in high to low
       highLow <- crypto_data[i, 5] / crypto_data[i, 6]
       high_low_fluc[i] <- highLow
