@@ -1,7 +1,8 @@
 /*jshint esversion: 6 */
-const mongo = require('../config/db');
+const mongo = require('../config/db'),
+serverLogger = require('../logs/serverLogger');
 var db;
-mongo.connectToServer(function(err, client) {
+mongo.connectToServer((err, client) => {
     db = mongo.getDb();
 });
 
@@ -26,7 +27,7 @@ module.exports = buySellSignals = {
             decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
+        serverLogger.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
     },
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
@@ -49,27 +50,29 @@ module.exports = buySellSignals = {
             decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
+        serverLogger.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
     },
 
     logTransaction: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
         if (type == 'buy') {
             var buy_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            console.log(currency + ' Buy!');
-            console.log(buy_data);
+            serverLogger.log(currency + ' Buy!');
+            for (const key in buy_data) {
+                serverLogger.log(JSON.stringify(key) + ' : ' + JSON.stringify(buy_data[key]));
+            }
             var buy_collection = currency + '_Buys';
             db.collection(buy_collection).insertOne(buy_data, (err, result) => {
-                if (err) return console.log(err);
-                console.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
+                if (err) serverLogger.log(err);
+                serverLogger.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
             });
         } else {
             var sell_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            console.log(currency + ' Sell!');
-            console.log(sell_data);
+            serverLogger.log(currency + ' Sell!');
+            serverLogger.log(sell_data);
             var sell_collection = currency + '_Sells';
             db.collection(sell_collection).insertOne(sell_data, (err, result) => {
-                if (err) return console.log(err);
-                console.log('Sell successful!! Saved data to ' + currency + '_Sells @ ' + new Date(Date.now()).toLocaleString());
+                if (err) serverLogger.log(err);
+                serverLogger.log('Sell successful!! Saved data to ' + currency + '_Sells @ ' + new Date(Date.now()).toLocaleString());
             });
         }
     },
