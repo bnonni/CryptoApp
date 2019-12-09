@@ -3,6 +3,7 @@
 var express = require('express');
 var mongo = require('../config/db');
 var db, BTC_Tickers, ETH_Tickers, LTC_Tickers;
+var querystring = require('querystring');
 var router = express.Router();
 mongo.connectToServer((err, client) => {
     db = mongo.getDb();
@@ -24,55 +25,45 @@ router.get('/register', (req, res, db) => {
     res.render('register');
 });
 
-router.get('/BTC', (req, res) => {
-    BTC_Tickers.find()
+router.get('/tickers', (req, res) => {
+    var cryptocurrency = req.query.currency, doc = cryptocurrency + '_Tickers';
+    db.collection(doc)
+        .find()
         .limit(50)
         .sort({ time: -1 })
-        .toArray((err, btc) => {
+        .toArray((err, crypto) => {
             if (err) res.send(err);
-            res.json(btc);        
+            res.json(crypto);
         });
 });
 
 router.post('/tickers', (req, res, db) => {
-    var CCreq = req.body,
-        BTC = CCreq.bitcoin,
-        ETH = CCreq.ethereum,
-        LTC = CCreq.litecoin,
-        cryptocurrency;
-    (cryptocurrency = BTC)
-        ? BTC != null
-        : (cryptocurrency = ETH)
-        ? ETH != null
-        : (cryptocurrency = LTC);
-    console.log(cryptocurrency);
-    db.collection(cryptocurrency + '_Tickers')
-        .find()
-        .limit(50)
-        .toArray((err, crypto) => {
-            if (err) res.send(err);
-            res.json({ title: cryptocurrency, tickers: crypto });
-        });
+    
 });
 
 module.exports = router;
 
 /**
- *   ETH_Tickers.find()
-                .limit(50)
-                .sort({ time: -1 })
-                .toArray((err, eth) => {
-                    if (err) res.send(err);
-                    LTC_Tickers.find()
-                        .limit(50)
-                        .sort({ time: -1 })
-                        .toArray((err, ltc) => {
-                            if (err) res.send(err);
-                            const tickers = {
-                                BTC: btc,
-                                ETH: eth,
-                                LTC: ltc
-                            };
-                        });
-                    });
+ * // BTC_Tickers.find()
+//     .limit(50)
+//     .sort({ time: -1 })
+.toArray((err, btc) => {
+if (err) res.send(err);
+res.json(btc);        
+});
+*   ETH_Tickers.find()
+.limit(50)
+.sort({ time: -1 })
+.toArray((err, eth) => {
+if (err) res.send(err);
+LTC_Tickers.find()
+.limit(50)
+.sort({ time: -1 })
+.toArray((err, ltc) => {
+if (err) res.send(err);
+const tickers = {
+BTC: btc,
+ETH: eth,
+LTC: ltc
+};});});
  */

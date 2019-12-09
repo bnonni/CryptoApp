@@ -11,10 +11,9 @@ class Currency extends React.Component {
     constructor() {
         super();
         this.state = {
-          currency: 'BTC'
+          currency: ''
         }
         this.onClick = this.onClick.bind(this);
-        this.handleTextChange = this.handleTextChange.bind(this);
         this.insertNewTickers = this.insertNewTickers.bind(this);
     }
 
@@ -24,13 +23,9 @@ class Currency extends React.Component {
 
     insertNewTickers(e) {
         Axios.post(
-            '/',
+            `/tickers?currency=${e.state.currency}`,
             querystring.stringify({
-                price: e.state.price,
-                date: e.state.date,
-                bid: e.state.bid,
-                ask: e.state.ask,
-                volume: e.state.volume
+                currency: e.state.currency,
             }),
             {
                 headers: {
@@ -44,27 +39,10 @@ class Currency extends React.Component {
         });
     }
 
-    handleTextChange(e) {
-        if (e.target.name == 'BTC') {
-            this.setState({
-                description: e.target.value
-            });
-        }
-        if (e.target.name == 'ETH') {
-            this.setState({
-                amount: e.target.value
-            });
-        }
-        if (e.target.name == 'LTC') {
-            this.setState({
-                model: e.target.value
-            });
-        }
-    }
-
     render() {
         return (
             <div>
+            <h1>{this.state.currency}</h1>
               <div>
               {/* <label htmlFor="currency">Currency:</label>
               <select id="currency" name="currency" value={this.state.currency} onChange={this.handleSelectChange}>
@@ -76,23 +54,26 @@ class Currency extends React.Component {
                         variant='success'
                         size='small'
                         onClick={this.onClick}
+                        name='BTC'
                     >
-                        <span className='glyphicon glyphicon-plus'>BTC</span>
+                        <input type="submit" id="BTC" name="BTC" value={this.state.currency}></input>
                     </Button>
 
                     <Button
                         variant='success'
                         size='small'
                         onClick={this.onClick}
+                        name='ETH'
                     >
-                        <span className='glyphicon glyphicon-plus'>ETH</span>
+                        <input type="submit" id="ETH" name="ETH" value={this.state.currency}></input>
                     </Button>
                     <Button
                         variant='success'
                         size='small'
                         onClick={this.onClick}
+                        name='LTC'
                     >
-                        <span className='glyphicon glyphicon-plus'>LTC</span>
+                        <input type="submit" id="LTC" name="LTC" value={this.state.currency}></input>
                     </Button>
                 </div>
                 {/* <ul className='transactions'>

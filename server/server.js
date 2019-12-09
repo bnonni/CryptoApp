@@ -16,7 +16,8 @@ const tf = require("@tensorflow/tfjs-node"),
     RSI = require("technicalindicators"),
     session = require("express-session"),
     tropowebapi = require("tropo-webapi"),
-    serverLogger = require('./logs/serverLogger');
+    serverLogger = require('./logs/serverLogger'),
+    querystring = require('querystring');
 
 var app = express();
 serverLogger.init();

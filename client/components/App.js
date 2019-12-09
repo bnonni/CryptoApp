@@ -10,20 +10,20 @@ export default class App extends React.Component {
         this.state = {
             currency: 'BTC', data: []
         };
-        this.getBTCtickers = this.getBTCtickers.bind(this);
+        this.getTickers = this.getTickers.bind(this);
     }
 
     componentDidMount() {
-        this.getBTCtickers(this, '');
+        this.getTickers(this, '');
     }
 
     componentDidUpdate(nextProps) {
-        this.getBTCtickers(this, '');
+        this.getTickers(this, '');
     }
 
-    getBTCtickers(ev, model) {
+    getTickers(ev, model) {
         axios
-            .get('/BTC')
+            .get('/tickers?currency=BTC')
             .then(response => {
                 ev.setState({ data: response.data });
             })
