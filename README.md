@@ -1,5 +1,6 @@
-# Crypto Currency Trading Algorithm | connorlacy/development
-## How to Install and Run
+# Crypto Currency Trading Algorithm
+## connorlacy/development branch
+### How to Install and Run
 
 1. Switch over to your dev branch<br/>
     ```
