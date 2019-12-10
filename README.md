@@ -27,6 +27,7 @@
     ```
 
 5. Decode the last two lines in the [server/config/credentials.txt](./server/config/credentials.txt) file:
+    
     **Hint: Use a [ROT13 decoder](https://rot13.com/)**
     ```
     rkcbeg znhfe='PelcgbNytbNqzva'
@@ -34,6 +35,7 @@
     ```
 
 6. Add these 2 decoded lines as-is to the end of the crypto.env file.
+    
     **ATTN: Please delete the [server/config/credentials.txt](./server/config/credentials.txt) file**
 
 7. Source the crypto.env file to export env variables:
