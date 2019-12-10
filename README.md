@@ -10,7 +10,6 @@
     ```
 
 2. Install dependencies (skip if you've done this):
-
     ```
     yarn install
     ```
@@ -21,7 +20,6 @@
     ```
 
 4. Copy the API info from [server/config/credentials.txt](./server/config/credentials.txt) into crypto.env:
-
     ```
     export key='YOUR COINBASE API KEY
     export secret='YOUR COINBASE API SECRET'
@@ -36,15 +34,14 @@
     ```
 
 6. Add these 2 decoded lines as-is to the end of the crypto.env file.
+    **ATTN: Please delete the [server/config/credentials.txt](./server/config/credentials.txt) file**
 
 7. Source the crypto.env file to export env variables:
-
     ```
     source crypto.env
     ```
 
 8. Run the app, and go to [http://127.0.0.1:8080](http://127.0.0.1:8080):
-
     ```
     yarn start
     ```
