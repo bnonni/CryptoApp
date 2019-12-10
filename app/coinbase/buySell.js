@@ -2,14 +2,14 @@
 
 const mongo = require('../config/db');
 var db;
-mongo.connectToServer(function (err, client) {
+mongo.connectToServer(function(err, client) {
     db = mongo.getDb();
 });
 
 module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
         let start, end, today, decision, tickers = ADL.prices;
-        if ((RSI[1] <= 29.99) && (RSI[1] <= RSI[0])) {
+        if ((RSI[1] <= 30) && (RSI[0] <= RSI[1])) {
             if (OBV.slope > 0) {
                 if (ADL.slope > 0) {
                     decision = true;
@@ -46,7 +46,7 @@ module.exports = buySellSignals = {
             } else {
                 decision = false;
             }
-        } else{
+        } else {
             decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
@@ -76,7 +76,10 @@ module.exports = buySellSignals = {
     },
 
     create_data_obj: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
-        let RSIs = [], OBVs = [], ADLs = [], prices = [];
+        let RSIs = [],
+            OBVs = [],
+            ADLs = [],
+            prices = [];
         for (var i = 0; i < 5; i++) {
             RSIs.push(RSI[i]);
             OBVs.push(OBV.OBV[i]);
