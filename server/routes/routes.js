@@ -26,8 +26,8 @@ router.get('/register', (req, res, db) => {
 });
 
 router.get('/tickers', (req, res) => {
-    var cryptocurrency = req.query.currency, doc = cryptocurrency + '_Tickers';
-    db.collection(doc)
+    var cryptocurrency = req.query.currency, db_collection = `${cryptocurrency}_Tickers`;
+    db.collection(db_collection)
         .find()
         .limit(50)
         .sort({ time: -1 })
@@ -37,9 +37,9 @@ router.get('/tickers', (req, res) => {
         });
 });
 
-router.post('/tickers', (req, res, db) => {
+// router.post('/tickers', (req, res, db) => {
     
-});
+// });
 
 module.exports = router;
 

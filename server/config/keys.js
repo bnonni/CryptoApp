@@ -1,10 +1,9 @@
 /*jshint esversion: 6 */
 
-// var user = process.env.user;
-// var password = process.env.MongoPassword;
+var MongoAdminUsr = process.env.mausr;
+var MongoAdminPwd = process.env.mapwd;
 
-// module.exports = {
-//  // MongoURI: "mongodb+srv://" + user + ":" + password + "@cryptowallet-glvp8.mongodb.net/",
-//  MongoURI = "mongodb://localhost:27017/crypto_wallet",
-//  secretOrKey: "secret"
-// }
+module.exports = {
+ MongoURI: `mongodb://${MongoAdminUsr}:${MongoAdminPwd}@157.245.247.90:27017/admin`,
+ secretOrKey: "secret"
+}
