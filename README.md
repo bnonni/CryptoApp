@@ -1,72 +1,53 @@
-# Crypto Currency Trading Algorithm
+# Crypto Currency Trading Algorithm | connorlacy/development
+## How to Install and Run
 
-Technologies Leveraged:
-
--   Node
--   Express
--   MongoDB
--   CoinbasePro API
-
-Purpose:
-
--   Leverage the Coinbase API to pull and store cryptocurrency data (tickers, volume, datetime)
--   Retrieve data from MongoDB and calculate technical indicators (RSI, OBV, ADL, EMA/SMA) to inform buy/sell decisions
--   Leverage neural networks to test assumptions about features and determine best target variable to optmize trading decisions on
--   Currencies: BTC, ETH, LTC
-
-## How to Install and Run Crypto Algo
-
-1. Clone the Crypto_Algo repo <br/>
-   **SSH**
-
+1. Switch over to your dev branch<br/>
     ```
-    git clone git@github.com:bnonni/Crypto_Algo.git
+    git fetch
+    git pull
+    git checkout connorlacy/development
     ```
 
-    **HTTPS**
+2. Install dependencies (skip if you've done this):
 
     ```
-    git clone https://github.com/bnonni/Crypto_Algo.git
+    yarn install
     ```
 
-2. Next, if you're using VScode, run the following commands:
-   **terminal/git bash/powershell**
+3. Create crypto.env file (skip if you've done this):
     ```
-    cd Crypto_Algo
-    code .
-    ```
-    **VScode integrated terminal**
-    ```
-    cd app
-    ```
-    - Not using VSCode? No problem! Simply open the repo in your favorite editor, and navigate to app folder.
-
-3) Inside app/ folder, install dependencies:
-
-    ```
-    npm install
+    touch crypto.env
     ```
 
-4) Inside the app/ folder, create a file called crypto.env, add your database and Coinbase API credentials to the file.
+4. Copy the API info from [server/config/credentials.txt](./server/config/credentials.txt) into crypto.env:
 
     ```
-    export key="YOUR COINBASE API KEY"
-    export secret="YOUR COINBASE API SECRET"
-    export passphrase="YOUR COINBASE API PASSPHRASE"
-    export MongoDBPassword="YOUR PASSWORD"
+    export key='YOUR COINBASE API KEY
+    export secret='YOUR COINBASE API SECRET'
+    export passphrase='YOUR COINBASE API PASSPHRASE'
     ```
 
-5) Source the crypto.env file to export env variables.
+5. Decode the last two lines in the [server/config/credentials.txt](./server/config/credentials.txt) file:
+    **Hint: Use a [ROT13 decoder](https://rot13.com/)**
+    ```
+    rkcbeg znhfe='PelcgbNytbNqzva'
+    rkcbeg zncjq='pelcgbjnyyrg'
+    ```
+
+6. Add these 2 decoded lines as-is to the end of the crypto.env file.
+
+7. Source the crypto.env file to export env variables:
 
     ```
     source crypto.env
     ```
 
-6) Finally, let's run our app!
-    ```
-    npm run app
-    ```
+8. Run the app, and go to [http://127.0.0.1:8080](http://127.0.0.1:8080):
 
+    ```
+    yarn start
+    ```
+______________________________________________________________________________________________________
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 This project uses [yarn](https://yarnpkg.com/en/).
 
