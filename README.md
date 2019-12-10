@@ -36,7 +36,7 @@
 
 6. Add these 2 decoded lines as-is to the end of the crypto.env file.
     
-    **ATTN: Please delete the [server/config/credentials.txt](./server/config/credentials.txt) file**
+    **ATTN: DELETE THIS FILE BEFORE PUSHING [server/config/credentials.txt](./server/config/credentials.txt)**
 
 7. Source the crypto.env file to export env variables:
     ```
@@ -47,6 +47,16 @@
     ```
     yarn start
     ```
+
+9. Do all of your development on this branch. Submit PRs to integrate tested and completed features.
+
+**NOTE: BE SURE TO ONLY PUSH TO YOUR BRANCH**
+
+```
+git add .
+git commit -m "some message"
+git push origin githubusername/development
+```
 ______________________________________________________________________________________________________
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 This project uses [yarn](https://yarnpkg.com/en/).
