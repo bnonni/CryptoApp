@@ -2,7 +2,7 @@
 ## connorlacy/development branch
 ### How to Install and Run
 
-1. Switch over to your dev branch<br/>
+1. Switch over to the ```connorlacy/development``` branch<br/>
     ```
     git fetch
     git pull
