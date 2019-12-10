@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
-import Axios from 'axios';
+import axios from 'axios';
 import { directive } from '@babel/types';
 
 var querystring = require('querystring');
@@ -11,87 +11,72 @@ class Currency extends React.Component {
     constructor() {
         super();
         this.state = {
-          currency: ''
+          btc : 'BTC',
+          eth : 'ETH',
+          ltc : 'LTC',
+          currency : '',
+          data : []
         }
-        this.onClick = this.onClick.bind(this);
-        this.insertNewTickers = this.insertNewTickers.bind(this);
+        this.onBtcClick = this.onBtcClick.bind(this);
+        this.onEthClick = this.onEthClick.bind(this);
+        this.onLtcClick = this.onLtcClick.bind(this);
+        
+        this.insertTickers = this.insertTickers.bind(this);
     }
 
-    onClick(e) {
-        this.insertNewTickers(this);
+    onBtcClick(e) {
+        this.state.currency = this.state.btc;
+        this.insertTickers(this.state.currency);
     }
 
-    insertNewTickers(e) {
-        Axios.post(
-            `/tickers?currency=${e.state.currency}`,
-            querystring.stringify({
-                currency: e.state.currency,
-            }),
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }
-        ).then(function(response) {
-            e.setState({
-                messageFromServer: response.data
-            });
-        });
+    onEthClick(e) {
+        this.state.currency = this.state.eth; 
+        this.insertTickers(this.state.eth);
+    }
+
+    onLtcClick(e) {
+        this.state.currency = this.state.ltc
+        this.insertTickers(this.state.ltc);
+    }
+
+    insertTickers(e) {
+        axios
+        .get(`/tickers?currency=${e}`)
+        .then(response => {
+            ev.setState({ currency: e, data: response.data });
+        })
+        .catch(err => err);
     }
 
     render() {
         return (
-            <div>
-            <h1>{this.state.currency}</h1>
               <div>
-              {/* <label htmlFor="currency">Currency:</label>
-              <select id="currency" name="currency" value={this.state.currency} onChange={this.handleSelectChange}>
-                <option value="BTC" id="BTC" selected>BTC</option>
-                <option value="ETH" id="ETH">ETH</option>
-                <option value="LTC" id="LTC">LTC</option>
-              </select> */}
                     <Button
                         variant='success'
                         size='small'
-                        onClick={this.onClick}
+                        onClick={this.onBtcClick}
                         name='BTC'
                     >
-                        <input type="submit" id="BTC" name="BTC" value={this.state.currency}></input>
+                        <div id="BTC" name="BTC">{this.state.btc}</div>
                     </Button>
 
                     <Button
                         variant='success'
                         size='small'
-                        onClick={this.onClick}
+                        onClick={this.onEthClick}
                         name='ETH'
                     >
-                        <input type="submit" id="ETH" name="ETH" value={this.state.currency}></input>
+                        <div id="ETH" name="ETH">{this.state.eth}</div>
                     </Button>
                     <Button
                         variant='success'
                         size='small'
-                        onClick={this.onClick}
+                        onClick={this.onLtcClick}
                         name='LTC'
                     >
-                        <input type="submit" id="LTC" name="LTC" value={this.state.currency}></input>
+                        <div id="LTC" name="LTC">{this.state.ltc}</div>
                     </Button>
                 </div>
-                {/* <ul className='transactions'>
-                    {this.state.data.map(tickers => {
-                        return (
-                            <li key={tickers.date} className='tickers'>
-                                <div className='price'>{tickers.price}</div>
-                                <div className='datetime'>Date: {tickers.time}</div>
-                                <div className='bid'>Bid: ${tickers.bid}</div>
-                                <div className='ask'>Ask: ${tickers.ask}</div>
-                                <div className='volume'>
-                                    Volume: {tickers.volume}
-                                </div>
-                            </li>
-                        );
-                    })}{' '}
-                </ul> */}
-            </div>
         );
     }
 }

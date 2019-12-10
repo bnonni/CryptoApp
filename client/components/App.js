@@ -33,6 +33,7 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
+                <h1>{this.state.currency}</h1>
                 <Currency />                
                 <ul className='transactions'>
                     {this.state.data.map(tickers => {
@@ -42,9 +43,7 @@ export default class App extends React.Component {
                                 <div className='datetime'>Date: {tickers.time}</div>
                                 <div className='bid'>Bid: ${tickers.bid}</div>
                                 <div className='ask'>Ask: ${tickers.ask}</div>
-                                <div className='volume'>
-                                    Volume: {tickers.volume}
-                                </div>
+                                <div className='volume'> Volume: {tickers.volume} </div>
                             </li>
                         );
                     })}
