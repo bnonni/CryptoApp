@@ -1,25 +1,39 @@
 # Crypto Currency Trading Algorithm
-## connorlacy/development branch
+## fsanchez4/development branch
 ### How to Install and Run
 
-1. Switch over to the ```connorlacy/development``` branch<br/>
+1. Clone the Crypto_Algo repo, and open in an editor. <br/>
+   **SSH**
+
+    ```
+    git clone git@github.com:bnonni/Crypto_Algo.git
+    ```
+
+    **HTTPS**
+
+    ```
+    git clone https://github.com/bnonni/Crypto_Algo.git
+    ```
+
+2. In the terminal, switch over to the ```fsanchez4/development``` branch<br/>
     ```
     git fetch
     git pull
-    git checkout connorlacy/development
+    git checkout fsanchez4/development
     ```
 
-2. Install dependencies (skip if you've done this):
+2. Install dependencies (skip if you've done this, run in terminal):
     ```
     yarn install
     ```
 
-3. Create crypto.env file (skip if you've done this):
+3. Create crypto.env file (skip if you've done this, run in terminal):
     ```
     touch crypto.env
     ```
 
 4. Copy the API info from [server/config/credentials.txt](./server/config/credentials.txt) into crypto.env:
+    - Replace YOUR COINBASE API XXX with your credentials from Coinbase
     ```
     export key='YOUR COINBASE API KEY
     export secret='YOUR COINBASE API SECRET'
@@ -38,12 +52,12 @@
     
     **ATTN: DELETE THIS FILE BEFORE PUSHING [server/config/credentials.txt](./server/config/credentials.txt)**
 
-7. Source the crypto.env file to export env variables:
+7. Source the crypto.env file to export env variables (run in terminal):
     ```
     source crypto.env
     ```
 
-8. Run the app, and go to [http://127.0.0.1:8080](http://127.0.0.1:8080):
+8. Run the app via terminal, and go to [http://127.0.0.1:8080](http://127.0.0.1:8080):
     ```
     yarn start
     ```
