@@ -8,7 +8,7 @@ mongo.connectToServer(function(err, client) {
 
 module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
-        let start, end, today, decision, tickers = ADL.prices;
+        var start, end, today, decision, tickers = ADL.prices;
         if ((RSI[1] <= 30) && (RSI[0] <= RSI[1])) {
             if (OBV.slope > 0) {
                 if (ADL.slope > 0) {
@@ -31,7 +31,7 @@ module.exports = buySellSignals = {
     },
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
-        let start, end, today, decision, tickers = ADL.prices;
+        var start, end, today, decision, tickers = ADL.prices;
         if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {
             if (OBV.slope < 0) {
                 if (ADL.slope < 0) {
@@ -76,7 +76,7 @@ module.exports = buySellSignals = {
     },
 
     create_data_obj: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
-        let RSIs = [],
+        var RSIs = [],
             OBVs = [],
             ADLs = [],
             prices = [];
