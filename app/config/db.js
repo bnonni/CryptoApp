@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 const AdminPwd = process.env.MongoAdminPwd;
 const MongoClient = require("mongodb").MongoClient;
-const MongoURI = "mongodb://CryptoAlgoAdmin:"+AdminPwd+"@localhost:27017/admin"
+const MongoURI = `mongodb://CryptoAlgoAdmin:${AdminPwd}@localhost:27017/admin`
 var _db;
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
         });
     },
 
- getDb: function () {
-  return _db;
- }
+    getDb: function() {
+        return _db;
+    }
 };
