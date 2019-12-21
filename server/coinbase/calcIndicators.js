@@ -7,13 +7,25 @@ const mongo = require('../config/db'),
     ADL = require('technicalindicators').ADL,
     SMA = require('technicalindicators').SMA,
     EMA = require('technicalindicators').EMA,
-    LR = require('simple-statistics').linearRegression;
+    LR = require('simple-statistics').linearRegression,
+    serverLogger = require('../logs/serverLogger');
 var db;
 mongo.connectToServer((err, client) => {
+    if (err) serverLogger.log(err);
     db = mongo.getDb();
 });
 
 module.exports = calcIndicators = {
+    calcIndHelper: (data) => {
+        var RSI = calcIndicators.calcRSI(data);
+        // serverLogger.log("RSI", RSI)
+        var OBV = calcIndicators.calcOBV(data);
+        // serverLogger.log("OBV", OBV)
+        var ADL = calcIndicators.calcAccDist(data);
+        // serverLogger.log("RSI", ADL)
+        var obj = { 'RSI': RSI, 'OBV': OBV, 'ADL': ADL };
+        return Promise.resolve(obj);
+    },
     calcRSI: (data) => {
         var input = {
             values: data.prices,
@@ -32,8 +44,8 @@ module.exports = calcIndicators = {
         console.log(RSI_log);
         var collection = data.currency + '_RSI14_Data';
         db.collection(collection).insertOne(RSI_log, (err, result) => {
-            if (err) return console.log(err);
-            console.log('Saved RSIs to ' + collection + '.');
+            if (err) serverLogger.log(err);
+            serverLogger.log('Saved RSIs to ' + collection + '.');
         });
 
         return RSIs;
@@ -80,8 +92,8 @@ module.exports = calcIndicators = {
 
         var collection = data.currency + '_OBV_Data';
         db.collection(collection).insertOne(OBV_log, (err, result) => {
-            if (err) return console.log(err);
-            console.log('Saved OBVs to ' + collection + '.');
+            if (err) serverLogger.log(err);
+            serverLogger.log('Saved OBVs to ' + collection + '.');
         });
 
         return OBV_data;
@@ -119,17 +131,21 @@ module.exports = calcIndicators = {
 
         var collection = data.currency + '_ADL_Data';
         db.collection(collection).insertOne(ADL_log, (err, result) => {
-            if (err) return console.log(err);
-            console.log('Saved ADLs to ' + collection + '.');
+            if (err) serverLogger.log(err);
+            serverLogger.log('Saved ADLs to ' + collection + '.');
         });
 
         return ADL_data;
     },
 
-    calcMovAvg: () => {},
+    calcMovAvg: () => { },
 };
 
 /*TODO:
 
+<<<<<<< HEAD:app/coinbase/calcIndicators.js
 Calc LTC Ticker RSI calcLtcRSI14: () => { var currency = 'LTC'; Find ETH tickers & calculate RSI db.collection('LTC_Tickers').find().toArray((err,ltc_tickers) => { if (err) return console.log(err); var ltc_prices = []; for (var i = ltc_tickers.length - 1; i >= 0; i--) { if (ltc_tickers[i] != undefined) { ltc_prices.push(ltc_tickers[i].price); } } console.log('Line 148: BTC Price: ' + LTC_prices[0]);Input Object - RSI Calculationvar LTC_RSI_input = { values: ltc_prices, period: 14};console.log(LTC_RSI_input);Output Object - RSI Calculationvar LTC_RSI_output = RSI.calculate(LTC_RSI_input);console.log(LTC_RSI_output);buySellFunctions.buySignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); calcIndicators.logRSI(currency, LTC_RSI_output); setTimeout(() => { buySellFunctions.sellSignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); }, 100);});}};var btc_tickers = calcIndicators.pullBTCtickers(); var currency = 'BTC', btc_prices = [], btc_volume = []; for (var i = btc_tickers.prices.length - 1; i >= 0;i--) {if (btc_tickers[i] != undefined) {btc_prices.push(btc_tickers[i].price);btc_volume.push(btc_tickers[i].volume);}}console.log(btc_prices); console.log(btc_volume);Calculate RSI - ETH Tickers calcRSI14: () => {var currency = 'ETH';db.collection('ETH_Tickers').find().toArray((err, eth_tickers) => {var eth_prices = [];for (var i = eth_tickers.length - 1; i >= 0; i--) {if (eth_tickers[i] != undefined) {eth_prices.push(eth_tickers[i].price);}}var ETH_RSI_input = {values: eth_prices,period: 14};var ETH_RSI_output = RSI.calculate(ETH_RSI_input);buySellFunctions.buySignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices);calcIndicators.logRSI(currency, ETH_RSI_output);setTimeout(() => { buySellFunctions.sellSignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); }, 100)});},
+=======
+Calc LTC Ticker RSI calcLtcRSI14: () => { let currency = 'LTC'; Find ETH tickers & calculate RSI db.collection('LTC_Tickers').find().toArray((err,ltc_tickers) => { if (err) serverLogger.log(err); let ltc_prices = []; for (let i = ltc_tickers.length - 1; i >= 0; i--) { if (ltc_tickers[i] != undefined) { ltc_prices.push(ltc_tickers[i].price); } } serverLogger.log('Line 148: BTC Price: ' + LTC_prices[0]);Input Object - RSI Calculationlet LTC_RSI_input = { values: ltc_prices, period: 14};serverLogger.log(LTC_RSI_input);Output Object - RSI Calculationlet LTC_RSI_output = RSI.calculate(LTC_RSI_input);serverLogger.log(LTC_RSI_output);buySellFunctions.buySignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); calcIndicators.logRSI(currency, LTC_RSI_output); setTimeout(() => { buySellFunctions.sellSignal(currency, LTC_RSI_input.period, LTC_RSI_output, ltc_prices); }, 100);});}};var btc_tickers = calcIndicators.pullBTCtickers(); var currency = 'BTC', btc_prices = [], btc_volume = []; for (var i = btc_tickers.prices.length - 1; i >= 0;i--) {if (btc_tickers[i] != undefined) {btc_prices.push(btc_tickers[i].price);btc_volume.push(btc_tickers[i].volume);}}serverLogger.log(btc_prices); serverLogger.log(btc_volume);Calculate RSI - ETH Tickers calcRSI14: () => {let currency = 'ETH';db.collection('ETH_Tickers').find().toArray((err, eth_tickers) => {let eth_prices = [];for (let i = eth_tickers.length - 1; i >= 0; i--) {if (eth_tickers[i] != undefined) {eth_prices.push(eth_tickers[i].price);}}let ETH_RSI_input = {values: eth_prices,period: 14};let ETH_RSI_output = RSI.calculate(ETH_RSI_input);buySellFunctions.buySignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices);calcIndicators.logRSI(currency, ETH_RSI_output);setTimeout(() => { buySellFunctions.sellSignal(currency, ETH_RSI_input.period, ETH_RSI_output, eth_prices); }, 100)});},
+>>>>>>> 1afcb48cdb43a876bb49df30fe43a8bf442cbcc3:server/coinbase/calcIndicators.js
 */

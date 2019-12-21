@@ -1,13 +1,19 @@
 /*jshint esversion: 6 */
-
-const mongo = require('../config/db');
+const mongo = require('../config/db'),
+serverLogger = require('../logs/serverLogger');
 var db;
+<<<<<<< HEAD:app/coinbase/buySell.js
 mongo.connectToServer(function(err, client) {
+=======
+mongo.connectToServer((err, client) => {
+    if (err) serverLogger.log(err);
+>>>>>>> 1afcb48cdb43a876bb49df30fe43a8bf442cbcc3:server/coinbase/buySell.js
     db = mongo.getDb();
 });
 
 module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
+<<<<<<< HEAD:app/coinbase/buySell.js
         var start, end, today, decision, tickers = ADL.prices;
         if ((RSI[1] <= 30) && (RSI[0] <= RSI[1])) {
             if (OBV.slope > 0) {
@@ -17,17 +23,33 @@ module.exports = buySellSignals = {
                     start = new Date(Date.now() - 300000).toLocaleString();
                     end = new Date(Date.now()).toLocaleString();
                     buySellSignals.logTransaction(currency, 'buy', period, decision, RSI, OBV, ADL, tickers, start, end);
+=======
+        try {
+            let start, end, today, decision, tickers = ADL.prices;
+            if ((RSI[1] <= 29.99) && (RSI[1] <= RSI[0])) {
+                if (OBV.slope > 0) {
+                    if (ADL.slope > 0) {
+                        decision = true;
+                        /*TODO: Add Coinbase API request to buy*/
+                        start = new Date(Date.now() - 300000).toLocaleString();
+                        end = new Date(Date.now()).toLocaleString();
+                        buySellSignals.logTransaction(currency, 'buy', period, decision, RSI, OBV, ADL, tickers, start, end);
+                    } else {
+                        decision = false;
+                    }
+>>>>>>> 1afcb48cdb43a876bb49df30fe43a8bf442cbcc3:server/coinbase/buySell.js
                 } else {
                     decision = false;
                 }
             } else {
                 decision = false;
             }
-        } else {
-            decision = false;
+            today = new Date(Date.now()).toLocaleString();
+            serverLogger.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
+            return Promise.resolve(decision);
+        } catch(e){
+            serverLogger.log(err);
         }
-        today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
     },
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
@@ -50,33 +72,44 @@ module.exports = buySellSignals = {
             decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
-        console.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
+        serverLogger.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
+        return Promise.resolve(decision);
     },
 
     logTransaction: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
         if (type == 'buy') {
             var buy_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            console.log(currency + ' Buy!');
-            console.log(buy_data);
+            serverLogger.log(currency + ' Buy!');
+            for (const key in buy_data) {
+                serverLogger.log(JSON.stringify(key) + ' : ' + JSON.stringify(buy_data[key]));
+            }
             var buy_collection = currency + '_Buys';
             db.collection(buy_collection).insertOne(buy_data, (err, result) => {
-                if (err) return console.log(err);
-                console.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
-            });
+                if (err) serverLogger.log(err);
+                serverLogger.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
+                return Promise.resolve(result);
+            })
         } else {
             var sell_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            console.log(currency + ' Sell!');
-            console.log(sell_data);
+            serverLogger.log(currency + ' Sell!');
+            for (const key in sell_data) {
+                serverLogger.log(JSON.stringify(key) + ' : ' + JSON.stringify(sell_data[key]));
+            }
             var sell_collection = currency + '_Sells';
             db.collection(sell_collection).insertOne(sell_data, (err, result) => {
-                if (err) return console.log(err);
-                console.log('Sell successful!! Saved data to ' + currency + '_Sells @ ' + new Date(Date.now()).toLocaleString());
-            });
+                if (err) serverLogger.log(err);
+                serverLogger.log('Sell successful!! Saved data to ' + currency + '_Sells @ ' + new Date(Date.now()).toLocaleString());
+                return Promise.resolve(result);
+            })
         }
     },
 
     create_data_obj: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
+<<<<<<< HEAD:app/coinbase/buySell.js
         var RSIs = [],
+=======
+        let RSIs = [],
+>>>>>>> 1afcb48cdb43a876bb49df30fe43a8bf442cbcc3:server/coinbase/buySell.js
             OBVs = [],
             ADLs = [],
             prices = [];
