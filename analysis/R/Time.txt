@@ -1,0 +1,25 @@
+alpha:
+5, 5, inc 0:  0.33 mins = 18.5556 ~ 19 seconds
+ outer loop iters = 1
+5, 10, inc 5: 0.58 mins = 34.1341 ~ 34 seconds
+ outer loop iters = 2
+5, 15, inc 5: 1.30 mins = 78.9813 ~ 79 seconds
+ outer loop iters = 3
+
+34 - 19 = 15, thus add ~15 sec per outer loop iter increment
+slowdown = 34/19 = 1.7894 ~ 1.8x or 9/5x, thus exe time increases by a factor of 1.8 per additional outer loop iteration
+
+RPi: 5, 5, inc 0: 2 mins = 120 sec, 1 core, 1 node
+55 steps / inc of 5 = 11 outer loop steps per core * 2 mins per step 
+     = ~22 min per core * 4 cores per node 
+     = 88 min per node / 60 min 
+     = 1.47 
+     = ~1.5 hours per node 
+     => nodes are running in parallel
+     total runtime = 1.5 hours
+
+start=Sat7 Dec 23:17:30 GMT 2019
+
+intermittent_time <- Sys.time()
+inter_elapsed = intermittent_time - start_time
+paste("Time @ GainVec ", gg, ":=", inter_elapsed)
