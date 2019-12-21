@@ -29,19 +29,15 @@ Purpose:
       cd Crypto_Algo
       code .
       ```
-   **VScode integrated terminal**
-      ```
-      cd app
-      ```
-   - Not using VSCode? No problem! Simply open the repo in your favorite editor, and navigate to app folder.
+   - Not using VSCode? No problem! Simply open the repo in your favorite editor, and navigate to Crypto_Algo folder.
 
 
 3. Inside app/ folder, install dependencies:
    ```
-   npm install
+   yarn install
    ```
 
-4. Inside the app/ folder, create a file called crypto.env, add your database and Coinbase API credentials to the file.
+4. Inside the repo folder, create a file called crypto.env, add your database and Coinbase API credentials to the file.
    ```
    export user="YOUR USERNAME"
    export key="YOUR COINBASE API KEY"
@@ -54,8 +50,11 @@ Purpose:
    ```
    source crypto.env
    ```
+   **To source this file everytime you open bash, run this line of code in your terminal. Replace "path/to/file" with the path to your crypto.env file**
+   ```
+   echo "source path/to/crypto.env" >> ~/.bashrc
 
 6. Finally, let's run our app!
    ```
-   npm run app
+   yarn start
    ```
