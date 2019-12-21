@@ -23,7 +23,7 @@ export default class App extends React.Component {
 
     getTickers(ev, model) {
         axios
-            .get('/tickers?currency=BTC')
+            .get(`/tickers?currency=${this.state.currency}`)
             .then(response => {
                 ev.setState({ data: response.data });
             })

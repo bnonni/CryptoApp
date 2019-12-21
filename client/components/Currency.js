@@ -50,33 +50,33 @@ class Currency extends React.Component {
 
     render() {
         return (
-              <div>
-                    <Button
-                        variant='success'
-                        size='small'
-                        onClick={this.onBtcClick}
-                        name='BTC'
-                    >
-                        <div id="BTC" name="BTC">{this.state.btc}</div>
-                    </Button>
+        <div>
+            <Button
+                variant='success'
+                size='small'
+                onClick={this.onBtcClick}
+                name='BTC'
+            >
+                <div id="BTC" name="BTC">{this.state.btc}</div>
+            </Button>
 
-                    <Button
-                        variant='success'
-                        size='small'
-                        onClick={this.onEthClick}
-                        name='ETH'
-                    >
-                        <div id="ETH" name="ETH">{this.state.eth}</div>
-                    </Button>
-                    <Button
-                        variant='success'
-                        size='small'
-                        onClick={this.onLtcClick}
-                        name='LTC'
-                    >
-                        <div id="LTC" name="LTC">{this.state.ltc}</div>
-                    </Button>
-                </div>
+            <Button
+                variant='success'
+                size='small'
+                onClick={this.onEthClick}
+                name='ETH'
+            >
+                <div id="ETH" name="ETH">{this.state.eth}</div>
+            </Button>
+            <Button
+                variant='success'
+                size='small'
+                onClick={this.onLtcClick}
+                name='LTC'
+            >
+                <div id="LTC" name="LTC">{this.state.ltc}</div>
+            </Button>
+        </div>
         );
     }
 }
