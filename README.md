@@ -1,27 +1,33 @@
 # Crypto Currency Trading Algorithm
 
-Technologies Leveraged: 
-* Node
-* Express
-* MongoDB
-* CoinbasePro API
+Technologies Leveraged:
+
+-   Node
+-   Express
+-   MongoDB
+-   CoinbasePro API
 
 Purpose:
-- Leverage the Coinbase API to pull and store cryptocurrency data (tickers, volume, datetime)
-- Retrieve data from MongoDB and calculate technical indicators (RSI, OBV, ADL, EMA/SMA) to inform buy/sell decisions
-- Leverage neural networks to test assumptions about features and determine best target variable to optmize trading decisions on
-- Currencies: BTC, ETH, LTC
 
-## How to Install and Run Crypto Algo 
+-   Leverage the Coinbase API to pull and store cryptocurrency data (tickers, volume, datetime)
+-   Retrieve data from MongoDB and calculate technical indicators (RSI, OBV, ADL, EMA/SMA) to inform buy/sell decisions
+-   Leverage neural networks to test assumptions about features and determine best target variable to optmize trading decisions on
+-   Currencies: BTC, ETH, LTC
+
+## How to Install and Run Crypto Algo
+
 1. Clone the Crypto_Algo repo <br/>
-  **SSH**
-   ```
-   git clone git@github.com:bnonni/Crypto_Algo.git
-   ```
-   **HTTPS**
-   ```
-   git clone https://github.com/bnonni/Crypto_Algo.git
-   ```
+   **SSH**
+
+    ```
+    git clone git@github.com:bnonni/Crypto_Algo.git
+    ```
+
+    **HTTPS**
+
+    ```
+    git clone https://github.com/bnonni/Crypto_Algo.git
+    ```
 
 2. Next, if you're using VScode, run the following commands:
     **terminal/git bash/powershell**
