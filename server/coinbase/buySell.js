@@ -11,7 +11,7 @@ module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
         try {
             let start, end, today, decision, tickers = ADL.prices;
-            if ((RSI[1] <= 29.99) && (RSI[1] <= RSI[0])) {
+            if ((RSI[1] <= 30) && (RSI[1] <= RSI[0])) {
                 if (OBV.slope > 0) {
                     if (ADL.slope > 0) {
                         decision = true;
