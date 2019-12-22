@@ -4,14 +4,14 @@ MongoURI = require('./keys').MongoURI;
 var _db;
 
 module.exports = {
-    connectToServer: function (callback) {
+    connectToServer: (callback) => {
         MongoClient.connect(MongoURI, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
-            _db = client.db("crypto_wallet_dev");
+            _db = client.db('crypto_wallet_dev');
             return callback(err);
         });
     },
 
-    getDb: function () {
+    getDb: () => {
         return _db;
     }
 };
