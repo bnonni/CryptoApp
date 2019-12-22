@@ -1,29 +1,14 @@
 /*jshint esversion: 6 */
 const mongo = require('../config/db'),
-serverLogger = require('../logs/serverLogger');
+    serverLogger = require('../logs/serverLogger');
 var db;
-<<<<<<< HEAD:app/coinbase/buySell.js
-mongo.connectToServer(function(err, client) {
-=======
 mongo.connectToServer((err, client) => {
     if (err) serverLogger.log(err);
->>>>>>> 1afcb48cdb43a876bb49df30fe43a8bf442cbcc3:server/coinbase/buySell.js
     db = mongo.getDb();
 });
 
 module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
-<<<<<<< HEAD:app/coinbase/buySell.js
-        var start, end, today, decision, tickers = ADL.prices;
-        if ((RSI[1] <= 30) && (RSI[0] <= RSI[1])) {
-            if (OBV.slope > 0) {
-                if (ADL.slope > 0) {
-                    decision = true;
-                    /*TODO: Add Coinbase API request to buy*/
-                    start = new Date(Date.now() - 300000).toLocaleString();
-                    end = new Date(Date.now()).toLocaleString();
-                    buySellSignals.logTransaction(currency, 'buy', period, decision, RSI, OBV, ADL, tickers, start, end);
-=======
         try {
             let start, end, today, decision, tickers = ADL.prices;
             if ((RSI[1] <= 29.99) && (RSI[1] <= RSI[0])) {
@@ -37,7 +22,6 @@ module.exports = buySellSignals = {
                     } else {
                         decision = false;
                     }
->>>>>>> 1afcb48cdb43a876bb49df30fe43a8bf442cbcc3:server/coinbase/buySell.js
                 } else {
                     decision = false;
                 }
@@ -47,7 +31,7 @@ module.exports = buySellSignals = {
             today = new Date(Date.now()).toLocaleString();
             serverLogger.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
             return Promise.resolve(decision);
-        } catch(e){
+        } catch (e) {
             serverLogger.log(err);
         }
     },
@@ -105,11 +89,7 @@ module.exports = buySellSignals = {
     },
 
     create_data_obj: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
-<<<<<<< HEAD:app/coinbase/buySell.js
-        var RSIs = [],
-=======
         let RSIs = [],
->>>>>>> 1afcb48cdb43a876bb49df30fe43a8bf442cbcc3:server/coinbase/buySell.js
             OBVs = [],
             ADLs = [],
             prices = [];
