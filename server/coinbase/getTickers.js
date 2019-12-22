@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
 const mongo = require('../config/db'),
     authedClient = require('./Coinbase'),
-    calcIndicators = require('./calcIndicators'),
-    buySellFunctions = require('./buySell'),
+    calcIndicators = require('./CalculateIndicators'),
+    buySellFunctions = require('./BuySell'),
     serverLogger = require('../logs/serverLogger');
 var db;
 mongo.connectToServer((err, client) => {
