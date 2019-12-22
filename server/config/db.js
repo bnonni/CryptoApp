@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const MongoClient = require("mongodb").MongoClient,
+const MongoClient = require('mongodb').MongoClient,
     MongoURI = require('./keys').MongoURI;
 var _db;
 
