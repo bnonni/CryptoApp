@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 const mongo = require('../config/db'),
-serverLogger = require('../logs/serverLogger');
+    serverLogger = require('../logs/serverLogger');
 var db;
 mongo.connectToServer((err, client) => {
     if (err) serverLogger.log(err);
@@ -11,7 +11,7 @@ module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
         try {
             let start, end, today, decision, tickers = ADL.prices;
-            if ((RSI[1] <= 29.99) && (RSI[1] <= RSI[0])) {
+            if ((RSI[1] <= 30) && (RSI[1] <= RSI[0])) {
                 if (OBV.slope > 0) {
                     if (ADL.slope > 0) {
                         decision = true;
@@ -31,13 +31,13 @@ module.exports = buySellSignals = {
             today = new Date(Date.now()).toLocaleString();
             serverLogger.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
             return Promise.resolve(decision);
-        } catch(e){
+        } catch (e) {
             serverLogger.log(err);
         }
     },
 
     sellSignal: (currency, period, RSI, OBV, ADL) => {
-        let start, end, today, decision, tickers = ADL.prices;
+        var start, end, today, decision, tickers = ADL.prices;
         if ((RSI[1] >= 50) && (RSI[0] >= RSI[1])) {
             if (OBV.slope < 0) {
                 if (ADL.slope < 0) {

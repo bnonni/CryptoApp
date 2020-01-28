@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
-const MongoClient = require("mongodb").MongoClient,
-MongoURI = require('./keys').MongoURI;
+const MongoClient = require('mongodb').MongoClient,
+    MongoURI = require('./keys').MongoURI;
 var _db;
 
 module.exports = {
