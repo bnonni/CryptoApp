@@ -8,8 +8,8 @@
         "webpack": "webpack",
         "watch:build": "webpack --watch",
         "watch:server": "nodemon --exec babel-node -- server/bin/www ",
-        "start": "pm2 start",
-        "restart": "pm2 start",
+        "start": "pm2 start server/bin/www",
+        "restart": "pm2 restart all",
         "test": "react-scripts test"
     },
     "author": "Bryan Nonni",
