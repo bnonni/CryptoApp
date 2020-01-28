@@ -4,10 +4,13 @@
     "description": "nodejs, expressjs, mongodb crypto app",
     "main": "index.js",
     "scripts": {
+        "dev": "npm-run-all --parallel watch:server watch:build",
         "webpack": "webpack",
-        "start": "npm-run-all --parallel watch:server watch:build",
         "watch:build": "webpack --watch",
-        "watch:server": "nodemon --exec babel-node -- server/bin/www "
+        "watch:server": "nodemon --exec babel-node -- server/bin/www ",
+        "start": "pm2 start",
+        "restart": "pm2 start",
+        "test": "node test.js"
     },
     "author": "Bryan Nonni",
     "license": "ISC",

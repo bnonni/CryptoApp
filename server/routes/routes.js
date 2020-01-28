@@ -2,23 +2,22 @@
 
 var express = require('express');
 var mongo = require('../config/db');
-var db, BTC_Tickers, ETH_Tickers, LTC_Tickers;
-var querystring = require('querystring');
+var db;
 var router = express.Router();
 mongo.connectToServer((err, client) => {
     db = mongo.getDb();
     console.log(`Connected to ${db.namespace}.`);
 });
 
-router.get('/', (req, res, db) => {
+router.get('/', (req, res) => {
     res.render('index');
 });
 
-router.get('/login', (req, res, db) => {
+router.get('/login', (req, res) => {
     res.render('login');
 });
 
-router.get('/register', (req, res, db) => {
+router.get('/register', (req, res) => {
     res.render('register');
 });
 
@@ -35,3 +34,5 @@ router.get('/tickers', (req, res) => {
 });
 
 module.exports = router;
+
+// var querystring = require('querystring');
