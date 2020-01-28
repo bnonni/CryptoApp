@@ -1,12 +1,12 @@
 - type: parallel
-  name: example_parallel_step
+  name: crypto_algo
   steps:
-    - service: codeship_example
+    - service: crypto_algo
       command: printenv
-    - service: codeship_example
+    - service: crypto_algo
       # shell wrapper not required unless passing along env vars or combining commands
       command: /bin/bash -c 'ls && echo ${CI_BUILD_ID}'
-- name: example_tagged_step
+- name: crypto_algo
   tag: master
-  service: codeship_example
+  service: crypto_algo
   command: echo "Deploy here!"
