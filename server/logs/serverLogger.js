@@ -2,8 +2,7 @@ const fs = require('fs');
 var dt_obj = new Date(Date.now());
 const date = String(dt_obj.toLocaleDateString()).replace(/\//g, ''),
       hour = String(dt_obj.toTimeString({hour12: false})).split(':'),
-      time = hour[0] + hour[1],
-      datetime = date + '_' + time,
+      datetime = date + '_' + hour[0],
       log_file = `CryptoAlgo_${datetime}.log`, 
       start = `Server started. Log file created: /server/logs/${log_file}. Logging messages.`;
 

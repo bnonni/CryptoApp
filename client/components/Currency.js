@@ -20,32 +20,21 @@ class Currency extends React.Component {
         this.onBtcClick = this.onBtcClick.bind(this);
         this.onEthClick = this.onEthClick.bind(this);
         this.onLtcClick = this.onLtcClick.bind(this);
-        
-        this.insertTickers = this.insertTickers.bind(this);
     }
 
     onBtcClick(e) {
         this.state.currency = this.state.btc;
-        this.insertTickers(this.state.currency);
+        this.getTickers(this.state.btc);
     }
 
     onEthClick(e) {
         this.state.currency = this.state.eth; 
-        this.insertTickers(this.state.eth);
+        this.getTickers(this.state.eth);
     }
 
     onLtcClick(e) {
         this.state.currency = this.state.ltc
-        this.insertTickers(this.state.ltc);
-    }
-
-    insertTickers(e) {
-        axios
-        .get(`/tickers?currency=${e}`)
-        .then(response => {
-            ev.setState({ currency: e, data: response.data });
-        })
-        .catch(err => err);
+        this.getTickers(this.state.ltc);
     }
 
     render() {
@@ -76,8 +65,22 @@ class Currency extends React.Component {
             >
                 <div id="LTC" name="LTC">{this.state.ltc}</div>
             </Button>
-        </div>
-        );
+        
+         <ul className='transactions'>
+         {this.state.data.map(tickers => {
+             return (
+                 <li key={tickers.date} className='tickers'>
+                     <div className='price'>{tickers.price}</div>
+                     <div className='datetime'>Date: {tickers.time}</div>
+                     <div className='bid'>Bid: ${tickers.bid}</div>
+                     <div className='ask'>Ask: ${tickers.ask}</div>
+                     <div className='volume'> Volume: {tickers.volume} </div>
+                 </li>
+             );
+         })}
+        </ul>
+     </div>
+     );
     }
 }
 
