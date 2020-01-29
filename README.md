@@ -1,4 +1,5 @@
 # Crypto Currency Trading Algorithm
+[![Codeship Status for Crypto_Algo](https://app.codeship.com/projects/a06143f0-1e93-0138-b580-4a54e7b00208/status?branch=master)](https://app.codeship.com/projects/382175)
 
 Technologies Leveraged:
 
