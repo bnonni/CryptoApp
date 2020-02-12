@@ -1,4 +1,0 @@
-crypto_algo:
-  build:
-    image: crypto_algo
-    dockerfile: Dockerfile

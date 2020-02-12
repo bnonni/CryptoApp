@@ -27,6 +27,7 @@ Images/
 *.jpg
 package-lock.json
 *.env
+*.aes
 *.lock
 .gitconfig
 bundle.js

@@ -1,8 +1,13 @@
-FROM ubuntu:zesty
+FROM node:12
 
-RUN mkdir /usr/src/app
+COPY package*.json ./
+
 WORKDIR /usr/src/app
+
+RUN yarn
 
 COPY . .
 
-CMD ["printenv"]
+EXPOSE 8081
+CMD ["yarn test"]
+CMD ["yarn dev"]
