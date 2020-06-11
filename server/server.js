@@ -58,7 +58,7 @@ mongo.connectToServer(function(err, client) {
             getTickers.getLtcTickers();
         }, 3000);
     }, 3000);
-});
+
 
 app.use((err, req, res, next) => {
     res.locals.message = err.message;
@@ -66,7 +66,7 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.render('error');
 });
-
+});
 module.exports = app;
 
 /*TODO: // mongoose = require('mongoose'); Mongoose Connection, user auth: const user = require('./config/keys');// Connect to MongoDB mongoose.connect(user.MongoURI, { useNewUrlParser: true }).then(() => console.log('MongoDB successfully connected')).catch(err => console.log(err));*/

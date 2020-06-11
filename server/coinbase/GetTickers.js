@@ -4,11 +4,8 @@ const mongo = require('../config/db'),
     calcIndicators = require('./CalculateIndicators'),
     buySellFunctions = require('./BuySell'),
     serverLogger = require('../logs/serverLogger');
-var db;
-mongo.connectToServer((err, client) => {
-    if (err) serverLogger.log(err);
-    db = mongo.getDb();
-});
+
+var db = mongo.getDb();
 
 module.exports = getTickers = {
     getBtcTickers: () => {
@@ -37,7 +34,7 @@ module.exports = getTickers = {
                     }
                 }
 
-                let indicators = calcIndicators.calcIndHelper(data)
+                async () => calcIndicators.calcIndHelper(data)
                     .then((indicators) => {
                         setTimeout(() => { buySellFunctions.buySignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 150);
                         setTimeout(() => { buySellFunctions.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 150);

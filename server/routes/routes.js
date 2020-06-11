@@ -2,12 +2,8 @@
 
 var express = require('express');
 var mongo = require('../config/db');
-var db;
 var router = express.Router();
-mongo.connectToServer((err, client) => {
-    db = mongo.getDb();
-    console.log(`Connected to ${db.namespace}.`);
-});
+var db = mongo.getDb();
 
 router.get('/', (req, res) => {
     res.render('index');
@@ -22,8 +18,8 @@ router.get('/register', (req, res) => {
 });
 
 router.get('/tickers', (req, res) => {
-    var cryptocurrency = req.query.currency, db_collection = `${cryptocurrency}_Tickers`;
-    db.collection(db_collection)
+    var cryptocurrency = req.query.currency, db_tickers = `${cryptocurrency}_Tickers`;
+    db.collection(db_tickers)
         .find()
         .limit(50)
         .sort({ time: -1 })

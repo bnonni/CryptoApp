@@ -9,11 +9,8 @@ const mongo = require('../config/db'),
     EMA = require('technicalindicators').EMA,
     LR = require('simple-statistics').linearRegression,
     serverLogger = require('../logs/serverLogger');
-var db;
-mongo.connectToServer((err, client) => {
-    if (err) serverLogger.log(err);
-    db = mongo.getDb();
-});
+
+var db = mongo.getDb();
 
 module.exports = calcIndicators = {
     calcIndHelper: (data) => {

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../css/App.css';
 import { directive } from '@babel/types';
+import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis';
+
 
 var querystring = require('querystring');
 
@@ -81,18 +83,20 @@ export default class App extends React.Component {
             </Button>
         <h1>{this.state.currency}</h1>
          <ul className='transactions'>
-         {this.state.data.map(tickers => {
-             return (
-                 <li key={tickers.date} className='tickers'>
-                     <div className='price'>{tickers.price}</div>
-                     <div className='datetime'>Date: {tickers.time}</div>
-                     <div className='bid'>Bid: ${tickers.bid}</div>
-                     <div className='ask'>Ask: ${tickers.ask}</div>
-                     <div className='volume'> Volume: {tickers.volume} </div>
-                 </li>
-             );
-         })}
+            {this.state.data.map(tickers => {
+                return (
+                    <li key={tickers.date} className='tickers'>
+                        <div className='price'>{tickers.price}</div>
+                        <div className='datetime'>Date: {tickers.time}</div>
+                        <div className='bid'>Bid: ${tickers.bid}</div>
+                        <div className='ask'>Ask: ${tickers.ask}</div>
+                        <div className='volume'> Volume: {tickers.volume} </div>
+                    </li>
+                );
+            })}
         </ul>
+        <div>
+        </div>
      </div>
      );
     }

@@ -1,11 +1,7 @@
 /*jshint esversion: 6 */
 const mongo = require('../config/db'),
     serverLogger = require('../logs/serverLogger');
-var db;
-mongo.connectToServer((err, client) => {
-    if (err) serverLogger.log(err);
-    db = mongo.getDb();
-});
+var db = mongo.getDb();
 
 module.exports = buySellSignals = {
     buySignal: (currency, period, RSI, OBV, ADL) => {
