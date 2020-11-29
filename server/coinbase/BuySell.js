@@ -25,10 +25,10 @@ module.exports = buySellSignals = {
                 decision = false;
             }
             today = new Date(Date.now()).toLocaleString();
-            serverLogger.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
+            console.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
             return Promise.resolve(decision);
         } catch (e) {
-            serverLogger.log(err);
+            console.log(err);
         }
     },
 
@@ -52,33 +52,33 @@ module.exports = buySellSignals = {
             decision = false;
         }
         today = new Date(Date.now()).toLocaleString();
-        serverLogger.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
+        console.log(currency + ': Sell Decision => ' + decision + ' @ ' + today);
         return Promise.resolve(decision);
     },
 
     logTransaction: (currency, type, period, decision, RSI, OBV, ADL, tickers, start, end) => {
         if (type == 'buy') {
             var buy_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            serverLogger.log(currency + ' Buy!');
+            console.log(currency + ' Buy!');
             for (const key in buy_data) {
-                serverLogger.log(JSON.stringify(key) + ' : ' + JSON.stringify(buy_data[key]));
+                console.log(JSON.stringify(key) + ' : ' + JSON.stringify(buy_data[key]));
             }
             var buy_collection = currency + '_Buys';
             db.collection(buy_collection).insertOne(buy_data, (err, result) => {
-                if (err) serverLogger.log(err);
-                serverLogger.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
+                if (err) console.log(err);
+                console.log('Buy successful!! Saved data to ' + currency + '_Buys @ ' + new Date(Date.now()).toLocaleString());
                 return Promise.resolve(result);
             })
         } else {
             var sell_data = buySellSignals.create_data_obj(currency, type, period, decision, RSI, OBV, ADL, tickers, start, end);
-            serverLogger.log(currency + ' Sell!');
+            console.log(currency + ' Sell!');
             for (const key in sell_data) {
-                serverLogger.log(JSON.stringify(key) + ' : ' + JSON.stringify(sell_data[key]));
+                console.log(JSON.stringify(key) + ' : ' + JSON.stringify(sell_data[key]));
             }
             var sell_collection = currency + '_Sells';
             db.collection(sell_collection).insertOne(sell_data, (err, result) => {
-                if (err) serverLogger.log(err);
-                serverLogger.log('Sell successful!! Saved data to ' + currency + '_Sells @ ' + new Date(Date.now()).toLocaleString());
+                if (err) console.log(err);
+                console.log('Sell successful!! Saved data to ' + currency + '_Sells @ ' + new Date(Date.now()).toLocaleString());
                 return Promise.resolve(result);
             })
         }

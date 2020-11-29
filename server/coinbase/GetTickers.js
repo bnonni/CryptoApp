@@ -11,8 +11,8 @@ module.exports = getTickers = {
     getBtcTickers: () => {
         const btc_callback = (err, response, btc) => {
             db.collection('BTC_Tickers').insertOne(btc, (err, result) => {
-                if (err) serverLogger.log(err);
-                serverLogger.log('\n/* -------------------------BTC------------------------- */\n\nSaved tickers to BTC_Tickers.');
+                if (err) console.log(err);
+                console.log('\n/* -------------------------BTC------------------------- */\n\nSaved tickers to BTC_Tickers.');
             });
             var data = {
                 currency: 'BTC',
@@ -23,8 +23,8 @@ module.exports = getTickers = {
                 prices: []
             };
             db.collection('BTC_Tickers').find().sort({ time: -1 }).limit(200).toArray((err, tickers) => {
-                // serverLogger.log(tickers[0])
-                if (err) serverLogger.log(err);
+                // console.log(tickers[0])
+                if (err) console.log(err);
                 for (var i = tickers.length - 1; i >= 0; i -= 5) {
                     if (tickers[i] != undefined) {
                         data.prices.push(tickers[i].price);
@@ -40,7 +40,7 @@ module.exports = getTickers = {
                         setTimeout(() => { buySellFunctions.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 150);
                     })
                     .catch((err) => {
-                        if (err) serverLogger.log(err);
+                        if (err) console.log(err);
                     })
             });
         };
@@ -52,8 +52,8 @@ module.exports = getTickers = {
     getEthTickers: () => {
         const eth_tickers_cb = (err, response, eth) => {
             db.collection('ETH_Tickers').insertOne(eth, (err, result) => {
-                if (err) serverLogger.log(err);
-                serverLogger.log('\n/* -------------------------ETH------------------------- */\n\nSaved tickers to ETH_Tickers.');
+                if (err) console.log(err);
+                console.log('\n/* -------------------------ETH------------------------- */\n\nSaved tickers to ETH_Tickers.');
             });
             var data = {
                 currency: 'ETH',
@@ -64,7 +64,7 @@ module.exports = getTickers = {
                 prices: []
             };
             db.collection('ETH_Tickers').find().limit(200).toArray((err, tickers) => {
-                if (err) serverLogger.log(err);
+                if (err) console.log(err);
                 for (var i = tickers.length - 1; i >= 0; i -= 5) {
                     if (tickers[i] != undefined) {
                         data.prices.push(tickers[i].price);
@@ -80,7 +80,7 @@ module.exports = getTickers = {
                         setTimeout(() => { buySellFunctions.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
                     })
                     .catch((err) => {
-                        if (err) serverLogger.log(err);
+                        if (err) console.log(err);
                     });
             });
         };
@@ -91,8 +91,8 @@ module.exports = getTickers = {
     getLtcTickers: () => {
         const ltc_ticker_cb = (err, response, ltc) => {
             db.collection('LTC_Tickers').insertOne(ltc, (err, result) => {
-                if (err) serverLogger.log(err);
-                serverLogger.log('\n/* -------------------------LTC------------------------- */\n\nSaved tickers to LTC_Tickers.');
+                if (err) console.log(err);
+                console.log('\n/* -------------------------LTC------------------------- */\n\nSaved tickers to LTC_Tickers.');
             });
             var data = {
                 currency: 'LTC',
@@ -103,7 +103,7 @@ module.exports = getTickers = {
                 prices: []
             };
             db.collection('LTC_Tickers').find().limit(200).toArray((err, tickers) => {
-                if (err) serverLogger.log(err);
+                if (err) console.log(err);
                 for (var i = tickers.length - 1; i >= 0; i -= 5) {
                     if (tickers[i] != undefined) {
                         data.prices.push(tickers[i].price);
@@ -118,7 +118,7 @@ module.exports = getTickers = {
                         setTimeout(() => { buySellFunctions.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
                     })
                     .catch((err) => {
-                        if (err) serverLogger.log(err);
+                        if (err) console.log(err);
                     });
             });
         };

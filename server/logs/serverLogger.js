@@ -7,7 +7,7 @@ const date = String(dt_obj.toLocaleDateString()).replace(/\//g, ''),
       start = `Server started. Log file created: /server/logs/${log_file}. Logging messages.`;
 
 function log (message) {
-    fs.writeFileSync(`./server/logs/${log_file}`, message+'\n', { encoding: 'utf-8', flag: 'a' });
+    fs.writeFileSync(`./logs/${log_file}`, message+'\n', { encoding: 'utf-8', flag: 'a' });
 }
 
 function init() {
@@ -15,7 +15,9 @@ function init() {
     console.log(this.start);
 }
 
-module.exports.log_file = log_file;
-module.exports.start = start;
-module.exports.log = log;
-module.exports.init = init;
+module.exports = {
+    log_file,
+    start,
+    log,
+    init
+}
