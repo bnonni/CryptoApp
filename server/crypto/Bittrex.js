@@ -1,3 +1,4 @@
+require('dotenv').config({path: '../.env'})
 const apiKey = process.env.bittrexApiKey,
       apiSecret = process.env.bittrexSecret,
       Bittrex = require('bittrex-wrapper'),

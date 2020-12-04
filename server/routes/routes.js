@@ -1,9 +1,8 @@
 /*jshint esversion: 6 */
 
 var express = require('express');
-var mongo = require('../config/db');
+var db = require('../config/db');
 var router = express.Router();
-var db = mongo.getDb();
 
 router.get('/', (req, res) => {
     res.render('index');
