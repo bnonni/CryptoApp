@@ -1,10 +1,8 @@
 /*jshint esversion: 6 */
-const mongo = require('../config/db'),
-    authedClient = require('./Coinbase'),
-    calcIndicators = require('./CalculateIndicators'),
-    buySellFunctions = require('./BuySell'),
-    serverLogger = require('../logs/serverLogger'),
-    db = require('../config/db')
+const authedClient = require('./Coinbase'),
+      CalculateIndicators = require('./CalculateIndicators'),
+      BuySell = require('./BuySell'),
+      db = require('../config/db')
 
 
 async function getBtcTickers(){
@@ -33,10 +31,10 @@ async function getBtcTickers(){
                 }
             }
 
-            async () => calcIndicators.calcIndHelper(data)
+            async () => CalculateIndicators.calcIndHelper(data)
                 .then((indicators) => {
-                    setTimeout(() => { buySellFunctions.buySignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 150);
-                    setTimeout(() => { buySellFunctions.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 150);
+                    setTimeout(() => { BuySell.buySignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 150);
+                    setTimeout(() => { BuySell.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 150);
                 })
                 .catch((err) => {
                     if (err) console.log(err);
@@ -73,10 +71,10 @@ async function getEthTickers(){
                 }
             }
 
-            let indicators = calcIndicators.calcIndHelper(data)
+            let indicators = CalculateIndicators.calcIndHelper(data)
                 .then((indicators) => {
-                    setTimeout(() => { buySellFunctions.buySignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
-                    setTimeout(() => { buySellFunctions.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
+                    setTimeout(() => { BuySell.buySignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
+                    setTimeout(() => { BuySell.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
                 })
                 .catch((err) => {
                     if (err) console.log(err);
@@ -111,10 +109,10 @@ async function getLtcTickers(){
                     data.high.push(tickers[i].ask);
                 }
             }
-            let indicators = calcIndicators.calcIndHelper(data)
+            let indicators = CalculateIndicators.calcIndHelper(data)
                 .then((indicators) => {
-                    setTimeout(() => { buySellFunctions.buySignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
-                    setTimeout(() => { buySellFunctions.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
+                    setTimeout(() => { BuySell.buySignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
+                    setTimeout(() => { BuySell.sellSignal(data.currency, 14, indicators.RSI, indicators.OBV, indicators.ADL); }, 50);
                 })
                 .catch((err) => {
                     if (err) console.log(err);

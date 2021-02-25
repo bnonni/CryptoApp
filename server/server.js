@@ -10,10 +10,7 @@ const tf = require('@tensorflow/tfjs-node'),
     logger = require('morgan'),
     authedClient = require('./crypto/Coinbase'),
     passport = require('passport'),
-    routes = require('./routes/routes'),
-    session = require('express-session'),
-    tropowebapi = require('tropo-webapi'),
-    querystring = require('querystring');
+    routes = require('./routes/routes')
 
 var app = express();
 

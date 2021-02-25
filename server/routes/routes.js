@@ -8,14 +8,6 @@ router.get('/', (req, res) => {
     res.render('index');
 });
 
-router.get('/login', (req, res) => {
-    res.render('login');
-});
-
-router.get('/register', (req, res) => {
-    res.render('register');
-});
-
 router.get('/tickers', (req, res) => {
     var cryptocurrency = req.query.currency, db_tickers = `${cryptocurrency}_Tickers`;
     db.collection(db_tickers)

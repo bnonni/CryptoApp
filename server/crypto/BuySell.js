@@ -13,15 +13,12 @@ module.exports = buySellSignals = {
                         start = new Date(Date.now() - 300000).toLocaleString();
                         end = new Date(Date.now()).toLocaleString();
                         buySellSignals.logTransaction(currency, 'buy', period, decision, RSI, OBV, ADL, tickers, start, end);
-                    } else {
+                    } else
                         decision = false;
-                    }
-                } else {
+                } else
                     decision = false;
-                }
-            } else {
+            } else
                 decision = false;
-            }
             today = new Date(Date.now()).toLocaleString();
             console.log(currency + ': Buy Decision => ' + decision + ' @ ' + today);
             return Promise.resolve(decision);
